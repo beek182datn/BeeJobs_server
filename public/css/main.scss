@@ -1,0 +1,6807 @@
+/************************************************
+	************************************************
+							Importing Sass Variables
+	************************************************
+************************************************/
+@import "variables.scss";
+
+/************************************************
+	************************************************
+								Table of Contents							
+	************************************************
+************************************************/
+
+/*----------------------------
+	---------------------
+	-----------------
+1. Body
+2. Global Styles - a link, ul, hr
+3. Reusable Styles
+	 3 A. Card Fixed Height
+	 3 B. Spacers/Heights
+	 3 C. Background Colors
+	 3 D. Text Colors
+	 3 E. Font Sizes
+	 3 F. Custom Typography
+	 3 G. Image Sizes
+	 3 H. Borders
+4. Layout - app, app-wrap, app-header, app-container, app-main,
+						main-heading, main-content, main-footer, app-side,
+						side-content, side-nav, onoffcanvas, sidebar-widget,
+5. Custom Headers/Custom Banners
+	 5 A. Custom Header
+	 5 B. Profile Page Banner
+	 			5 B 1. Welcome Message
+	 			5 B 2. User plans
+	 			5 B 3. Share footer
+	 5.C. Widgets Page Banner
+	 5 D. Tasks Page Banner
+	 5 E. Search Results Page Banner
+6. Custom Search Box - used in Contacts/Search and Tasks Pages
+7. Date Range CSS
+8. Main CSS
+	 8 A. Logo
+	 8 B. Header Scrolling live Updates
+	 8 C. Header Actions
+	 8 D. Header Messages Dropdown
+	 8 E. Tasks Widget
+	 8 F. User Settings
+	 8 G. Toggle Mini Nav
+	 8 H. Toggle Sidebar
+9. Widgets
+	 9 A. Product Status Widget
+	 9 B. Project activity Widget
+	 9 C. Graph Notifi Info
+	 9 D. Orders Widget
+	 9 E. Info Widget
+	 9 F. Toggle switch
+	 9 G. Messages Widget
+	 9 H. Icon Stats Widget
+	 9 I. Newsticker Widget
+	 9 J. Tasks Widget
+	 9 K. Todo Widget
+	 9 L. Traffic Sources Widget
+	 9 M. Revenue Widget
+	 9 N. Simple widget
+	 9 O. Plain widget
+	 9 P. Settings
+	 9 Q. Deals Widget
+	 9 R. Invoices Widget
+	 9 S. Tags Widget
+	 9 T. Post Widget
+	 9 U. Projects Table
+10. Pages
+	 10 A. Invoice Page
+	 10 B. Icons Page
+	 10 C. Gallery Page
+	 10 D. News Feed Page
+	 10 E. Social Stats Page
+	 10 F. Small Gallery Page
+	 10 G. Search Results Page
+	 10 H. Custom Forms Page
+	 10 I. Pricing Plans
+	 10 J. Tasks
+	 10 K. Timeline
+11. Chart Heights
+12. Plugins Overwrite CSS
+	 12 A. Gmap Skins
+	 12 B. jVector Map
+	 12 C. Flot Chart
+	 12 D. Notify
+	 12 E. Rating
+	 12 F. Google Maps
+13. Login, Signup, Lock and Error Screens
+	 13 A. Login Screen
+	 13 B. OR | Line between two blocks
+	 13 C. Lock Screen
+	 13 D. Error screen
+14. Loading
+15. Sections
+16. Inline Bagdes
+17. Secure Account
+18. Bootstrap Overwrite CSS
+	 18 A. Modals
+	 18 B. Carousel
+	 18 C. Buttons
+	 18 D. Outline Buttons
+	 18 E. Dropdown Menus
+	 18 F. Media
+	 18 G. Cards
+	 18 H. Card Header Tabs
+	 18 I. Accordion Card
+	 18 J. Tooltips
+	 18 K. Badges
+	 18 L. Alerts
+	 18 M. Progress bars
+	 18 N. Popovers
+	 18 O. Tabs & Navs
+	 18 P. Pills
+	 18 Q. Page Item
+	 18 R. Breadcrumbs
+	 18 S. jumbotron
+	 18 T. List Group
+	 18 U. Pagination
+	 18 V. Blockquote
+	 18 W. Custom File Labels
+	 18 X. Form Controls
+	 18 Y. Checkbox & Radios
+	 18 Z. Navbar
+19 Tables
+20 Gutters
+21 Code Syntax Highlight
+	--------------------
+	-------------------------
+----------------------*/
+
+/************************************************
+	************************************************
+									  1. Body							
+	************************************************
+************************************************/
+
+html {
+	height: 100%;
+}
+
+body {
+	min-height: 100%;
+	position: relative;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	font-size: 0.9rem;
+	font-weight: normal;
+	color: $font-color;
+	background: $body-bg;
+	&.boxed {
+		margin: 0 auto;
+		max-width: 1200px;
+		background: $black;
+		.app-header {
+			max-width: 1200px;
+			margin: 0 auto;
+			width: 100%;
+			left: inherit;
+			right: inherit;
+		}
+		.main-footer {
+			max-width: 1200px;
+			margin: 0 auto;
+			width: 100%;
+			left: inherit;
+			right: inherit;
+		}
+	}
+	&.full-screen {
+		a.onoffcanvas-toggler {
+			display: inline-block;
+		}
+		.app-side {
+			left: 0;
+			&.is-open {
+				left: -230px;
+			}
+		}
+		@media (max-width: 992px) {
+			.app-side {
+				left: -230px;
+				&.is-open {
+					left: 0;
+				}
+			}
+		}
+		.app-main {
+			margin-left: 0;
+		}
+	}
+	&.off-canvas {
+		@media (max-width: 1100px) {
+			a.onoffcanvas-toggler {
+				display: inline-block;
+			}
+			a.mini-nav-btn {
+				display: none;
+			}
+		}
+	}
+	&.error-bg {
+		background: url("../img/carousel-img-2.jpg") no-repeat;
+		background-size: cover;
+		background-position: center center;
+	}
+}
+
+/************************************************
+	************************************************
+										2. Global Styles
+	************************************************
+************************************************/
+
+a {
+	color: $black;
+	text-decoration: none;
+	&:hover {
+		color: darken($blue, 5%);
+		text-decoration: none;
+	}
+	&:focus {
+		outline: none;
+		text-decoration: none;
+		color: $orange;
+	}
+}
+
+ul {
+	margin: 0;
+	padding: 0;
+	li {
+		list-style-type: none;
+	}
+}
+
+ul.custom {
+	margin: 0 0 0 20px;
+	padding: 0;
+	li {
+		list-style-type: none;
+		line-height: 180%;
+	}
+}
+
+hr {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	border-top: 1px solid $border-bg;
+}
+
+/************************************************
+	************************************************
+								3. Reusable Styles
+	************************************************
+************************************************/
+
+/*************** 3 A. Card Fixed Heights ***************/
+
+.card333 {
+	height: 324px;
+}
+
+.card160 {
+	height: 159px;
+}
+
+/*************** 3 B. Spacers ***************/
+
+.spacer10 {
+	height: 10px;
+}
+
+.spacer20 {
+	height: 20px;
+}
+
+.spacer30 {
+	height: 30px;
+}
+
+.spacer50 {
+	height: 50px;
+}
+
+.spacer60 {
+	height: 60px;
+}
+
+.spacer70 {
+	height: 70px;
+}
+
+/************* 3 C. Background Colors **************/
+
+.bg-primary {
+	@include linear-gradient(lighten($primary-color, 15%), $primary-color);
+}
+
+.bg-secondary {
+	@include linear-gradient(lighten($secondary-color, 15%), $secondary-color);
+}
+
+.bg-success {
+	@include linear-gradient($light-green, $green);
+}
+
+.bg-info {
+	@include linear-gradient($light-blue, $blue);
+}
+
+.bg-warning {
+	@include linear-gradient($light-yellow, $yellow);
+}
+
+.bg-danger {
+	@include linear-gradient($light-red, $red);
+}
+
+.bg-pink {
+	@include linear-gradient($light-pink, $pink);
+}
+
+.bg-purple {
+	@include linear-gradient($light-purple, $purple);
+}
+
+.bg-violet {
+	@include linear-gradient($light-violet, $violet);
+}
+
+.bg-orange {
+	@include linear-gradient($light-orange, $orange);
+}
+
+.bg-brown {
+	@include linear-gradient($light-brown, $brown);
+}
+
+.bg-light {
+	@include linear-gradient($body-bg, lighten($body-bg, 5%));
+}
+
+.bg-dark {
+	@include linear-gradient($dark-color, darken($dark-color, 7%));
+}
+
+.bg-fb {
+	@include linear-gradient(lighten($facebook, 10%), $facebook);
+}
+
+.bg-tw {
+	@include linear-gradient(lighten($twitter, 10%), $twitter);
+}
+
+.bg-gp {
+	@include linear-gradient(lighten($gplus, 10%), $gplus);
+}
+
+.bg-lk {
+	@include linear-gradient(lighten($linkedin, 10%), $linkedin);
+}
+
+/************* 3 D. Text Colors **************/
+
+.text-primary {
+	color: $primary-color !important;
+}
+
+.text-secondary {
+	color: $secondary-color !important;
+}
+
+.text-success {
+	color: $green !important;
+}
+
+.text-info {
+	color: $blue !important;
+}
+
+.text-warning {
+	color: $yellow !important;
+}
+
+.text-danger {
+	color: $red !important;
+}
+
+.text-violet {
+	color: $violet !important;
+}
+
+.text-purple {
+	color: $purple !important;
+}
+
+.text-pink {
+	color: $pink !important;
+}
+
+.text-orange {
+	color: $orange !important;
+}
+
+.text-light {
+	color: $light-blue !important;
+}
+
+.text-dark {
+	color: $black !important;
+}
+
+.text-muted {
+	color: $font-color-light !important;
+}
+
+/************* 3 E. Font Sizes **************/
+
+.font-light {
+	font-weight: 300;
+}
+
+.font-regular {
+	font-weight: 400;
+}
+
+.font-semibold {
+	font-weight: 600;
+}
+
+.font-bold {
+	font-weight: 700;
+}
+
+/************* 3 F. Custom Typography **************/
+
+p.custom {
+	line-height: 180%;
+	font-size: 0.85rem;
+}
+
+h1.custom {
+	margin: 0 0 30px 0;
+	line-height: 100%;
+}
+
+h2.custom {
+	margin: 0 0 25px 0;
+	line-height: 100%;
+}
+
+h3.custom {
+	margin: 0 0 20px 0;
+	line-height: 100%;
+}
+
+h4.custom {
+	margin: 0 0 20px 0;
+	line-height: 100%;
+}
+
+h5.custom {
+	margin: 0 0 20px 0;
+	line-height: 100%;
+}
+
+/************* 3 G. Image Sizes **************/
+
+.img-30 {
+	width: 30px;
+	height: 30px;
+}
+
+.img-48 {
+	width: 48px;
+	height: 48px;
+}
+
+.img-60 {
+	width: 60px;
+	height: 60px;
+}
+
+.img-72 {
+	width: 72px;
+	height: 72px;
+}
+
+.img-90 {
+	width: 90px;
+	height: 90px;
+}
+
+/************* 3 H. Borders **************/
+
+.bdr-right {
+	border-right: 1px solid $body-bg;
+}
+
+.bdr-left {
+	border-left: 1px solid $body-bg;
+}
+
+.bdr-top {
+	border-top: 1px solid $body-bg;
+}
+
+.bdr-bottom {
+	border-bottom: 1px solid $body-bg;
+}
+
+/************* Overflows Scrolls **************/
+
+.overflow-scroll {
+	overflow: auto;
+}
+
+/************* Char Count **************/
+
+.charCount {
+	font-size: 0.7rem;
+}
+
+/************************************************
+	************************************************
+									4. Layout CSS
+	************************************************
+************************************************/
+
+.app {
+	min-height: 100%;
+}
+
+.app-wrap {
+	min-height: 100vh;
+	position: relative;
+}
+
+.app-header {
+	padding: 0;
+	background: $white;
+	position: fixed;
+	z-index: 1020;
+	top: 0;
+	left: 0;
+	right: 0;
+	&.btm-shadow {
+		box-shadow: 0 10px 20px -10px rgba(0, 0, 0, 0.25);
+	}
+}
+
+@media (max-width: 1100px) {
+	.app-header {
+		left: 0;
+	}
+}
+
+@media (max-width: 576px) {
+	.app-header {
+		position: inherit;
+	}
+}
+
+.app-container {
+	position: relative;
+	background: $body-bg;
+	top: 60px;
+}
+
+@media (max-width: 576px) {
+	.app-container {
+		top: inherit;
+	}
+}
+
+.app-main {
+	position: relative;
+	-webkit-transition: all 0.3s ease-out;
+	-o-transition: all 0.3s ease-out;
+	transition: all 0.3s ease-out;
+	margin-left: 230px;
+	&.left-toggle {
+		margin-left: 0;
+	}
+}
+
+.main-heading {
+	padding: 0 0.5rem;
+	background: $white;
+	position: relative;
+	-webkit-box-shadow: 0 0 5px 0 darken($body-bg, 12%);
+	-moz-box-shadow: 0 0 5px 0 darken($body-bg, 12%);
+	box-shadow: 0 0 5px 0 darken($body-bg, 12%);
+	border-top: 1px solid $body-bg;
+	z-index: 10;
+	.page-icon {
+		float: left;
+		border-right: 1px solid $body-bg;
+		padding: 25px 20px 25px 0;
+		i {
+			font-size: 1.5rem;
+			color: $primary-color;
+			margin: 0;
+			display: block;
+		}
+	}
+	.page-title {
+		margin: 15px 0 15px 65px;
+		h3 {
+			margin: 0;
+			padding: 0;
+			font-weight: 300;
+			line-height: 125%;
+			font-size: 1.5rem;
+		}
+		h6.sub-heading {
+			margin: 0;
+			padding: 0;
+			font-size: 0.75rem;
+			color: $font-color-light;
+		}
+	}
+}
+
+@media (max-width: 768px) {
+	.main-heading {
+		.page-icon {
+			display: none;
+		}
+		.page-title {
+			margin: 12px 0 0 0;
+		}
+	}
+}
+
+.main-content {
+	position: relative;
+	margin-bottom: auto;
+	padding: 1.5rem;
+	background: $body-bg;
+	&.white {
+		background: $white;
+		border-bottom: 1px solid $border-bg;
+	}
+}
+
+.main-footer {
+	background: $white;
+	padding: 0.7rem 1.3rem;
+	font-size: 0.65rem;
+	color: $font-color-light;
+}
+
+.app-side {
+	margin: 0;
+	width: 230px;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	margin: auto;
+	z-index: 1000;
+	background: $sidebar-bg;
+	-webkit-transition: all 0.3s ease-out;
+	-moz-transition: all 0.3s ease-out;
+	-ms-transition: all 0.3s ease-out;
+	-o-transition: all 0.3s ease-out;
+	transition: all 0.3s ease-out;
+	&.fixed {
+		position: fixed;
+		padding: 60px 0 0 0;
+	}
+	&.left-toggle {
+		left: -230px;
+	}
+}
+
+@media (max-width: 1100px) {
+	.app-side {
+		left: 0;
+		box-shadow: none;
+		&.is-open {
+			left: -230px;
+		}
+	}
+}
+
+@media (max-width: 992px) {
+	.app-side {
+		left: -230px;
+		&.is-open {
+			left: 0;
+		}
+	}
+}
+
+.side-content {
+	margin-bottom: auto;
+
+	// User Actions
+	ul.user-actions {
+		display: block;
+		margin: 0 auto 10px auto;
+		padding: 20px 10px 10px 10px;
+		text-align: center;
+		border-bottom: 1px solid lighten($sidebar-bg, 7%);
+		.quick-links {
+			margin: 0 0 20px 0;
+			color: $font-color-light;
+			display: block;
+		}
+		> li {
+			display: inline-block;
+			&:nth-child(3n + 3) {
+				border-right: 0;
+			}
+			&:nth-child(4) {
+				border-bottom: 0;
+			}
+			&:nth-child(5) {
+				border-bottom: 0;
+			}
+			&:nth-child(6) {
+				border-bottom: 0;
+			}
+			a {
+				font-size: 0.65rem;
+				text-align: center;
+				display: block;
+				width: 36px;
+				height: 36px;
+				line-height: 32px;
+				margin: 5px;
+				float: left;
+				@include linear-gradient($light-blue, $blue);
+				@include border-radius(30px);
+				&.orange {
+					@include linear-gradient($light-orange, $orange);
+				}
+				i {
+					font-size: 1.2rem;
+					color: $white;
+					margin: auto;
+					vertical-align: middle;
+				}
+				.count-label {
+					position: absolute;
+					top: 5px;
+					right: 7px;
+					width: 10px;
+					height: 10px;
+					border: 2px solid $primary-color;
+					@include border-radius(10px);
+					animation: glow 1s ease-out;
+					-moz-animation: glow 1s ease-out;
+					-moz-animation-iteration-count: infinite;
+					-o-animation: glow 1s ease-out;
+					-o-animation-iteration-count: infinite;
+					-webkit-animation: glow 1s ease-out;
+					-ms-animation: glow 1s ease-out;
+					-webkit-animation-iteration-count: infinite;
+					animation-iteration-count: infinite;
+					&.red {
+						border: 2px solid $red;
+					}
+					&.green {
+						border: 2px solid $green;
+					}
+					&.yellow {
+						border: 2px solid $yellow;
+					}
+				}
+				&:hover {
+					color: $primary-color;
+				}
+			}
+			&:last-child {
+				border-right: 0;
+			}
+			&:first-child {
+				border-left: 0;
+			}
+		}
+	}
+
+	// Login User Sidebar Profile
+	.login-user {
+		padding: 30px 10px 20px 10px;
+		text-align: center;
+		border-bottom: 1px solid darken($sidebar-bg, 3%);
+		position: relative;
+		margin-bottom: 5px;
+		-webkit-box-shadow: 0 18px 16px -16px darken($sidebar-bg, 5%);
+		-moz-box-shadow: 0 18px 16px -16px darken($sidebar-bg, 5%);
+		box-shadow: 0 18px 16px -16px darken($sidebar-bg, 5%);
+		.profile-thumb {
+			position: relative;
+			width: 64px;
+			height: 64px;
+			margin: 0 auto 10px auto;
+			img {
+				width: 64px;
+				height: 64px;
+				@include border-radius(50px);
+				box-shadow: 0 0 15px darken($sidebar-bg, 10%);
+			}
+			.status {
+				position: absolute;
+				top: 0;
+				right: 5px;
+				width: 13px;
+				height: 13px;
+				@include border-radius(30px);
+				&.busy {
+					background: $orange;
+				}
+				&.online {
+					background: $green;
+				}
+				&.away {
+					background: $red;
+				}
+			}
+		}
+		h6.profile-name {
+			font-size: 0.8rem;
+			margin: 0;
+			color: $font-color-light;
+		}
+	}
+}
+
+.side-nav {
+	margin-bottom: 1rem;
+	.unifyMenu {
+		display: -webkit-box;
+		display: -webkit-flex;
+		display: -ms-flexbox;
+		display: flex;
+		-webkit-box-orient: vertical;
+		-webkit-box-direction: normal;
+		-webkit-flex-direction: column;
+		-ms-flex-direction: column;
+		flex-direction: column;
+		padding: 0;
+		> li {
+			position: relative;
+			&.selected {
+				&:after {
+					position: absolute;
+					content: "";
+					right: -1px;
+					top: 0px;
+					background: url("../img/menu-arrow.svg");
+					background-size: 100%;
+					width: 9px;
+					height: 40px;
+				}
+				> a {
+					color: $white;
+					@include linear-gradient($sidebar-bg, lighten($sidebar-bg, 5%));
+				}
+				.current-page {
+					color: $light-blue;
+					pointer-events: none;
+					@include linear-gradient($sidebar-bg, lighten($sidebar-bg, 5%));
+				}
+			}
+			&.active {
+				a {
+					span.lbl {
+						display: none;
+					}
+					span.badge {
+						display: none;
+					}
+				}
+			}
+		}
+		a {
+			position: relative;
+			display: -webkit-box;
+			display: -webkit-flex;
+			display: -ms-flexbox;
+			display: flex;
+			-webkit-box-orient: horizontal;
+			-webkit-box-direction: normal;
+			-webkit-flex-direction: row;
+			-ms-flex-direction: row;
+			flex-direction: row;
+			-webkit-box-align: center;
+			-webkit-align-items: center;
+			-ms-flex-align: center;
+			align-items: center;
+			outline-width: 0;
+			-webkit-transition: all 0.3s ease-out;
+			-o-transition: all 0.3s ease-out;
+			transition: all 0.3s ease-out;
+			background: $sidebar-bg;
+			color: $font-color-light;
+			font-size: 0.9rem;
+			padding: 0;
+			font-weight: 500;
+			&:active,
+			&:focus,
+			&:hover {
+				color: $white;
+				background: lighten($sidebar-bg, 3%);
+			}
+			span.lbl {
+				position: absolute;
+				right: 30px;
+				top: 17px;
+				background: $light-blue;
+				height: 7px;
+				width: 7px;
+				@include border-radius(10px);
+				&.red {
+					background: $orange;
+				}
+				&.green {
+					background: $green;
+				}
+				&.yellow {
+					background: $yellow;
+				}
+			}
+			span.badge {
+				position: absolute;
+				right: 15px;
+				top: 14px;
+				background: $light-blue;
+				height: 14px;
+				min-width: 24px;
+				@include border-radius(20px);
+				font-size: 10px;
+				color: $white;
+				padding: 2px 5px;
+				&.orange {
+					background: $orange;
+				}
+				&.green {
+					background: $green;
+				}
+				&.yellow {
+					background: $yellow;
+				}
+			}
+		}
+		ul {
+			background: $sidebar-bg;
+			> li.active {
+				> a {
+					color: $white;
+				}
+			}
+			a {
+				padding: 0.5em;
+				padding-left: 3.7rem;
+				font-size: 0.9rem;
+			}
+			ul {
+				a {
+					padding-left: 5rem;
+					color: darken($font-color-light, 10%);
+				}
+			}
+		}
+	} // Menu collapse
+	.collapse {
+		display: none;
+		&.in {
+			display: block;
+		}
+	}
+	.collapsing {
+		position: relative;
+		height: 0;
+		overflow: hidden;
+		-webkit-transition-timing-function: ease;
+		-o-transition-timing-function: ease;
+		transition-timing-function: ease;
+		-webkit-transition-duration: 0.35s;
+		-o-transition-duration: 0.35s;
+		transition-duration: 0.35s;
+		-webkit-transition-property: height, visibility;
+		-o-transition-property: height, visibility;
+		transition-property: height, visibility;
+	} // Menu Arrow
+	.arrow {
+		float: right;
+		line-height: 1.42857;
+	}
+	.has-arrow {
+		position: relative;
+		&::after {
+			position: absolute;
+			content: "";
+			width: 0.5em;
+			height: 0.5em;
+			border-width: 1px 0 0 1px;
+			border-style: solid;
+			border-color: initial;
+			right: 1.3em;
+			-webkit-transform: rotate(135deg) translate(0, -50%);
+			-ms-transform: rotate(135deg) translate(0, -50%);
+			-o-transform: rotate(135deg) translate(0, -50%);
+			transform: rotate(135deg) translate(0, -50%);
+			-webkit-transform-origin: top;
+			-ms-transform-origin: top;
+			-o-transform-origin: top;
+			transform-origin: top;
+			top: 50%;
+			-webkit-transition: all 0.3s ease-out;
+			-o-transition: all 0.3s ease-out;
+			transition: all 0.3s ease-out;
+		}
+	}
+	.active > .has-arrow::after,
+	.has-arrow[aria-expanded="true"]::after {
+		-webkit-transform: rotate(225deg) translate(0, -50%);
+		-ms-transform: rotate(225deg) translate(0, -50%);
+		-o-transform: rotate(225deg) translate(0, -50%);
+		transform: rotate(225deg) translate(0, -50%);
+		margin-top: 0;
+	}
+}
+
+@media (min-width: 992px) {
+	.app-side.is-mini {
+		width: 80px;
+		left: 0;
+		~ .app-main {
+			margin-left: 80px;
+		}
+		.unifyMenu {
+			> li {
+				&.selected {
+					&:after {
+						background: transparent;
+					}
+				}
+				> ul {
+					position: absolute;
+					top: 100%;
+					left: 100%;
+					display: none;
+					> li > a {
+						padding: 0.5em 0.5em 0.5em 1.5em;
+					}
+				}
+				&:hover {
+					> {
+						ul {
+							display: block;
+							min-width: 192px;
+							height: auto !important;
+							box-shadow: 2px 2px 0 2px darken($body-bg, 5%);
+						}
+						a {
+							display: -webkit-box;
+							display: -webkit-flex;
+							display: -ms-flexbox;
+							display: flex;
+							-webkit-box-orient: horizontal;
+							-webkit-box-direction: normal;
+							-webkit-flex-direction: row;
+							-ms-flex-direction: row;
+							flex-direction: row;
+							min-width: 257px;
+							color: $white;
+							background: $primary-color;
+							&:active,
+							&:focus,
+							&:hover {
+								color: $white;
+								background: $primary-color;
+							}
+						}
+					}
+					.nav-title {
+						display: inline-block;
+						-webkit-align-self: center;
+						-ms-flex-item-align: center;
+						-ms-grid-row-align: center;
+						align-self: center;
+					}
+					> .has-arrow::after {
+						border-width: 1px 0 0 1px;
+					}
+				}
+				> a.has-arrow::after {
+					border-width: 0;
+				}
+			}
+			li:last-child {
+				padding-bottom: 0;
+			}
+			ul ul a {
+				padding-left: 2.5rem;
+			}
+			a {
+				span.lbl {
+					display: none;
+				}
+				span.badge {
+					display: none;
+				}
+			}
+		}
+		.nav-title {
+			display: none;
+		}
+		a.logo {
+			padding: 20px 10px 20px 10px;
+			img {
+				max-width: 50px;
+			}
+		}
+		.has-icon {
+			width: 80px;
+			-webkit-box-flex: 0;
+			-webkit-flex: 0 0 80px;
+			-ms-flex: 0 0 80px;
+			flex: 0 0 80px;
+		}
+	}
+}
+
+@media (max-width: 1100px) {
+	.app-main {
+		margin-left: 0;
+	}
+	.side-nav {
+		.unifyMenu {
+			> li {
+				&.selected {
+					&:after {
+						background: transparent;
+					}
+				}
+			}
+		}
+	}
+}
+
+.has-icon {
+	width: 60px;
+	-webkit-box-flex: 0;
+	-webkit-flex: 0 0 60px;
+	-ms-flex: 0 0 60px;
+	flex: 0 0 60px;
+	height: 2.5rem;
+	font-size: 1.4em;
+	display: -webkit-inline-box;
+	display: -webkit-inline-flex;
+	display: -ms-inline-flexbox;
+	display: inline-flex;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	-ms-flex-align: center;
+	align-items: center;
+	-webkit-box-pack: center;
+	-webkit-justify-content: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-webkit-flex-direction: column;
+	-ms-flex-direction: column;
+	flex-direction: column;
+	i {
+		&:before {
+			background: -moz-linear-gradient(top, #55779f 0%, #253446 100%);
+			background: -webkit-gradient(
+				linear,
+				left top,
+				left bottom,
+				color-stop(0%, #55779f),
+				color-stop(100%, #253446)
+			);
+			background: -webkit-linear-gradient(top, #55779f 0%, #253446 100%);
+			background-clip: text;
+			text-fill-color: transparent;
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+		}
+	}
+}
+
+.onoffcanvas {
+	visibility: hidden;
+	&.is-open {
+		visibility: visible;
+	}
+}
+
+.sidebar-widget {
+	background: lighten($sidebar-bg, 3%);
+	ul.contributions {
+		padding: 15px;
+		li {
+			margin-bottom: 1.5rem;
+			p {
+				margin: 0 0 5px 0;
+				font-size: 0.8rem;
+				color: $font-color-light;
+				span {
+					float: right;
+					font-size: 0.9rem;
+					font-weight: 600;
+				}
+			}
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+	}
+}
+
+@media (min-width: 992px) {
+	.app-side.is-mini {
+		.sidebar-widget {
+			ul.contributions {
+				li {
+					p {
+						span {
+							float: none;
+							display: block;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+/************************************************
+	************************************************
+					5. Custom Headers/Custom Banners
+	************************************************
+************************************************/
+
+/*************** 5 A. Custom Header ***************/
+
+.custom-header {
+	padding: 1rem 1rem;
+	background: darken($primary-color, 25%);
+	.page-title {
+		color: $white;
+		h3 {
+			font-size: 2rem;
+			font-weight: 300;
+			margin: 0;
+		}
+		h6.sub-heading {
+			line-height: 180%;
+			margin: 0;
+			font-weight: 300;
+			font-size: 0.8rem;
+		}
+	}
+	.daterange-container {
+		margin: 13px 0 0 0;
+		.form-control {
+			border: 1px solid $white;
+		}
+	}
+}
+
+/*************** 5 B. Profile Page Banner ***************/
+
+.profile-header {
+	padding: 2rem 1rem;
+	background: darken($primary-color, 25%);
+	.welcome-msg {
+		.welcome-title {
+			color: $white;
+		}
+		.welcome-designation {
+			color: $white;
+		}
+	}
+	.user-plans {
+		.circliful text {
+			fill: $white;
+		}
+	}
+}
+@media (max-width: 767px) {
+	.profile-header {
+		.welcome-msg {
+			.btn {
+				display: none;
+			}
+			.welcome-title {
+				margin-bottom: 0;
+			}
+			.welcome-designation {
+				margin-bottom: 0;
+			}
+		}
+	}
+}
+
+// 5 B 1. Welcome Message
+.welcome-msg {
+	padding-left: 0;
+	.welcome-user-thumb {
+		margin-bottom: 10px;
+		img {
+			width: 60px;
+			height: 60px;
+			@include border-radius(100px);
+		}
+	}
+	.welcome-title {
+		font-size: 2rem;
+		font-weight: 300;
+		color: $white;
+		margin-bottom: 0.7rem;
+		span {
+			font-weight: 500;
+		}
+	}
+	.welcome-designation {
+		color: $white;
+		line-height: 150%;
+		margin-bottom: 0;
+		margin-right: 10%;
+		font-weight: 100;
+	}
+}
+@media (max-width: 767px) {
+	.welcome-msg {
+		.btn {
+			display: none;
+		}
+		.welcome-title {
+			margin-bottom: 0;
+			font-size: 1.5rem;
+		}
+		.welcome-designation {
+			margin-bottom: 0;
+		}
+		.welcome-user-thumb {
+			img {
+				width: 32px;
+				height: 32px;
+			}
+		}
+	}
+}
+
+// 5 B 2. User plans
+.user-plans {
+	margin: 1rem 0 0 0;
+}
+
+// 5 B 3. Share footer
+.share-footer {
+	a:not(.btn) {
+		margin-top: 4px;
+		margin-right: 10px;
+		font-size: 1rem;
+		display: inline-block;
+	}
+}
+
+/*************** 5 C. Widgets Page Banner ***************/
+
+.widgets-header {
+	padding: 1rem 1rem;
+	position: relative;
+	z-index: 10;
+	background: darken($primary-color, 25%);
+}
+
+/*************** 5 D. Tasks Page Banner ***************/
+
+.tasks-banner {
+	padding: 1.5rem 1rem;
+	background: darken($primary-color, 25%);
+	text-align: center;
+	.page-title {
+		color: $white;
+		h3 {
+			font-size: 2rem;
+			font-weight: 300;
+			margin: 0;
+			line-height: 190%;
+		}
+		h6#today-date {
+			margin: 0 0 1rem 0;
+			font-weight: 300;
+		}
+	}
+	.add-btn {
+		position: absolute;
+		@include linear-gradient($pink-red, darken($pink-red, 10%));
+		bottom: -20px;
+		right: 25px;
+		@include border-radius(10px);
+		cursor: pointer;
+		width: 40px;
+		height: 40px;
+		padding: 10px;
+		text-align: center;
+		color: $white;
+		border: 0;
+		font-size: 1rem;
+		&:hover {
+			border: 0;
+		}
+		&:focus {
+			border: 0;
+			outline: none;
+			box-shadow: none;
+		}
+	}
+}
+
+/*************** 5 E. Search Results Page Banner ***************/
+
+.search-results-banner {
+	padding: 2rem 1rem;
+	background: darken($primary-color, 25%);
+	position: relative;
+	z-index: 10;
+	text-align: center;
+	.page-title {
+		color: $white;
+		h3 {
+			font-size: 2rem;
+			font-weight: 300;
+			margin: 0;
+			line-height: 250%;
+		}
+		p {
+			margin: 0 0 1rem 0;
+		}
+	}
+}
+
+/************************************************
+	************************************************
+								6. Custom Search Box
+	************************************************
+************************************************/
+
+.tasks-search {
+	position: relative;
+	.form-control {
+		@include border-radius(30px);
+		border: 1px solid $white;
+		padding: 0.7rem 1rem;
+	}
+	.btn {
+		@include border-radius-all-val(0, 30px, 30px, 0);
+	}
+}
+
+/************************************************
+	************************************************
+								7. Date Range CSS
+	************************************************
+************************************************/
+
+.daterange-container {
+	float: right;
+	margin: 18px 0;
+	.form-control {
+		@include border-radius(30px);
+		padding: 0.4rem 0.7rem 0.4rem 1rem;
+		color: $font-color-light;
+		font-size: 0.8rem;
+		border: 1px solid $body-bg;
+		min-height: 40px;
+		> span {
+			float: left;
+			margin-top: 2px;
+		}
+		i.down-arrow {
+			@include border-radius(30px);
+			@include linear-gradient($light-orange, $orange);
+			font-size: 1rem;
+			color: $white;
+			width: 24px;
+			height: 24px;
+			text-align: center;
+			line-height: 24px;
+			margin-left: 20px;
+			display: inline-block;
+		}
+	}
+}
+
+/************************************************
+	************************************************
+										8. Main CSS
+	************************************************
+************************************************/
+
+/*************** 8 A. Logo ***************/
+
+.logo-block {
+	min-width: 260px;
+	max-width: 260px;
+	margin: 0;
+	float: left;
+}
+
+a.logo {
+	padding: 9px 0px 9px 5px;
+	float: left;
+	min-width: 200px;
+	img {
+		max-width: 180px;
+		max-height: 50px;
+	}
+}
+
+@media (max-width: 767px) {
+	.logo-block {
+		min-width: 220px;
+		max-width: 220px;
+	}
+	a.logo {
+		min-width: 160px;
+		padding: 14px 0px 14px 5px;
+		img {
+			max-width: 130px;
+			max-height: 40px;
+		}
+	}
+}
+
+/*************** 8 B. Header Scrolling live Updates ***************/
+
+.live-updates {
+	display: inline-block;
+	margin-left: 25px;
+	position: relative;
+	top: 15px;
+	max-height: 30px;
+	overflow: hidden;
+	ul.header-news {
+		li {
+			line-height: 30px;
+			a {
+				color: $font-color-light;
+				font-size: 0.85rem;
+				i {
+					@include linear-gradient($blue, $light-blue);
+					padding: 5px;
+					@include border-radius(3px);
+					width: 30px;
+					height: 30px;
+					font-size: 1rem;
+					text-align: center;
+					margin-right: 10px;
+					line-height: 20px;
+					float: left;
+					color: $white;
+				}
+			}
+		}
+	}
+}
+
+@media (max-width: 1100px) {
+	.live-updates {
+		display: none;
+	}
+}
+
+/*************** 8 C. Header Actions ***************/
+
+.header-actions {
+	float: right;
+	margin-right: 5px;
+	> li {
+		float: left;
+		border-left: 1px solid $body-bg;
+		> a {
+			padding: 18px 20px;
+			display: block;
+			position: relative;
+			> i {
+				font-size: 1.5rem;
+				vertical-align: middle;
+				color: $font-color-light;
+			}
+			.count-label {
+				position: absolute;
+				top: 12px;
+				right: 10px;
+				width: 17px;
+				height: 17px;
+				@include linear-gradient($primary-light-color, $primary-color);
+				@include border-radius(30px);
+				text-align: center;
+				font-size: 0.6rem;
+				color: $white;
+				line-height: 18px;
+				&.red {
+					@include linear-gradient($light-red, $orange);
+				}
+				&.green {
+					@include linear-gradient($blue, $green);
+				}
+				&.yellow {
+					@include linear-gradient($light-yellow, $yellow);
+				}
+			}
+			&.user-settings {
+				padding: 10px 0 10px 18px;
+				.avatar {
+					position: relative;
+					width: 40px;
+					height: 40px;
+					@include border-radius(50px);
+					@include linear-gradient($primary-light-color, $primary-color);
+					line-height: 40px;
+					display: inline-block;
+					text-align: center;
+					color: $white;
+					.status {
+						position: absolute;
+						top: -2px;
+						right: -2px;
+						width: 13px;
+						height: 13px;
+						@include border-radius(30px);
+						border: 2px solid $white;
+						&.busy {
+							@include linear-gradient($light-orange, $red);
+						}
+						&.online {
+							@include linear-gradient($blue, $green);
+						}
+						&.away {
+							@include linear-gradient($light-yellow, $yellow);
+						}
+					}
+				}
+				span.user-name {
+					color: $black;
+					margin-left: 5px;
+					vertical-align: middle;
+					font-size: 0.8rem;
+					display: inline-block;
+					max-width: 90px;
+					overflow: hidden;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+					font-weight: 600;
+				}
+				i.downarrow {
+					@include border-radius(30px);
+					@include linear-gradient($light-orange, $orange);
+					font-size: 1rem;
+					color: $white;
+					margin-left: 5px;
+				}
+			}
+		}
+		.dropdown-menu {
+			margin-top: 0;
+		}
+		&:first-child {
+			border-left: 0;
+		}
+	}
+}
+
+@media (max-width: 767px) {
+	.header-actions {
+		> li {
+			display: none;
+			&:last-child {
+				display: block;
+				border-left: 0;
+			}
+		}
+	}
+}
+
+@media (max-width: 992px) {
+	.header-actions {
+		> li {
+			> a {
+				&.user-settings {
+					span.user-name {
+						display: none;
+					}
+				}
+			}
+		}
+	}
+}
+
+.logout-btn {
+	margin: 10px 10px 0 10px;
+	.btn {
+		display: block;
+		width: 100%;
+	}
+}
+
+/*************** 8 D. Header Messages Dropdown ***************/
+
+ul.imp-notify {
+	li {
+		padding: 10px 15px;
+		border-bottom: 1px solid $body-bg;
+		&:last-child {
+			border-bottom: 0;
+		}
+		.icon {
+			float: left;
+			width: 40px;
+			height: 40px;
+			line-height: 40px;
+			text-align: center;
+			@include border-radius(50px);
+			color: $white;
+			@include linear-gradient($primary-light-color, $primary-color);
+			&.green {
+				@include linear-gradient($light-green, $green);
+			}
+			&.red {
+				@include linear-gradient($red, $light-orange);
+			}
+			&.yellow {
+				@include linear-gradient($green, $yellow);
+			}
+		}
+		.details {
+			display: block;
+			margin-left: 55px;
+			h6.username {
+				font-weight: 600;
+				font-size: 0.9rem;
+			}
+			p.desc {
+				font-size: 0.8rem;
+				margin: 0;
+				line-height: 130%;
+				color: $font-color-light;
+			}
+			p.time {
+				font-size: 0.7rem;
+				margin: 5px 0 0 0;
+				color: $font-color-light;
+			}
+		}
+	}
+}
+
+/*************** 8 E. Tasks Widget ***************/
+
+ul.tasks-widget {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	li {
+		padding: 15px 15px;
+		border-bottom: 1px solid $border-bg;
+		p {
+			margin: 0 0 10px 0;
+			padding: 0;
+			line-height: 100%;
+			span {
+				float: right;
+				font-size: 0.75rem;
+				color: $font-color-light;
+			}
+		}
+		.progress {
+			margin-bottom: 0px;
+			height: 5px;
+		}
+		&:last-child {
+			border-bottom: 0 solid transparent;
+		}
+	}
+}
+
+/*************** 8 F. User Settings ***************/
+
+.admin-settings {
+	ul.admin-settings-list {
+		margin: 0;
+		> li {
+			border-bottom: 1px solid $body-bg;
+			display: block;
+			color: $font-color-light;
+			a {
+				font-size: 0.8rem;
+				display: block;
+				padding: 7px 15px;
+				span.icon {
+					margin-right: 10px;
+					font-size: 1rem;
+					vertical-align: middle;
+				}
+				span.text-name {
+					margin-right: 10px;
+					vertical-align: middle;
+				}
+				.badge {
+					float: right;
+					font-size: 0.65rem;
+					margin-top: 1px;
+					@include border-radius(20px);
+				}
+			}
+			&:hover {
+				background: lighten($body-bg, 5%);
+			}
+		}
+	}
+	.actions {
+		margin: 10px 15px 3px 15px;
+		.btn {
+			display: inline-block;
+			font-size: 1rem;
+		}
+	}
+}
+
+/*************** 8 G. Toggle Mini Nav ***************/
+
+a.mini-nav-btn {
+	padding: 18px 10px 18px 10px;
+	width: 50px;
+	height: 50px;
+	display: inline-block;
+	position: relative;
+	top: 5px;
+	i.open {
+		position: absolute;
+		display: block;
+		height: 2px;
+		background: $orange;
+		width: 30px;
+		left: 10px;
+		-webkit-transition: all 0.3s;
+		transition: all 0.3s;
+		&:nth-child(1) {
+			top: 16px;
+		}
+		&:nth-child(2) {
+			top: 24px;
+		}
+		&:nth-child(3) {
+			top: 32px;
+		}
+	}
+	i.mini {
+		position: absolute;
+		display: block;
+		height: 2px;
+		background: $orange;
+		width: 30px;
+		left: 10px;
+		-webkit-transition: all 0.3s;
+		transition: all 0.3s;
+		&:nth-child(1) {
+			top: 25px;
+			-webkit-transform: rotateZ(45deg);
+			transform: rotateZ(45deg);
+		}
+		&:nth-child(2) {
+			background: transparent;
+		}
+		&:nth-child(3) {
+			top: 25px;
+			-webkit-transform: rotateZ(-45deg);
+			transform: rotateZ(-45deg);
+		}
+	}
+}
+
+@media (max-width: 1100px) {
+	a.mini-nav-btn {
+		display: none;
+	}
+}
+
+/*************** 8 H. Toggle Sidebar ***************/
+
+a.onoffcanvas-toggler {
+	padding: 18px 10px 18px 10px;
+	width: 50px;
+	height: 50px;
+	display: none;
+	position: relative;
+	top: 5px;
+	i.open {
+		position: absolute;
+		display: block;
+		height: 2px;
+		background: $orange;
+		width: 30px;
+		left: 10px;
+		-webkit-transition: all 0.3s;
+		transition: all 0.3s;
+		&:nth-child(1) {
+			top: 16px;
+		}
+		&:nth-child(2) {
+			top: 24px;
+		}
+		&:nth-child(3) {
+			top: 32px;
+		}
+	}
+	i.mini {
+		position: absolute;
+		display: block;
+		height: 2px;
+		background: $orange;
+		width: 30px;
+		left: 10px;
+		-webkit-transition: all 0.3s;
+		transition: all 0.3s;
+		&:nth-child(1) {
+			top: 25px;
+			-webkit-transform: rotateZ(45deg);
+			transform: rotateZ(45deg);
+		}
+		&:nth-child(2) {
+			background: transparent;
+		}
+		&:nth-child(3) {
+			top: 25px;
+			-webkit-transform: rotateZ(-45deg);
+			transform: rotateZ(-45deg);
+		}
+	}
+}
+
+@media (max-width: 1100px) {
+	a.onoffcanvas-toggler {
+		display: inline-block;
+	}
+}
+
+/************************************************
+	************************************************
+										9. Widgets
+	************************************************
+************************************************/
+
+/*************** 9 A. Product Status Widget ***************/
+
+ul.product-status {
+	li {
+		margin-bottom: 15px;
+		&:last-child {
+			margin-bottom: 0px;
+		}
+		.customer {
+			float: left;
+			img {
+				width: 48px;
+				height: 48px;
+				@include border-radius(30px);
+			}
+			.empty-avatar {
+				height: 48px;
+				width: 48px;
+				@include border-radius(5px);
+				color: $white;
+				text-align: center;
+				line-height: 48px;
+				@include linear-gradient($primary-light-color, $primary-color);
+				&.green {
+					@include linear-gradient($light-green, $green);
+				}
+				&.red {
+					@include linear-gradient($red, $light-orange);
+				}
+				&.yellow {
+					@include linear-gradient($green, $yellow);
+				}
+			}
+		}
+		.product-details {
+			margin-left: 75px;
+			.badge {
+				font-size: 0.7rem;
+				padding: 3px 10px 4px 10px;
+				margin: 15px 0 10px 0;
+			}
+			h6 {
+				margin: 0;
+				line-height: 180%;
+				font-size: 0.9rem;
+			}
+			p {
+				line-height: 180%;
+			}
+		}
+	}
+}
+
+/*************** 9 B. Project activity Widget ***************/
+
+ul.project-activity {
+	margin-left: 20px;
+	padding: 0 0 20px 0;
+	border-left: 1px solid $border-bg;
+	li.activity-list {
+		position: relative;
+		.lbl {
+			@include linear-gradient($primary-light-color, $primary-color);
+			color: $white;
+			@include border-radius(2px);
+			content: "";
+			height: 10px;
+			width: 10px;
+			text-align: center;
+			text-transform: uppercase;
+			position: absolute;
+			top: 10px;
+			left: -6px;
+			transform: rotate(-45deg);
+			&.red {
+				@include linear-gradient($light-red, $red);
+			}
+			&.green {
+				@include linear-gradient($light-green, $green);
+			}
+			&.yellow {
+				@include linear-gradient($light-yellow, $yellow);
+			}
+			&.pink {
+				@include linear-gradient($light-pink, $pink);
+			}
+			&.orange {
+				@include linear-gradient($light-orange, $orange);
+			}
+			&.violet {
+				@include linear-gradient($light-violet, $violet);
+			}
+		}
+		&:last-child .detail-info {
+			padding-bottom: 0;
+		}
+		.detail-info {
+			line-height: 100%;
+			margin: 0 0 0 30px;
+			padding-bottom: 25px;
+			p.desc-info {
+				margin: 0 0 5px 0;
+				line-height: 150%;
+				span {
+					color: $blue;
+				}
+			}
+			a.activity-status {
+				color: $font-color-light;
+				font-size: 0.85rem;
+				i {
+					font-size: 1rem;
+					vertical-align: middle;
+					margin-right: 5px;
+					color: $green;
+				}
+			}
+		}
+	}
+}
+
+/*************** 9 C. Graph Notifi Info ***************/
+
+.notifi {
+	position: absolute;
+	&.tr {
+		top: 1rem;
+		right: 1rem;
+	}
+	&.tl {
+		top: 1rem;
+		left: 1rem;
+	}
+	&.bl {
+		bottom: 1rem;
+		left: 1rem;
+	}
+	&.br {
+		bottom: 1rem;
+		right: 1rem;
+	}
+	a {
+		display: inline-block;
+		i {
+			font-size: 30px;
+		}
+	}
+}
+
+/*************** 9 D. Orders Widget ***************/
+
+ul.order-list {
+	li {
+		padding: 0.8rem 0;
+		.order-num {
+			margin: 0 0 7px 0;
+			color: $primary-color;
+			border-left: 5px solid $primary-color;
+			padding-left: 10px;
+			&.placed {
+				color: $green;
+				border-left: 5px solid $green;
+			}
+			&.cancelled {
+				color: $red;
+				border-left: 5px solid $red;
+			}
+		}
+		.order-desc {
+			margin: 0 0 0 15px;
+			line-height: 180%;
+			span {
+				text-decoration: underline;
+			}
+		}
+		.order-date {
+			color: $font-color-light;
+			float: right;
+			margin-top: 2px;
+			font-size: 0.8rem;
+		}
+		&:first-child {
+			padding-top: 0;
+		}
+		&:last-child {
+			padding-bottom: 0;
+		}
+	}
+}
+
+/*************** 9 E. Info Widget ***************/
+
+.info-stats {
+	text-align: center;
+	margin-bottom: 20px;
+	p.info-title {
+		margin: 5px 0;
+		color: $font-color-light;
+	}
+	h6.info-title {
+		margin: 10px 0;
+		color: $font-color-light;
+		font-size: 0.85rem;
+		&.small {
+			font-size: 0.75rem;
+		}
+	}
+	h6.info-total {
+		margin: 0;
+	}
+	h5.info-total {
+		margin: 0;
+	}
+	h4.info-total {
+		margin: 10px 0 0 0;
+		font-size: 0.85rem;
+		line-height: 140%;
+		display: inline-block;
+		padding: 2px 20px;
+		color: $white;
+		@include border-radius(20px);
+		@include linear-gradient($blue, $light-blue);
+		&.red {
+			@include linear-gradient($orange, $light-orange);
+		}
+	}
+	span.info-label {
+		width: 12px;
+		height: 12px;
+		border: 3px solid $primary-color;
+		@include border-radius(10px);
+		display: inline-block;
+		&.red {
+			border: 3px solid $red;
+		}
+		&.green {
+			border: 3px solid $green;
+		}
+		&.yellow {
+			border: 3px solid $yellow;
+		}
+	}
+}
+
+/*************** 9 F. Toggle switch ***************/
+
+.toggle-switch {
+	position: relative;
+	width: 40px;
+	height: 20px;
+	@include linear-gradient($primary-light-color, $primary-color);
+	overflow: hidden;
+	@include border-radius(10px);
+	.check {
+		position: absolute;
+		display: block;
+		cursor: pointer;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		opacity: 0;
+		z-index: 6;
+		margin: 0;
+		&:checked ~ {
+			.track {
+				@include linear-gradient($orange, $light-orange);
+			}
+			.switch {
+				right: 2px;
+				left: 20px;
+				transition: 0.35s cubic-bezier(0.7, 0.1, 0.15, 0.8);
+				transition-property: left, right;
+				transition-delay: 0.05s, 0s;
+				&:after {
+					position: absolute;
+					content: "\e900";
+					font-size: 0.75rem;
+					color: $orange;
+					font-family: "icomoon";
+					line-height: 100%;
+					top: 2px;
+					left: 3px;
+				}
+			}
+		}
+	}
+	.switch {
+		position: absolute;
+		left: 2px;
+		top: 2px;
+		bottom: 2px;
+		right: 20px;
+		@include linear-gradient($white, darken($white, 5%));
+		@include border-radius(10px);
+		z-index: 1;
+		transition: 0.35s cubic-bezier(0.7, 0.1, 0.15, 0.8);
+		transition-property: left, right;
+		transition-delay: 0s, 0.05s;
+		&:after {
+			position: absolute;
+			content: "\e901";
+			font-size: 0.75rem;
+			color: $primary-color;
+			font-family: "icomoon";
+			line-height: 100%;
+			top: 2px;
+			left: 3px;
+		}
+	}
+	.track {
+		position: absolute;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		transition: 0.35s cubic-bezier(0.7, 0.1, 0.15, 0.8);
+		box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.05);
+	}
+	&.tr {
+		position: absolute;
+		top: 15px;
+		right: 15px;
+	}
+	&.tr-xl {
+		position: absolute;
+		top: 16px;
+		right: 15px;
+	}
+}
+
+/*************** 9 G. Messages Widget ***************/
+
+.message-wrapper {
+	li {
+		padding: 16px 0 17px 0;
+		border-bottom: 1px dotted $border-bg;
+		img.avatar {
+			height: 60px;
+			width: 60px;
+			@include border-radius(50px);
+		}
+		.empty-avatar {
+			height: 60px;
+			width: 60px;
+			@include border-radius(5px);
+			color: $white;
+			text-align: center;
+			line-height: 60px;
+			@include linear-gradient($primary-light-color, $primary-color);
+			&.green {
+				@include linear-gradient($light-green, $green);
+			}
+			&.red {
+				@include linear-gradient($red, $light-red);
+			}
+			&.yellow {
+				@include linear-gradient($light-yellow, $yellow);
+			}
+			&.orange {
+				@include linear-gradient($red, $orange);
+			}
+		}
+		&.in img.avatar {
+			float: left;
+		}
+		&.in .empty-avatar {
+			float: left;
+		}
+		&.in .plain-avatar {
+			float: left;
+		}
+		.name {
+			color: $font-color-light;
+			line-height: 180%;
+		}
+		.date-time {
+			color: $primary-color;
+			font-size: 0.65rem;
+		}
+		&.out img.avatar {
+			float: right;
+		}
+		&.out .empty-avatar {
+			float: right;
+		}
+		&.out .plain-avatar {
+			float: right;
+		}
+		.message {
+			display: block;
+			padding: 0;
+			position: relative;
+			line-height: 180%;
+		}
+		&.in .message {
+			text-align: left;
+			margin-left: 80px;
+		}
+		&.out {
+			text-align: right;
+			.message {
+				margin-right: 80px;
+				text-align: right;
+			}
+		}
+		.message .body {
+			display: block;
+			padding-top: 5px;
+			span {
+				font-style: italic;
+			}
+		}
+		&:first-child {
+			padding-top: 0;
+		}
+		&:last-child {
+			border-bottom: none;
+		}
+	}
+}
+
+/*************** 9 H. Icon Stats Widget ***************/
+
+ul.stats {
+	li {
+		line-height: 36px;
+		margin-bottom: 12px;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		font-weight: 300;
+		color: $white;
+		span.icon {
+			background: $primary-color;
+			@include linear-gradient($primary-light-color, $primary-color);
+			width: 36px;
+			height: 36px;
+			text-align: center;
+			display: inline-block;
+			@include border-radius(50px);
+			margin-right: 15px;
+			float: left;
+			i {
+				color: $white;
+				font-size: 1rem;
+				line-height: 36px;
+			}
+			&.red {
+				@include linear-gradient($light-red, $red);
+			}
+			&.green {
+				@include linear-gradient($light-green, $green);
+			}
+			&.yellow {
+				@include linear-gradient($light-yellow, $yellow);
+			}
+			&.orange {
+				@include linear-gradient($light-orange, $orange);
+			}
+		}
+	}
+}
+
+/*************** 9 I. Newsticker Widget ***************/
+
+.scroll-stats {
+	text-align: center;
+	margin: 0 auto;
+	i {
+		font-size: 36px;
+		color: $primary-color;
+		cursor: pointer;
+		width: 36px;
+		height: 36px;
+		line-height: 36px;
+		display: inline-block;
+		margin: auto;
+	}
+}
+
+ul#newsticker {
+	li {
+		overflow: hidden;
+		padding: 12px 0;
+		min-height: 80px;
+		text-align: left;
+		line-height: 150%;
+		border-bottom: 1px dotted $body-bg;
+		.ticker-image {
+			width: 56px;
+			height: 56px;
+			float: left;
+			padding: 3px;
+			img {
+				width: 50px;
+				height: 50px;
+				@include border-radius(50px);
+			}
+			.empty-avatar {
+				height: 56px;
+				width: 56px;
+				@include border-radius(50px);
+				color: $white;
+				text-align: center;
+				line-height: 56px;
+			}
+		}
+		.ticker-wrapper {
+			margin: 5px 0 0 70px;
+			a {
+				color: $primary-color;
+				text-decoration: underline;
+				&:hover {
+					color: darken($primary-color, 10%);
+				}
+			}
+		}
+	}
+}
+
+/*************** 9 J. Tasks Widget ***************/
+
+.task-list {
+	li {
+		display: block;
+		padding: 15px 0 15px 0;
+		margin: 0;
+		cursor: pointer;
+		&.list span {
+			float: left;
+			margin-top: 20px;
+			color: $orange;
+			&:before {
+				font-size: 1.5rem;
+				content: "\e5ca";
+				font-family: "icomoon";
+				vertical-align: middle;
+				border: 3px solid $orange;
+				@include border-radius(50px);
+				padding: 4px;
+			}
+		}
+		&.completed {
+			text-decoration: line-through;
+			color: $font-color-light;
+			@include transition(all, 0.3s, ease-out);
+			span:before {
+				color: $green;
+				border: 3px solid $green;
+				content: "\e5ca";
+				font-family: "icomoon";
+				text-decoration: none;
+			}
+		}
+		&:first-child {
+			padding-top: 0;
+		}
+		&:last-child {
+			padding-bottom: 0;
+			border-bottom: 0;
+		}
+		.task-details {
+			margin-left: 60px;
+			p {
+				margin: 0;
+				padding: 10px 0 6px 0;
+				line-height: 140%;
+				small {
+					padding: 0;
+					color: $secondary-color;
+				}
+			}
+			p.date {
+				padding: 0;
+				margin: 0;
+				font-size: 0.75rem;
+				small {
+					text-transform: uppercase;
+				}
+			}
+		}
+	}
+}
+
+/*************** 9 K. Todo Widget ***************/
+
+.todo-container {
+	#today-date {
+		margin: 0;
+		padding: 0;
+		font-size: 1rem;
+		font-weight: 600;
+	}
+	.todo-body {
+		margin-left: 25px;
+		padding: 20px 20px 0 0;
+		border-left: 1px solid darken($white, 10%);
+		li.todo-list {
+			position: relative;
+			display: block;
+			cursor: pointer;
+			color: $black;
+			.dot {
+				border: 2px solid $primary-color;
+				background: $white;
+				@include border-radius(50px);
+				content: "";
+				height: 19px;
+				width: 19px;
+				text-align: center;
+				text-transform: uppercase;
+				position: absolute;
+				top: 4px;
+				left: -10px;
+				&:before {
+					font-size: 0.7rem;
+					content: "\e901";
+					font-family: "icomoon";
+					color: rgba(0, 0, 0, 0.2);
+				}
+				&.red {
+					border: 2px solid $red;
+				}
+				&.green {
+					border: 2px solid $green;
+				}
+				&.yellow {
+					border: 2px solid $yellow;
+				}
+				&.pink {
+					border: 2px solid $pink;
+				}
+				&.orange {
+					border: 2px solid $orange;
+				}
+				&.violet {
+					border: 2px solid $violet;
+				}
+			}
+			&.done {
+				text-decoration: line-through;
+				@include transition(all, 0.3s, ease-out);
+				color: $black;
+				.dot {
+					border: 2px solid darken($primary-color, 10%);
+					background: $primary-color;
+					&:before {
+						color: $white;
+						content: "\e901";
+						font-family: "icomoon";
+						text-decoration: none;
+					}
+					&.red {
+						background: $red;
+						border: 2px solid darken($red, 10%);
+					}
+					&.green {
+						background: $green;
+						border: 2px solid darken($green, 10%);
+					}
+					&.yellow {
+						background: $yellow;
+						border: 2px solid darken($yellow, 20%);
+					}
+					&.pink {
+						background: $pink;
+						border: 2px solid darken($pink, 10%);
+					}
+					&.orange {
+						background: $orange;
+						border: 2px solid darken($orange, 10%);
+					}
+					&.violet {
+						background: $violet;
+						border: 2px solid darken($violet, 10%);
+					}
+				}
+				.todo-info {
+					p {
+						opacity: 0.3;
+					}
+					small {
+						opacity: 0.3;
+					}
+				}
+			}
+			&:last-child .detail-info {
+				padding-bottom: 0;
+			}
+			.todo-info {
+				line-height: 100%;
+				margin: 0 0 0 20px;
+				padding-bottom: 25px;
+				p {
+					margin: 0 0 5px 0;
+					line-height: 150%;
+					span.time {
+						font-size: 0.7rem;
+						float: right;
+					}
+				}
+			}
+		}
+	}
+}
+
+/*************** 9 L. Traffic Sources Widget ***************/
+
+ul.traffic-sources {
+	margin: 0;
+	li {
+		padding: 6px 0;
+		border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+		&:last-child {
+			border-bottom: 0;
+			padding-bottom: 4px;
+		}
+		.source-graph {
+			float: right;
+		}
+	}
+	.symbol {
+		width: 16px;
+		height: 16px;
+		background: $blue;
+		display: inline-block;
+		margin-top: 3px;
+		&.orange {
+			background: $orange;
+		}
+		&.green {
+			background: $green;
+		}
+		&.yellow {
+			background: $yellow;
+		}
+		&.pink {
+			background: $pink;
+		}
+	}
+}
+
+/*************** 9 M. Revenue Widget ***************/
+
+.revenue-container {
+	min-height: 208px;
+	.revenue-footer {
+		.live-sales {
+			float: right;
+			margin-top: 10px;
+			ul.sales-ticker {
+				li {
+					line-height: 30px;
+					a {
+						color: $black;
+						font-size: 0.8rem;
+						.num {
+							@include linear-gradient($black, lighten($black, 20%));
+							padding: 5px;
+							@include border-radius(30px);
+							width: 30px;
+							height: 30px;
+							font-size: 1rem;
+							text-align: center;
+							margin-right: 10px;
+							line-height: 20px;
+							float: left;
+							color: $white;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+/*************** 9 N. Simple widget ***************/
+
+.simple-widget {
+	position: relative;
+	padding: 15px;
+	@include border-radius(0.3rem);
+	margin-bottom: 0.9rem;
+	@include linear-gradient($blue, $light-blue);
+	.growth {
+		position: absolute;
+		right: 15px;
+		top: 15px;
+		@include border-radius(50px);
+		width: 48px;
+		height: 48px;
+		line-height: 48px;
+		background: rgba(0, 0, 0, 0.05);
+		color: $white;
+		text-align: center;
+		box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+	}
+	h3 {
+		margin: 0 0 15px 0;
+		font-size: 2rem;
+		color: $white;
+		letter-spacing: 1px;
+	}
+	p {
+		margin: 0;
+		padding: 0 0 10px 0;
+		color: $white;
+	}
+	.progress {
+		background: rgba(255, 255, 255, 0.2);
+		.progress-bar {
+			background: $card-bg;
+		}
+	}
+	&.orange {
+		@include linear-gradient($orange, $light-orange);
+	}
+}
+
+/*************** 9 O. Plain widget ***************/
+
+.plain-widget {
+	position: relative;
+	padding: 15px;
+	@include border-radius(0.3rem);
+	margin-bottom: 0.9rem;
+	background: $white;
+	&.dark {
+		background: $sidebar-bg;
+		color: $white;
+		p {
+			color: $white;
+		}
+	}
+	&.blue {
+		background: $blue;
+		color: $white;
+		p {
+			color: $white;
+		}
+	}
+	&.orange {
+		background: $orange;
+		color: $white;
+		p {
+			color: $white;
+		}
+	}
+	&.pink {
+		background: $pink;
+		color: $white;
+		p {
+			color: $white;
+		}
+	}
+	.growth {
+		position: absolute;
+		right: 15px;
+		top: 15px;
+		@include border-radius(50px);
+		width: 48px;
+		height: 48px;
+		line-height: 48px;
+		color: $white;
+		font-weight: 600;
+		text-align: center;
+		box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+	}
+	h3 {
+		margin: 0 0 15px 0;
+		font-size: 2rem;
+		font-weight: 300;
+	}
+	p {
+		margin: 0;
+		padding: 0 0 10px 0;
+		color: $font-color-light;
+	}
+}
+
+/*************** 9 P. Settings ***************/
+
+.settings {
+	li {
+		border-bottom: 1px dotted darken($body-bg, 10%);
+		padding: 10px 0;
+		p {
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			overflow: hidden;
+			margin: 0;
+			line-height: 150%;
+		}
+		.toggle-switch {
+			float: right;
+		}
+		a.cancel {
+			float: right;
+			margin-left: 10px;
+			border: 2px solid darken($body-bg, 20%);
+			width: 24px;
+			height: 24px;
+			line-height: 24px;
+			text-align: center;
+			i {
+				font-size: 18px;
+				color: darken($body-bg, 20%);
+			}
+			&.cancelled {
+				border: 2px solid $red;
+				i {
+					color: $red;
+				}
+			}
+		}
+		&:first-child {
+			padding-top: 0;
+		}
+		&:last-child {
+			padding-bottom: 0;
+			border-bottom: 0;
+		}
+	}
+}
+
+/*************** 9 Q. Deals Widget ***************/
+
+.deals-widget {
+	h5 {
+		margin: 0;
+		padding: 0;
+		font-size: 0.8rem;
+		color: $black;
+	}
+	p {
+		padding: 0;
+		margin: 0;
+		font-size: 1.5rem;
+		small {
+			margin-left: 5px;
+			font-size: 85%;
+		}
+		i {
+			margin-right: 5px;
+			font-size: 1.5rem;
+			vertical-align: middle;
+		}
+	}
+	.small-graph {
+		margin: 10px 0 4px 0;
+	}
+}
+
+/*************** 9 R. Invoices Widget ***************/
+
+.invoices-widget {
+	h5 {
+		margin: 0;
+		padding: 0;
+		font-size: 0.8rem;
+		color: $white;
+	}
+	p {
+		padding: 0;
+		margin: 0;
+		font-size: 1.5rem;
+		color: $white;
+		small {
+			margin-left: 5px;
+			font-size: 85%;
+		}
+		i {
+			margin-right: 5px;
+			font-size: 1.5rem;
+			vertical-align: middle;
+		}
+	}
+	.progress {
+		margin: 14px 0 15px 0;
+	}
+}
+
+/*************** 9 S. Tags Widget ***************/
+
+.tags-container {
+	background: $white;
+	border-bottom: 1px solid $border-bg;
+}
+
+/*************** 9 T. Post Widget ***************/
+
+.post-slider {
+	margin-bottom: 0.8rem;
+	.post-bg {
+		padding: 1rem;
+		color: $white;
+		@include border-radius(3px);
+		background-size: cover;
+		background-image: url("../img/carousel-img-1.jpg");
+		&.bg2 {
+			background-image: url("../img/carousel-img-2.jpg");
+		}
+		&.bg3 {
+			background-image: url("../img/carousel-img-3.jpg");
+		}
+	}
+	.post-body {
+		min-height: 180px;
+		h4 {
+			margin: 0 0 10px 0;
+			font-weight: 300;
+		}
+		h6 {
+			text-transform: uppercase;
+			margin: 0;
+			font-size: 0.8rem;
+			line-height: 150%;
+		}
+	}
+	.post-footer {
+		padding: 15px 0 0 0;
+		margin-bottom: 40px;
+		.like-box {
+			margin-bottom: 10px;
+			i {
+				font-size: 1.5rem;
+				margin-right: 5px;
+				color: $white;
+				vertical-align: middle;
+				&.liked {
+					color: $red;
+				}
+			}
+			span.total {
+				font-size: 0.8rem;
+				font-weight: 700;
+				color: $white;
+			}
+		}
+	}
+}
+
+/*************** 9 U. Projects Table ***************/
+
+.projects-table.table {
+	color: $font-color-light;
+	i {
+		font-size: 10px;
+		margin-right: 5px;
+	}
+	thead th {
+		border-bottom: 1px solid lighten($sidebar-bg, 10%);
+	}
+	th,
+	td {
+		border-top: 1px solid lighten($sidebar-bg, 10%);
+	}
+}
+
+/*************** 9 V. User Cards ***************/
+
+figure.user-card {
+	background: $white;
+	padding: 20px;
+	border-top: 3px solid darken($white, 25%);
+	text-align: center;
+	&.red {
+		border-top: 3px solid $red;
+	}
+	&.green {
+		border-top: 3px solid $green;
+	}
+	&.blue {
+		border-top: 3px solid $blue;
+	}
+	&.yellow {
+		border-top: 3px solid $yellow;
+	}
+	&.orange {
+		border-top: 3px solid $orange;
+	}
+	&.teal {
+		border-top: 3px solid $teal;
+	}
+	&.pink {
+		border-top: 3px solid $pink;
+	}
+	&.brown {
+		border-top: 3px solid $brown;
+	}
+	&.purple {
+		border-top: 3px solid $purple;
+	}
+	&.fb {
+		border-top: 3px solid $facebook;
+	}
+	&.gp {
+		border-top: 3px solid $gplus;
+	}
+	.profile {
+		@include border-radius(5px);
+		max-width: 72px;
+		margin-bottom: 20px;
+	}
+	h5 {
+		margin: 0 0 5px 0;
+	}
+	h6 {
+		margin: 0 0 15px 0;
+		color: $font-color-light;
+		font-size: 14px;
+	}
+	p {
+		margin: 0;
+		padding: 0 0 15px 0;
+		color: $font-color-light;
+		line-height: 150%;
+		font-size: 0.85rem;
+	}
+	ul.contacts {
+		margin: 0;
+		padding: 0 0 15px 0;
+		line-height: 150%;
+		font-size: 0.85rem;
+		li {
+			padding: 0.2rem 0;
+			a {
+				color: $blue;
+				i {
+					min-width: 36px;
+					float: left;
+					font-size: 1rem;
+				}
+			}
+			&:last-child {
+				a {
+					color: $orange;
+				}
+			}
+		}
+	}
+}
+
+/************************************************
+	************************************************
+										10. Pages
+	************************************************
+************************************************/
+
+/*************** 10 A. Invoice Page ***************/
+
+.invoice-container {
+	padding: 0;
+	background-color: $white;
+	border: 1px solid darken($border-bg, 5%);
+	.invoice-header {
+		padding: 1rem 1.5rem;
+		img.invoice-logo {
+			max-width: 120px;
+		}
+	}
+	.invoice-address {
+		background: lighten($body-bg, 3%);
+		padding: 1rem 1.5rem;
+	}
+	address {
+		margin-top: 10px;
+		font-size: 0.8rem;
+		color: $font-color-light;
+	}
+	.invoice-details {
+		margin-top: 2.5rem;
+		text-align: right;
+	}
+	.invoice-body {
+		padding: 3rem 1.5rem 1rem 1.5rem;
+	}
+	.invoice-footer {
+		background: lighten($body-bg, 3%);
+		padding: 1rem 1.5rem;
+		text-align: center;
+		font-size: 0.7rem;
+	}
+	.invoice-payment {
+		background: lighten($body-bg, 3%);
+		padding: 0 1.5rem 0 1.5rem;
+		text-align: right;
+		font-size: 0.8rem;
+		line-height: 200%;
+	}
+}
+
+/*************** 10 B. Icons Page ***************/
+
+.icons {
+	text-align: center;
+	span {
+		font-size: 1.5rem;
+		text-align: center;
+		cursor: pointer;
+		display: inline-block;
+		width: 60px;
+		height: 60px;
+		line-height: 60px;
+		@include transition(all, 0.3s, ease-out);
+		@include border-radius(4px);
+		background: lighten($body-bg, 3%);
+		margin-bottom: 3px;
+		&:before {
+			@include linear-gradient-tb(
+				lighten($sidebar-bg, 70%),
+				lighten($sidebar-bg, 10%)
+			);
+			background-clip: text;
+			text-fill-color: transparent;
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+		}
+		&:hover {
+			@include linear-gradient(lighten($body-bg, 5%), $body-bg);
+		}
+	}
+}
+
+/*************** 10 C. Gallery Page ***************/
+
+.gallery {
+	margin: 0 auto;
+	a {
+		border: 3px solid darken($body-bg, 1%);
+		position: relative;
+		overflow: hidden;
+		@include box-shadow(0, 0, 10px, darken($body-bg, 20%));
+		@include transition(all, 0.3s, ease-out);
+		display: block;
+		margin: 0 0 15px 0;
+		opacity: 1;
+		img {
+			max-height: 180px;
+		}
+		.overlay {
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			opacity: 0;
+			position: absolute;
+			z-index: 20;
+			background: rgba(0, 0, 0, 0.8);
+			overflow: hidden;
+			@include transition(all, 0.3s, ease-out);
+		}
+		.expand {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			z-index: 100;
+			border: 2px solid $yellow;
+			text-align: center;
+			color: $yellow;
+			line-height: 44px;
+			font-size: 30px;
+			margin-left: -20px;
+			margin-top: -20px;
+			width: 48px;
+			height: 48px;
+			-webkit-transition: all 0.5s;
+			-moz-transition: all 0.5s;
+			-o-transition: all 0.5s;
+			transition: all 0.5s;
+		}
+		&:hover {
+			opacity: 1;
+			.overlay {
+				opacity: 1;
+			}
+			span.expand {
+				width: 48px;
+				height: 48px;
+				@include border-radius(2px);
+			}
+		}
+	}
+}
+
+/*************** 10 D. News Feed ***************/
+
+ul.news-feed {
+	width: 100%;
+	li {
+		border-bottom: 1px dotted lighten($body-bg, 10%);
+		padding: 25px 0;
+		&:last-child {
+			border-bottom: 0;
+			padding-bottom: 0;
+		}
+		&:first-child {
+			border-bottom: 0;
+		}
+		img.avatar {
+			float: left;
+			width: 48px;
+			height: 48px;
+		}
+		blockquote {
+			padding: 0;
+			font-size: 0.85rem;
+			line-height: 180%;
+			color: $font-color-light;
+		}
+		.message-wrapper {
+			margin-left: 60px;
+			.url {
+				font-size: 0.8rem;
+				a {
+					text-decoration: underline;
+				}
+				i {
+					font-size: 1rem;
+					margin-right: 5px;
+					vertical-align: middle;
+				}
+			}
+			h6 {
+				margin: 15px 0 15px 0;
+				.message-date {
+					float: right;
+					font-size: 0.75rem;
+					font-weight: 600;
+					color: $font-color-light;
+				}
+			}
+		}
+	}
+}
+
+ul.users-group {
+	li {
+		margin-right: 10px;
+		width: 36px;
+		float: left;
+		padding: 0;
+		a {
+			padding: 0;
+			margin: 0;
+			@include border-radius(3px);
+			img {
+				@include border-radius(2px);
+				width: 36px;
+				height: 36px;
+			}
+		}
+	}
+}
+
+ul.team-group {
+	li {
+		float: left;
+		padding: 0;
+		a:not(.btn) {
+			padding: 6px 10px;
+			@include border-radius(30px);
+			border: 2px solid $white;
+			display: block;
+			text-align: center;
+			font-weight: 600;
+			font-size: 0.8rem;
+			color: $white;
+		}
+	}
+}
+
+/*************** 10 E. Social Stats ***************/
+
+.socail-stats {
+	margin-bottom: 0.8rem;
+	@include border-radius(0.3rem);
+	padding: 10px;
+	text-align: center;
+	display: block;
+	@include transition(all, 0.3s, ease-in-out);
+	color: $white;
+	h5 {
+		margin: 10px 0 0 0;
+	}
+	i {
+		font-size: 2rem;
+	}
+	&:hover {
+		opacity: 0.8;
+		color: $white;
+	}
+}
+
+/*************** 10 F. Small Gallery ***************/
+
+.gallery-sm {
+	margin: 0;
+	img {
+		margin: 5px auto;
+	}
+}
+
+/*************** 10 G. Search Results Page ***************/
+
+.search-results {
+	border: 1px solid $border-bg;
+	background-color: $white;
+	padding: 1.5rem;
+	@include border-radius(0.3rem);
+	margin: 0;
+	.results-header {
+		border-bottom: 1px solid $border-bg;
+		color: $font-color-light;
+		margin-bottom: 1.5rem;
+		padding: 0 0 1rem 0;
+	}
+	.search-section {
+		margin-bottom: 3rem;
+		max-width: 60%;
+		a {
+			color: $blue;
+			font-size: 1rem;
+			margin: 0 0 10px 0;
+			font-weight: 700;
+			display: inline-block;
+		}
+		p.title {
+			font-size: 0.9rem;
+			color: $font-color-light;
+			margin: 0 0 10px 0;
+		}
+		p.desc {
+			font-size: 0.9rem;
+			margin: 0;
+			line-height: 150%;
+		}
+	}
+}
+
+@media (max-width: 767px) {
+	.search-results {
+		.search-section {
+			width: 100%;
+			max-width: 100%;
+		}
+	}
+}
+
+/*************** 10 H. Custom Forms ***************/
+
+.form-block {
+	background: $white;
+	border: 1px solid $border-bg;
+	@include border-radius(3px);
+	.form-block-header {
+		background: lighten($body-bg, 5%);
+		border-bottom: 1px solid $border-bg;
+		padding: 1rem 1.5rem;
+		h5 {
+			margin: 0 0 8px 0;
+		}
+		h4 {
+			margin: 0 0 15px 0;
+		}
+		h6 {
+			margin: 0;
+			font-size: 0.8rem;
+			color: $font-color-light;
+		}
+	}
+	.form-block-body {
+		padding: 1.5rem;
+	}
+}
+
+/*************** 10 I. Pricing Plans ***************/
+
+.plan-one {
+	margin: 0 0 20px 0;
+	width: 100%;
+	position: relative;
+	background: $white;
+	@include border-radius-all-val(10px, 10px, 10px, 10px);
+	.pricing-header {
+		padding: 0;
+		margin-bottom: 10px;
+		text-align: center;
+		.plan-title {
+			@include border-radius-all-val(10px, 10px, 0px, 0px);
+			font-size: 1.2rem;
+			color: $white;
+			padding: 10px 0;
+			text-transform: uppercase;
+			font-weight: 600;
+			background: $blue;
+			margin: 0;
+		}
+		.plan-cost {
+			color: $white;
+			background: lighten($blue, 5%);
+			padding: 15px 0;
+			font-size: 2.5rem;
+			font-weight: 700;
+		}
+		.plan-save {
+			color: $white;
+			background: lighten($blue, 9%);
+			padding: 10px 0;
+			font-size: 1rem;
+			font-weight: 700;
+		}
+		&.green {
+			.plan-title {
+				background: $teal;
+			}
+			.plan-cost {
+				background: lighten($teal, 5%);
+			}
+			.plan-save {
+				background: lighten($teal, 9%);
+			}
+		}
+		&.orange {
+			.plan-title {
+				background: lighten($red, 5%);
+			}
+			.plan-cost {
+				background: lighten($red, 10%);
+			}
+			.plan-save {
+				background: lighten($red, 15%);
+			}
+		}
+	}
+	.plan-features {
+		padding: 0;
+		margin: 20px 0;
+		text-align: left;
+		li {
+			padding: 10px 15px 10px 40px;
+			margin: 5px 0;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			position: relative;
+			border-bottom: 1px solid $body-bg;
+			line-height: 100%;
+			&:before {
+				position: absolute;
+				left: 15px;
+				top: 10px;
+				font-size: 1rem;
+				color: $black;
+				content: "\e901";
+				font-family: "icomoon";
+			}
+		}
+	}
+	.plan-footer {
+		background: $white;
+		@include border-radius-all-val(0, 0, 10px, 10px);
+		text-align: center;
+		padding: 10px 0 30px 0;
+	}
+}
+
+@media (max-width: 767px) {
+	.plan-one {
+		.pricing-header {
+			text-align: center;
+			i {
+				display: block;
+				float: none;
+				margin-bottom: 20px;
+			}
+		}
+	}
+}
+
+/***************** 10 J. Tasks *****************/
+.task-checkbox {
+	position: relative;
+	input,
+	.label,
+	.check {
+		display: inline-block;
+		vertical-align: middle;
+	}
+	.check {
+		position: absolute;
+		top: 0;
+		right: 0;
+	}
+	input[type="checkbox"] {
+		opacity: 0;
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		cursor: pointer;
+		&:focus {
+			outline: 0;
+		}
+		&:checked + .ripple-container {
+			.check-off {
+				border-color: $white;
+			}
+			.check-on {
+				-webkit-transform: scale(0.8);
+				-moz-transform: scale(0.8);
+				-ms-transform: scale(0.8);
+				-o-transform: scale(0.8);
+				transform: scale(0.8);
+				-webkit-transition: -webkit-transform 0.3s;
+				-moz-transition: -moz-transform 0.3s;
+				transition: transform 0.3s;
+				color: $white;
+			}
+			.check-ripple {
+				&:before,
+				&:after {
+					-webkit-transition: all 0.65s cubic-bezier(0.25, 0.8, 0.25, 1);
+					-moz-transition: all 0.65s cubic-bezier(0.25, 0.8, 0.25, 1);
+					transition: all 0.65s cubic-bezier(0.25, 0.8, 0.25, 1);
+					opacity: 0;
+				}
+				&:before {
+					-webkit-transform: scale(3);
+					-moz-transform: scale(3);
+					-ms-transform: scale(3);
+					-o-transform: scale(3);
+					transform: scale(3);
+				}
+				&:after {
+					-webkit-transform: scale(1.5);
+					-moz-transform: scale(1.5);
+					-ms-transform: scale(1.5);
+					-o-transform: scale(1.5);
+					transform: scale(1.5);
+				}
+			}
+		}
+		+ .ripple-container {
+			width: auto;
+			position: relative;
+			display: inline-block;
+			width: 25px;
+			height: 25px;
+			top: 0;
+			pointer-events: none;
+			&:before {
+				content: "";
+				position: absolute;
+				@include border-radius(2px);
+				display: block;
+				height: auto;
+				left: 0;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				-webkit-transition: all 0.5s;
+				-moz-transition: all 0.5s;
+				transition: all 0.5s;
+			}
+			.check-off {
+				position: absolute;
+				width: 25px;
+				height: 25px;
+				left: 0;
+				top: 0;
+				@include border-radius(2px);
+				border: 2px solid rgba(255, 255, 255, 0.6);
+				transition: border-color ease 0.28s;
+			}
+			.check-on {
+				-webkit-transform: scale(0);
+				-moz-transform: scale(0);
+				-ms-transform: scale(0);
+				-o-transform: scale(0);
+				transform: scale(0);
+				-webkit-transition: all 0s;
+				-moz-transition: all 0s;
+				transition: all 0s;
+				position: absolute;
+				left: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				text-align: center;
+				line-height: 25px;
+			}
+			.check-ripple {
+				&:before,
+				&:after {
+					-webkit-transition: all 0s;
+					-moz-transition: all 0s;
+					transition: all 0s;
+					-webkit-transform: scale(0);
+					-moz-transform: scale(0);
+					-ms-transform: scale(0);
+					-o-transform: scale(0);
+					transform: scale(0);
+					content: "";
+					position: absolute;
+					display: block;
+					@include border-radius(50%);
+					width: 25px;
+					height: 25px;
+					opacity: 1;
+				}
+				&:before {
+					background-color: rgba(255, 255, 255, 0.35);
+				}
+				&:after {
+					background-color: rgba(219, 213, 213, 0.6);
+				}
+			}
+		}
+	}
+}
+
+.task-container {
+	position: relative;
+	@include border-radius(0);
+	&.high-priority {
+		@include border-radius-all-val(10px, 0, 0, 10px);
+		color: $white;
+		@include linear-gradient(darken($pink-red, 5%), $pink-red);
+		z-index: 1;
+		ul {
+			li {
+				border-top: 1px solid rgba(255, 255, 255, 0.2);
+			}
+		}
+	}
+	&.low-priority {
+		@include border-radius-all-val(0, 10px, 10px, 0);
+		color: $white;
+		@include linear-gradient(darken($sidebar-bg, 5%), $sidebar-bg);
+		ul {
+			li {
+				border-top: 1px solid lighten($sidebar-bg, 7%);
+			}
+		}
+	}
+	h4.task-header {
+		padding: 1.5rem 1.5rem 0 1.5rem;
+		font-weight: 300;
+		color: $white;
+		font-size: 1.5rem;
+		opacity: 0.5;
+	}
+	.tasks-list {
+		color: $white;
+		padding: 1rem 1.5rem;
+		.task-name {
+			color: $white;
+			margin-bottom: 15px;
+			font-size: 1rem;
+			font-weight: 600;
+		}
+		.task-desc {
+			color: $white;
+			margin-bottom: 15px;
+			font-size: 0.9rem;
+			line-height: 180%;
+			font-weight: 300;
+			opacity: 0.6;
+		}
+		.task-time {
+			font-weight: 300;
+			font-size: 0.8rem;
+		}
+		.task-types {
+			margin-top: 15px;
+			.badge {
+				@include border-radius(0);
+				background: rgba(255, 255, 255, 0.2);
+			}
+		}
+		ul {
+			position: relative;
+			z-index: 1;
+			li {
+				@include transition(all, 0.3s, ease-out);
+				padding: 1rem 0;
+				position: relative;
+				.label {
+					@include transition(all, 0.3s, ease-out);
+					opacity: 1;
+					line-height: 120%;
+					margin-right: 60px;
+				}
+				.task-msg {
+					@include transition(all, 0.3s, ease-out);
+					right: 35px;
+					top: 12px;
+					position: absolute;
+					font-size: 0.75rem;
+					opacity: 0;
+				}
+				&.task-checked {
+					.task-msg {
+						-webkit-animation: fadeInOut 2s;
+						-moz-animation: fadeInOut 2s;
+						animation: fadeInOut 2s;
+					}
+					.label {
+						opacity: 0.5;
+						text-decoration: line-through;
+					}
+				}
+				&:last-child {
+					padding-bottom: 0;
+				}
+				&:first-child {
+					border-top: 0;
+				}
+			}
+		}
+	}
+}
+@media (max-width: 767px) {
+	.task-container {
+		&.high-priority {
+			margin-bottom: 1rem;
+			@include border-radius(10px);
+		}
+		&.low-priority {
+			margin-bottom: 1rem;
+			@include border-radius(10px);
+		}
+	}
+}
+
+@-webkit-keyframes fadeInOut {
+	0% {
+		opacity: 0;
+		-webkit-transform: translate3d(10px, -50%, 0);
+	}
+	30% {
+		opacity: 1;
+		-webkit-transform: translate3d(0, -50%, 0);
+	}
+	75% {
+		opacity: 1;
+		-webkit-transform: translate3d(0, -50%, 0);
+	}
+	100% {
+		opacity: 0;
+		-webkit-transform: translate3d(-10px, -50%, 0);
+	}
+}
+
+@-moz-keyframes fadeInOut {
+	0% {
+		opacity: 0;
+		-moz-transform: translate3d(10px, -50%, 0);
+	}
+	30% {
+		opacity: 1;
+		-moz-transform: translate3d(0, -50%, 0);
+	}
+	75% {
+		opacity: 1;
+		-moz-transform: translate3d(0, -50%, 0);
+	}
+	100% {
+		opacity: 0;
+		-moz-transform: translate3d(-10px, -50%, 0);
+	}
+}
+
+@keyframes fadeInOut {
+	0% {
+		opacity: 0;
+		-webkit-transform: translate3d(10px, -50%, 0);
+		-moz-transform: translate3d(10px, -50%, 0);
+		-ms-transform: translate3d(10px, -50%, 0);
+		-o-transform: translate3d(10px, -50%, 0);
+		transform: translate3d(10px, -50%, 0);
+	}
+	30% {
+		opacity: 1;
+		-webkit-transform: translate3d(0, -50%, 0);
+		-moz-transform: translate3d(0, -50%, 0);
+		-ms-transform: translate3d(0, -50%, 0);
+		-o-transform: translate3d(0, -50%, 0);
+		transform: translate3d(0, -50%, 0);
+	}
+	75% {
+		opacity: 1;
+		-webkit-transform: translate3d(0, -50%, 0);
+		-moz-transform: translate3d(0, -50%, 0);
+		-ms-transform: translate3d(0, -50%, 0);
+		-o-transform: translate3d(0, -50%, 0);
+		transform: translate3d(0, -50%, 0);
+	}
+	100% {
+		opacity: 0;
+		-webkit-transform: translate3d(-10px, -50%, 0);
+		-moz-transform: translate3d(-10px, -50%, 0);
+		-ms-transform: translate3d(-10px, -50%, 0);
+		-o-transform: translate3d(-10px, -50%, 0);
+		transform: translate3d(-10px, -50%, 0);
+	}
+}
+
+/*************** 10 K. Timeline ***************/
+
+.timeline {
+	position: relative;
+	padding: 10px;
+	margin: 0 auto;
+	overflow: hidden;
+	color: $white;
+	&:after {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 50%;
+		margin-left: -1px;
+		border-right: 2px dashed darken($body-bg, 10%);
+		height: 100%;
+		display: block;
+	}
+}
+
+.timeline-row {
+	padding-left: 50%;
+	position: relative;
+	margin-bottom: 30px;
+	.timeline-time {
+		position: absolute;
+		right: 50%;
+		top: 31px;
+		text-align: right;
+		margin-right: 20px;
+		color: $black;
+		font-size: 1.5rem;
+		small {
+			display: block;
+			font-size: 0.8rem;
+			color: $font-color-light;
+		}
+	}
+	.timeline-content {
+		position: relative;
+		padding: 20px 30px;
+		@include border-radius(10px);
+		&:after {
+			content: "";
+			position: absolute;
+			top: 20px;
+			height: 3px;
+			width: 40px;
+		}
+		&:before {
+			content: "";
+			position: absolute;
+			top: 20px;
+			right: -50px;
+			width: 20px;
+			height: 20px;
+			@include border-radius(100px);
+			z-index: 100;
+			background: $white;
+			border: 2px dashed darken($body-bg, 10%);
+		}
+		h4 {
+			margin: 0 0 20px 0;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			line-height: 150%;
+		}
+		p {
+			margin-bottom: 30px;
+			line-height: 150%;
+		}
+		i {
+			font-size: 2rem;
+			color: $white;
+			line-height: 100%;
+			padding: 10px;
+			border: 2px solid $white;
+			@include border-radius(100px);
+			margin-bottom: 10px;
+			display: inline-block;
+		}
+		.thumbs {
+			margin-bottom: 20px;
+			img {
+				margin-bottom: 10px;
+			}
+		}
+	}
+	&:nth-child(even) {
+		.timeline-content {
+			@include linear-gradient($red, $orange);
+			margin-left: 40px;
+			text-align: left;
+			&:after {
+				left: -39px;
+				border-right: 18px solid $orange;
+				border-top: 10px solid transparent;
+				border-bottom: 10px solid transparent;
+			}
+			&:before {
+				left: -50px;
+				right: initial;
+			}
+		}
+	}
+	&:nth-child(odd) {
+		padding-left: 0;
+		padding-right: 50%;
+		.timeline-time {
+			right: auto;
+			left: 50%;
+			text-align: left;
+			margin-right: 0;
+			margin-left: 20px;
+		}
+		.timeline-content {
+			@include linear-gradient($primary-light-color, $primary-color);
+			margin-right: 40px;
+			margin-left: 0;
+			text-align: right;
+			&:after {
+				right: -39px;
+				border-left: 18px solid $primary-light-color;
+				border-top: 10px solid transparent;
+				border-bottom: 10px solid transparent;
+			}
+		}
+	}
+}
+
+@media (max-width: 767px) {
+	.timeline {
+		padding: 15px 10px;
+		&:after {
+			left: 28px;
+		}
+		.timeline-row {
+			padding-left: 0;
+			margin-bottom: 16px;
+			.timeline-time {
+				position: relative;
+				right: auto;
+				top: 0;
+				text-align: left;
+				margin: 0 0 6px 56px;
+				strong {
+					display: inline-block;
+					margin-right: 10px;
+				}
+			}
+			.timeline-icon {
+				top: 52px;
+				left: -2px;
+				margin-left: 0;
+			}
+			.timeline-content {
+				padding: 15px;
+				margin-left: 56px;
+				box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+				position: relative;
+				&:after {
+					right: auto;
+					left: -39px;
+					top: 32px;
+				}
+			}
+			&:nth-child(odd) {
+				padding-right: 0;
+				.timeline-time {
+					position: relative;
+					right: auto;
+					left: auto;
+					top: 0;
+					text-align: left;
+					margin: 0 0 6px 56px;
+				}
+				.timeline-content {
+					margin-right: 0;
+					margin-left: 55px;
+					&:after {
+						right: auto;
+						left: -39px;
+						top: 32px;
+						border-right: 18px solid $primary-color;
+						border-left: inherit;
+					}
+				}
+			}
+		}
+		&.animated .timeline-row {
+			&:nth-child(odd) .timeline-content {
+				left: 20px;
+			}
+			&.active:nth-child(odd) .timeline-content {
+				left: 0;
+			}
+		}
+	}
+}
+
+/************************************************
+	************************************************
+								11. Chart Heights
+	************************************************
+************************************************/
+
+/*************** Map/Chart/Graph Heights ***************/
+
+.chart-height {
+	position: relative;
+	height: 210px;
+}
+
+.chart-height-2 {
+	position: relative;
+	height: 120px;
+}
+
+.chart-height-md {
+	position: relative;
+	height: 190px;
+}
+
+.chart-height-lg {
+	position: relative;
+	height: 280px;
+	text-align: center;
+	overflow: hidden;
+	svg {
+		// width: 100% !important;
+	}
+}
+
+.chart-height-lgx {
+	position: relative;
+	height: 261px;
+}
+
+.chart-height-xl {
+	position: relative;
+	height: 360px;
+}
+
+/************************************************
+	************************************************
+						12. Plugins Overwrite CSS
+	************************************************
+************************************************/
+
+/*************** 12 A. Gmap Skins ***************/
+
+.map {
+	width: 100%;
+	height: 320px;
+	background: $body-bg;
+}
+
+.map-xl {
+	width: 100%;
+	height: 500px;
+	background: $body-bg;
+}
+
+/*************** 12 B. jVector Map ***************/
+
+.jvectormap-container {
+	width: 100%;
+	height: 100%;
+	position: relative;
+	overflow: hidden;
+	touch-action: none;
+}
+
+.jvectormap-tip {
+	position: absolute;
+	display: none;
+	@include border-radius(0);
+	background: $black;
+	color: $white;
+	font-size: 0.75rem;
+	padding: 6px 12px;
+}
+
+/*************** 12 C. Flot Chart ***************/
+
+.legendLabel {
+	padding-left: 5px;
+	padding-right: 10px;
+	font-size: 10px;
+}
+
+/*************** 12 D. Notify ***************/
+
+.notify-notifications {
+	.btn {
+		margin: 3px;
+		min-width: 120px;
+		float: left;
+	}
+}
+
+/*************** 12 E. Rating ***************/
+
+.stars {
+	margin: 5px 0 0 0;
+	width: 100% !important;
+	img {
+		width: 18px;
+		height: 18px;
+	}
+}
+
+/*************** 12 F. Google Maps ***************/
+
+.map-xl *,
+.map-xl::after,
+.map-xl::before {
+	box-sizing: initial;
+}
+
+.gm-style-mtc div[role="button"] {
+	background-color: #ff7e39 !important;
+	color: $white !important;
+	font-size: 13px !important;
+}
+
+/************************************************
+	************************************************
+		13. Login, Signup, Lock and Error Screens
+	************************************************
+************************************************/
+
+/*************** 13 A. Login Screen ***************/
+
+.login-screen {
+	position: relative;
+	box-shadow: 0px 30px 50px darken($body-bg, 10%);
+	background: $white;
+	margin: 60px auto;
+	@include border-radius(8px);
+	.login-logo {
+		margin: 20px 0 30px 0;
+		display: block;
+		> img {
+			margin: 0;
+			max-height: 36px;
+		}
+	}
+	.login-box {
+		padding: 30px 30px;
+		h5 {
+			margin: 0 0 20px 0;
+			color: $primary-color;
+			text-align: center;
+		}
+	} // Actions
+	.actions {
+		display: block;
+		margin-bottom: 20px;
+		text-align: center;
+		a {
+			color: $primary-color;
+			text-decoration: none;
+			margin-top: 12px;
+			display: block;
+			font-size: 0.8rem;
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+		.btn {
+			padding: 8px 25px;
+			text-transform: uppercase;
+		}
+	}
+	a.additional-link {
+		text-decoration: none;
+		margin: 30px auto 0 auto;
+		text-align: center;
+		display: block;
+		span {
+			text-decoration: underline;
+			color: $primary-color;
+		}
+	}
+	p.info {
+		padding: 0;
+		margin: 0 0 20px 0;
+		line-height: 150%;
+		color: $font-color-light;
+		text-align: center;
+	}
+}
+
+/*************** 13 B. OR | Line between two blocks ***************/
+
+.or {
+	position: relative;
+	text-align: center;
+	margin-bottom: 20px;
+	&::before {
+		content: "";
+		position: absolute;
+		top: 50%;
+		left: 15%;
+		width: 70%;
+		height: 1px;
+		background-color: $body-bg;
+	}
+	span {
+		position: relative;
+		background-color: $white;
+		padding: 0 10px;
+		z-index: 10;
+	}
+}
+
+/*************** 13 C. Lock Screen ***************/
+
+.lock-screen {
+	position: absolute;
+	top: 120px;
+	left: 50%;
+	width: 300px;
+	margin-left: -150px;
+	text-align: center;
+	.avatar {
+		position: relative;
+		margin: auto;
+		width: 90px;
+		margin: 10px auto;
+		img {
+			width: 90px;
+			height: 90px;
+			@include border-radius(100%);
+		}
+		.status {
+			position: absolute;
+			top: 3px;
+			right: 3px;
+			width: 18px;
+			height: 18px;
+			background: $green;
+			@include border-radius(100%);
+		}
+	}
+	h6 {
+		margin: 0 0 30px 0;
+	}
+}
+
+// Lockscreen Input
+.lock-screen-input {
+	margin: 20px auto;
+	height: 52px;
+	position: relative;
+	.form-control {
+		height: 52px;
+		padding: 12px 5px 12px 20px;
+		border: 1px solid $orange;
+		@include border-radius(30px);
+	}
+	.lock-btn {
+		position: absolute;
+		right: 5px;
+		top: 5px;
+		border: none;
+		height: 42px;
+		width: 70px;
+		text-align: center;
+		color: $white;
+		cursor: pointer;
+		@include linear-gradient($light-orange, $orange);
+		@include border-radius(30px);
+		i {
+			font-size: 21px;
+			vertical-align: middle;
+			line-height: 42px;
+		}
+	}
+}
+
+/*************** 13 D. Error screen ***************/
+
+.error-screen {
+	max-width: 600px;
+	margin: 100px auto 50px auto;
+	text-align: center;
+	img {
+		max-width: 480px;
+		max-height: 480px;
+		margin-bottom: 1rem;
+	}
+	h5 {
+		margin-bottom: 2rem;
+	}
+	h6 {
+		margin-bottom: 1rem;
+		font-weight: 600;
+		line-height: 150%;
+	}
+	.btn {
+		i {
+			font-size: 1.2rem;
+			margin-top: 3px;
+			float: right !important;
+			margin-left: 3px;
+		}
+	}
+}
+
+/************************************************
+	************************************************
+									14. Loading
+	************************************************
+************************************************/
+
+#loading-wrapper {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 5000;
+	background: $body-bg;
+	#loader {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		margin-left: -30px;
+		margin-top: -30px;
+		width: 60px;
+		height: 60px;
+		&:before {
+			content: "";
+			box-sizing: border-box;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			width: 48px;
+			height: 48px;
+			margin-left: -24px;
+			@include border-radius(50%);
+			border: 2px solid darken($border-bg, 5%);
+			border-top-color: $primary-color;
+			-moz-animation: spinner 0.6s linear infinite;
+			-webkit-animation: spinner 0.6s linear infinite;
+			animation: spinner 0.6s linear infinite;
+		}
+		@-moz-keyframes spinner {
+			from {
+				transform: rotate(0deg);
+			}
+			to {
+				transform: rotate(360deg);
+			}
+		}
+
+		@-webkit-keyframes spinner {
+			from {
+				transform: rotate(0deg);
+			}
+			to {
+				transform: rotate(360deg);
+			}
+		}
+
+		@keyframes spinner {
+			from {
+				transform: rotate(0deg);
+			}
+			to {
+				transform: rotate(360deg);
+			}
+		}
+	}
+}
+
+/************************************************
+	************************************************
+									15. Sections
+	************************************************
+************************************************/
+
+.section-container {
+	background-color: $white;
+	padding: 1.5rem;
+	@include border-radius(0.3rem);
+	margin-bottom: 0.8rem;
+	h6.section-title {
+		text-transform: uppercase;
+		margin: 0 0 30px 0;
+		font-weight: 600;
+	}
+	p.section-desc {
+		color: $font-color-light;
+		margin-bottom: 30px;
+		line-height: 200%;
+	}
+	p.section-title {
+		color: $font-color-light;
+		font-weight: 600;
+		margin-bottom: 20px;
+		i {
+			font-size: 2rem;
+			margin-right: 10px;
+			color: $blue;
+			vertical-align: middle;
+		}
+	}
+	ul.section-list {
+		margin: 0 0 20px 40px;
+		li {
+			padding-left: 10px;
+			list-style-type: disc;
+			margin-bottom: 15px;
+			line-height: 200%;
+		}
+	}
+	.section-wrapper {
+		border: 1px solid $border-bg;
+		background-color: lighten($body-bg, 5%);
+		padding: 30px;
+		text-align: center;
+		&.left {
+			text-align: left;
+		}
+		&.white {
+			background: $white;
+		}
+	}
+}
+
+/************************************************
+	************************************************
+							16. Inline Bagdes
+	************************************************
+************************************************/
+
+.badges-inline {
+	.badge {
+		margin-right: 5px;
+		float: left;
+	}
+}
+
+/************************************************
+	************************************************
+								17. Secure Account
+	************************************************
+************************************************/
+
+.acc-secure {
+	max-width: 280px;
+	margin: 100px auto 50px auto;
+	text-align: center;
+	img {
+		max-width: 250px;
+		max-height: 250px;
+		margin-bottom: 1rem;
+	}
+	.btn {
+		i {
+			font-size: 1.2rem;
+			margin-top: 3px;
+			float: right !important;
+			margin-left: 3px;
+		}
+	}
+}
+
+/************************************************
+	************************************************
+							18. Bootstrap Overwrite CSS
+	************************************************
+************************************************/
+
+/*************** 18 A. Modals ***************/
+
+.modal-content {
+	border: 1px solid $border-bg;
+}
+
+.modal-header {
+	padding: 10px 15px;
+	border-bottom: 1px solid $border-bg;
+}
+
+.modal-title {
+	font-size: 1rem;
+}
+
+// Modal Danger
+.modal-danger {
+	.modal-content {
+		border: 0;
+		background: $pink-red;
+	}
+	.modal-header {
+		background: $pink-red;
+		border: 0;
+		.modal-title {
+			color: $white;
+		}
+	}
+	.modal-body {
+		background: lighten($pink-red, 5%);
+	}
+	.modal-footer {
+		border: 0;
+	}
+	.form-control {
+		border: 0;
+		&:focus {
+			border: 0;
+		}
+	}
+}
+
+/*************** 18 B. Carousel ***************/
+
+.carousel-item {
+	max-height: 450px;
+}
+
+/*************** 18 C. Buttons ***************/
+
+.btn {
+	@include border-radius(2px);
+	border: 0;
+	padding: 0.375rem 1rem;
+	.icon {
+		font-size: 1.4rem;
+		vertical-align: middle;
+		margin-top: -4px;
+		display: inline-block;
+	}
+	&.focus,
+	&:focus {
+		color: $white;
+	}
+}
+
+.btn-sm {
+	padding: 0.25rem 0.75rem;
+	.icon {
+		font-size: 1rem;
+		vertical-align: middle;
+		margin-top: -2px;
+		display: inline-block;
+	}
+}
+
+.btn-rounded {
+	@include border-radius(50px);
+}
+
+// Btn Primary
+.btn-primary {
+	@include linear-gradient($primary-light-color, $primary-color);
+	color: $white;
+	&:hover {
+		opacity: 0.8;
+		color: $white;
+	}
+	&:focus {
+		box-shadow: 0 0 0 3px lighten($primary-color, 35%);
+	}
+}
+
+.btn-primary:not(:disabled):not(.disabled).active,
+.btn-primary:not(:disabled):not(.disabled):active,
+.show > .btn-primary.dropdown-toggle {
+	background: $primary-color;
+}
+
+// Btn Secondary
+.btn-secondary {
+	@include linear-gradient($secondary-light-color, $secondary-color);
+	color: $white;
+	&:hover {
+		opacity: 0.8;
+		color: $white;
+	}
+	&:focus {
+		box-shadow: 0 0 0 3px lighten($secondary-color, 21%);
+	}
+}
+
+.btn-secondary:not(:disabled):not(.disabled).active,
+.btn-secondary:not(:disabled):not(.disabled):active,
+.show > .btn-secondary.dropdown-toggle {
+	background: $secondary-color;
+}
+
+// Btn Success
+.btn-success {
+	@include linear-gradient($light-green, $green);
+	&:hover {
+		opacity: 0.8;
+	}
+	&:focus {
+		box-shadow: 0 0 0 3px lighten($green, 33%);
+	}
+}
+
+.btn-success:not(:disabled):not(.disabled).active,
+.btn-success:not(:disabled):not(.disabled):active,
+.show > .btn-success.dropdown-toggle {
+	background: $green;
+}
+
+// Btn Danger
+.btn-danger {
+	@include linear-gradient($light-red, $red);
+	&:hover {
+		opacity: 0.8;
+	}
+	&:focus {
+		box-shadow: 0 0 0 3px lighten($red, 22%);
+	}
+}
+
+.btn-danger:not(:disabled):not(.disabled).active,
+.btn-danger:not(:disabled):not(.disabled):active,
+.show > .btn-danger.dropdown-toggle {
+	background: $red;
+}
+
+// Btn Warning
+.btn-warning {
+	@include linear-gradient($light-yellow, $yellow);
+	color: $black;
+	&:hover {
+		opacity: 0.8;
+		color: $black;
+	}
+	&:focus {
+		box-shadow: 0 0 0 3px lighten($yellow, 30%);
+		color: $black;
+	}
+}
+
+.btn-warning:not(:disabled):not(.disabled).active,
+.btn-warning:not(:disabled):not(.disabled):active,
+.show > .btn-warning.dropdown-toggle {
+	background: $yellow;
+}
+
+// Btn Info
+.btn-info {
+	@include linear-gradient($light-blue, $blue);
+	&:hover {
+		opacity: 0.8;
+	}
+	&:focus {
+		box-shadow: 0 0 0 3px lighten($blue, 35%);
+	}
+}
+
+.btn-info:not(:disabled):not(.disabled).active,
+.btn-info:not(:disabled):not(.disabled):active,
+.show > .btn-info.dropdown-toggle {
+	background: $blue;
+}
+
+// Btn White
+.btn-white {
+	background: $white;
+	color: $black;
+	border: 1px solid $border-bg;
+	&:hover {
+		color: lighten($black, 10%);
+		background: darken($white, 3%);
+	}
+	&:focus {
+		box-shadow: 0 0 0 3px darken($white, 5%);
+		color: lighten($black, 10%);
+	}
+}
+
+.btn-lighter:not(:disabled):not(.disabled).active,
+.btn-lighter:not(:disabled):not(.disabled):active,
+.show > .btn-light.dropdown-toggle {
+	background: $white;
+}
+
+// Btn Light
+.btn-light {
+	@include linear-gradient(lighten($light-color, 10%), $light-color);
+	&:hover {
+		opacity: 0.8;
+	}
+	&:focus {
+		box-shadow: 0 0 0 3px lighten($light-color, 10%);
+	}
+}
+
+.btn-light:not(:disabled):not(.disabled).active,
+.btn-light:not(:disabled):not(.disabled):active,
+.show > .btn-light.dropdown-toggle {
+	background: $light-color;
+}
+
+// Btn Dark
+.btn-dark {
+	@include linear-gradient($dark-color, lighten($dark-color, 20%));
+	&:hover {
+		opacity: 0.8;
+	}
+	&:focus {
+		box-shadow: 0 0 0 3px lighten($dark-color, 10%);
+	}
+}
+
+.btn-dark:not(:disabled):not(.disabled).active,
+.btn-dark:not(:disabled):not(.disabled):active,
+.show > .btn-dark.dropdown-toggle {
+	background: lighten($dark-color, 30%);
+}
+
+// Btn Lighter
+.btn-lighter {
+	background: $body-bg;
+	color: $black;
+	border: 1px solid $border-bg;
+	&:hover {
+		opacity: 0.8;
+		color: lighten($black, 10%);
+		background: lighten($body-bg, 3%);
+	}
+	&:focus {
+		box-shadow: 0 0 0 3px lighten($light-color, 10%);
+		color: lighten($black, 10%);
+	}
+}
+
+.btn-lighter:not(:disabled):not(.disabled).active,
+.btn-lighter:not(:disabled):not(.disabled):active,
+.show > .btn-light.dropdown-toggle {
+	background: $body-bg;
+}
+
+// Btn FB
+.btn-fb {
+	@include linear-gradient($facebook, lighten($facebook, 15%));
+	color: $white;
+	&:hover {
+		opacity: 0.8;
+		color: $white;
+	}
+	&:focus {
+		box-shadow: 0 0 0 3px lighten($facebook, 10%);
+	}
+}
+
+.btn-fb:not(:disabled):not(.disabled).active,
+.btn-fb:not(:disabled):not(.disabled):active,
+.show > .btn-fb.dropdown-toggle {
+	background: $facebook;
+}
+
+// Btn TW
+.btn-tw {
+	@include linear-gradient($twitter, darken($twitter, 15%));
+	color: $white;
+	&:hover {
+		opacity: 0.8;
+		color: $white;
+	}
+	&:focus {
+		box-shadow: 0 0 0 3px darken($twitter, 10%);
+	}
+}
+
+.btn-tw:not(:disabled):not(.disabled).active,
+.btn-tw:not(:disabled):not(.disabled):active,
+.show > .btn-tw.dropdown-toggle {
+	background: $twitter;
+}
+
+// Btn Orange
+.btn-orange {
+	@include linear-gradient($light-orange, $orange);
+	color: $white;
+	&:hover {
+		opacity: 0.8;
+		color: $white;
+	}
+	&:focus {
+		box-shadow: 0 0 0 3px lighten($orange, 30%);
+		color: $white;
+	}
+}
+
+.btn-orange:not(:disabled):not(.disabled).active,
+.btn-orange:not(:disabled):not(.disabled):active,
+.show > .btn-orange.dropdown-toggle {
+	background: $orange;
+}
+
+// Button Link
+.btn-link {
+	color: $primary-color;
+	&:hover {
+		text-decoration: none;
+	}
+}
+
+/*************** 18 D. Outline Buttons ***************/
+
+.btn-outline-primary {
+	border: 1px solid $primary-color;
+	&:hover {
+		@include linear-gradient($primary-light-color, $primary-color);
+	}
+}
+
+.btn-outline-secondary {
+	border: 1px solid $secondary-color;
+	&:hover {
+		@include linear-gradient($secondary-light-color, $secondary-color);
+	}
+}
+
+.btn-outline-success {
+	border: 1px solid $green;
+	&:hover {
+		@include linear-gradient($light-green, $green);
+	}
+}
+
+.btn-outline-danger {
+	border: 1px solid $red;
+	&:hover {
+		@include linear-gradient($light-red, $red);
+	}
+}
+
+.btn-outline-warning {
+	border: 1px solid $yellow;
+	&:hover {
+		@include linear-gradient($light-yellow, $yellow);
+	}
+}
+
+.btn-outline-info {
+	border: 1px solid $blue;
+	color: $blue;
+	&:hover {
+		@include linear-gradient($light-blue, $blue);
+	}
+}
+
+.btn-outline-light {
+	border: 1px solid $light-color;
+	color: $font-color-light;
+	&:hover {
+		@include linear-gradient(lighten($light-color, 10%), $light-color);
+		border: 1px solid darken($light-color, 7%);
+	}
+}
+
+.btn-outline-dark {
+	border: 1px solid $dark-color;
+	&:hover {
+		@include linear-gradient($dark-color, darken($dark-color, 5%));
+	}
+}
+
+.btn-outline-orange {
+	border: 1px solid $orange;
+	color: $orange;
+	&:hover {
+		@include linear-gradient($orange, darken($orange, 5%));
+		color: $white;
+	}
+}
+
+.btn-bdr-white {
+	border: 2px solid $white;
+	background: transparent;
+	color: $white;
+	padding: 0.5rem 1.5rem;
+	&:hover {
+		opacity: 0.8;
+		color: $white;
+	}
+	&:focus {
+		box-shadow: 0 0 0 3px lighten($white, 35%);
+	}
+}
+
+.btn.disabled,
+.btn:disabled {
+	pointer-events: none;
+}
+
+/*************** 18 E. Dropdown Menu ***************/
+
+.dropdown-menu {
+	@include border-radius(0);
+	border: 1px solid $border-bg;
+	min-width: 12rem;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	&.lg {
+		min-width: 18rem;
+	}
+	&:before {
+		content: "";
+		position: absolute;
+		top: -8px;
+		left: 5px;
+		width: 0;
+		height: 0;
+		border-left: 8px solid transparent;
+		border-right: 8px solid transparent;
+		border-bottom: 8px solid $border-bg;
+	}
+	&:after {
+		content: "";
+		position: absolute;
+		top: -7px;
+		left: 6px;
+		width: 0;
+		height: 0;
+		border-left: 7px solid transparent;
+		border-right: 7px solid transparent;
+		border-bottom: 7px solid $white;
+	}
+	.dropdown-item {
+		font-size: 13px;
+		padding: 0.25rem 1rem;
+		&:hover {
+			background: $body-bg;
+		}
+	}
+	&.dropdown-menu-right {
+		&:before {
+			content: "";
+			position: absolute;
+			top: -8px;
+			right: 5px;
+			left: auto;
+			width: 0;
+			height: 0;
+			border-left: 8px solid transparent;
+			border-right: 8px solid transparent;
+			border-bottom: 8px solid $border-bg;
+		}
+		&:after {
+			content: "";
+			position: absolute;
+			top: -7px;
+			right: 6px;
+			left: auto;
+			width: 0;
+			height: 0;
+			border-left: 7px solid transparent;
+			border-right: 7px solid transparent;
+			border-bottom: 7px solid $white;
+		}
+	}
+}
+
+.dropup {
+	.dropdown-menu {
+		&:before {
+			content: "";
+			position: absolute;
+			bottom: -8px;
+			left: 5px;
+			top: auto;
+			width: 0;
+			height: 0;
+			border-left: 8px solid transparent;
+			border-right: 8px solid transparent;
+			border-top: 8px solid $border-bg;
+			border-bottom: inherit;
+		}
+		&:after {
+			content: "";
+			position: absolute;
+			bottom: -7px;
+			left: 6px;
+			top: auto;
+			width: 0;
+			height: 0;
+			border-left: 7px solid transparent;
+			border-right: 7px solid transparent;
+			border-top: 7px solid $white;
+			border-bottom: inherit;
+		}
+	}
+}
+
+/*************** 18 F. Media ***************/
+
+.media.comments {
+	margin-top: 0;
+	.media-left a {
+		display: block;
+	}
+	a .empty-avatar {
+		height: 64px;
+		width: 64px;
+		@include border-radius(50px);
+		color: $white;
+		text-align: center;
+		display: block;
+		line-height: 60px;
+		&.sm {
+			width: 48px;
+			height: 48px;
+			line-height: 48px;
+		}
+	}
+	.media-body {
+		h5.media-heading {
+			font-size: 1rem;
+			span.date {
+				color: $font-color-light;
+				font-size: 0.75rem;
+				padding-left: 5px;
+			}
+		}
+		p {
+			padding: 0 0 0 15px;
+			margin: 15px 0;
+			line-height: 170%;
+			border-left: 3px solid $border-bg;
+		}
+	}
+	.comments-footer {
+		margin: 25px 0 50px 20px;
+		ul li {
+			float: left;
+			margin-right: 10px;
+		}
+	}
+	.comments-form .form-group {
+		margin-bottom: 10px;
+	}
+}
+
+.media {
+	&.disabled {
+		opacity: 0.3;
+		cursor: no-drop;
+	}
+}
+
+@media (max-width: 767px) {
+	.media.comments {
+		overflow: auto;
+	}
+}
+
+/*************** 18 G. Cards ***************/
+
+.card {
+	border: 0;
+	@include border-radius(0.3rem);
+	margin-bottom: 0.8rem;
+	box-shadow: none;
+	background: $white;
+	.card-header {
+		&:first-child {
+			@include border-radius-all-val(0.3rem, 0.3rem, 0, 0);
+		}
+	}
+	&.custom-bdr {
+		border: 0;
+		@include border-radius(0.3rem);
+		.card-header {
+			box-shadow: none;
+			border-bottom: 1px solid $border-bg;
+		}
+	}
+	&.bdr {
+		border: 1px solid $border-bg;
+		@include border-radius(0);
+		.card-header {
+			box-shadow: none;
+		}
+		.collapse.show {
+			border-top: 1px solid $border-bg;
+		}
+	}
+	&.bdr-primary {
+		border: 1px solid $primary-color;
+		@include border-radius(0);
+		.card-header {
+			box-shadow: none;
+		}
+		.collapse.show {
+			border-top: 1px solid $primary-color;
+		}
+	}
+	&.top-blue-bdr {
+		border-top: 2px solid $primary-color;
+	}
+	&.top-grey-bdr {
+		border-top: 2px solid lighten($black, 20%);
+	}
+	&.top-red-bdr {
+		border-top: 2px solid $red;
+	}
+	&.top-green-bdr {
+		border-top: 2px solid $green;
+	}
+	&.top-pink-bdr {
+		border-top: 2px solid $pink;
+	}
+	&.top-orange-bdr {
+		border-top: 2px solid $orange;
+	}
+	.card-body {
+		padding: 1rem;
+		position: relative;
+	}
+	.card-header {
+		background: $white;
+		border-bottom: 0;
+		font-size: 1rem;
+		padding: 0.8rem 1rem;
+		position: relative;
+		font-weight: 600;
+		color: $black;
+		-webkit-box-shadow: 0 5px 5px -5px darken($body-bg, 10%);
+		-moz-box-shadow: 0 5px 5px -5px darken($body-bg, 10%);
+		box-shadow: 0 5px 5px -5px darken($body-bg, 10%);
+		h5 {
+			font-size: 1rem;
+			a {
+				color: $blue;
+			}
+		}
+		a.link {
+			position: absolute;
+			right: 15px;
+			top: 15px;
+			font-size: 0.75rem;
+			color: $white;
+		}
+	}
+	.card-footer {
+		background: $white;
+		border-top: 0;
+		font-size: 1rem;
+		padding: 0.75rem 1rem;
+		position: relative;
+		h5 {
+			font-size: 1rem;
+			a {
+				color: $blue;
+			}
+		}
+	}
+	h6.card-title {
+		text-align: center;
+		margin: 1rem;
+	}
+	&.primary {
+		background: $primary-color;
+		.card-header {
+			color: $white;
+			background: $primary-color;
+			-webkit-box-shadow: 0 5px 5px -5px darken($primary-color, 10%);
+			-moz-box-shadow: 0 5px 5px -5px darken($primary-color, 10%);
+			box-shadow: 0 5px 5px -5px darken($primary-color, 10%);
+		}
+		.card-footer {
+			background: $primary-color;
+		}
+	}
+	&.secondary {
+		background: $secondary-color;
+		.card-header {
+			color: $white;
+			background: $secondary-color;
+			-webkit-box-shadow: 0 5px 5px -5px darken($secondary-color, 10%);
+			-moz-box-shadow: 0 5px 5px -5px darken($secondary-color, 10%);
+			box-shadow: 0 5px 5px -5px darken($secondary-color, 10%);
+		}
+		.card-footer {
+			background: $secondary-color;
+		}
+	}
+	&.dark {
+		background: $sidebar-bg;
+		.card-header {
+			color: $white;
+			background: $sidebar-bg;
+			-webkit-box-shadow: 0 5px 5px -5px darken($sidebar-bg, 10%);
+			-moz-box-shadow: 0 5px 5px -5px darken($sidebar-bg, 10%);
+			box-shadow: 0 5px 5px -5px darken($sidebar-bg, 10%);
+		}
+		.card-footer {
+			background: $sidebar-bg;
+		}
+	}
+	&.light {
+		background: $light-color;
+		.card-header {
+			background: $light-color;
+			-webkit-box-shadow: 0 5px 5px -5px darken($light-color, 15%);
+			-moz-box-shadow: 0 5px 5px -5px darken($light-color, 15%);
+			box-shadow: 0 5px 5px -5px darken($light-color, 15%);
+		}
+		.card-footer {
+			background: $light-color;
+		}
+	}
+	&.success {
+		background: $green;
+		.card-header {
+			background: $green;
+			color: $white;
+			-webkit-box-shadow: 0 5px 5px -5px darken($green, 10%);
+			-moz-box-shadow: 0 5px 5px -5px darken($green, 10%);
+			box-shadow: 0 5px 5px -5px darken($green, 10%);
+		}
+		.card-footer {
+			background: $green;
+		}
+	}
+	&.info {
+		background: $blue;
+		.card-header {
+			background: $blue;
+			color: $white;
+			-webkit-box-shadow: 0 5px 5px -5px darken($blue, 10%);
+			-moz-box-shadow: 0 5px 5px -5px darken($blue, 10%);
+			box-shadow: 0 5px 5px -5px darken($blue, 10%);
+		}
+		.card-footer {
+			background: $blue;
+		}
+	}
+	&.warning {
+		background: $yellow;
+		.card-header {
+			background: $yellow;
+			color: $black;
+			-webkit-box-shadow: 0 5px 5px -5px darken($yellow, 20%);
+			-moz-box-shadow: 0 5px 5px -5px darken($yellow, 20%);
+			box-shadow: 0 5px 5px -5px darken($yellow, 20%);
+		}
+		.card-footer {
+			background: $yellow;
+		}
+	}
+	&.danger {
+		background: $lighter-red;
+		.card-header {
+			background: $lighter-red;
+			color: $white;
+			-webkit-box-shadow: 0 5px 5px -5px darken($lighter-red, 10%);
+			-moz-box-shadow: 0 5px 5px -5px darken($lighter-red, 10%);
+			box-shadow: 0 5px 5px -5px darken($lighter-red, 10%);
+		}
+		.card-footer {
+			background: $red;
+		}
+	}
+	&.orange {
+		background: $orange;
+		.card-header {
+			background: $orange;
+			color: $white;
+			-webkit-box-shadow: 0 5px 5px -5px darken($orange, 20%);
+			-moz-box-shadow: 0 5px 5px -5px darken($orange, 20%);
+			box-shadow: 0 5px 5px -5px darken($orange, 20%);
+		}
+		.card-footer {
+			background: $orange;
+		}
+	}
+	&.pink {
+		background: $pink;
+		.card-header {
+			background: $pink;
+			color: $white;
+			-webkit-box-shadow: 0 5px 5px -5px darken($pink, 10%);
+			-moz-box-shadow: 0 5px 5px -5px darken($pink, 10%);
+			box-shadow: 0 5px 5px -5px darken($pink, 10%);
+		}
+		.card-footer {
+			background: $pink;
+		}
+	}
+	&.grey {
+		background: $black;
+		.card-header {
+			background: $black;
+			color: $white;
+			-webkit-box-shadow: 0 5px 5px -5px lighten($black, 10%);
+			-moz-box-shadow: 0 5px 5px -5px lighten($black, 10%);
+			box-shadow: 0 5px 5px -5px lighten($black, 10%);
+		}
+		.card-footer {
+			background: $black;
+		}
+	}
+	&.teal {
+		background: $teal;
+		.card-header {
+			background: $teal;
+			color: $white;
+			-webkit-box-shadow: 0 5px 5px -5px darken($teal, 10%);
+			-moz-box-shadow: 0 5px 5px -5px darken($teal, 10%);
+			box-shadow: 0 5px 5px -5px darken($teal, 10%);
+		}
+		.card-footer {
+			background: $teal;
+		}
+	}
+	&.brown {
+		background: $brown;
+		.card-header {
+			background: $brown;
+			color: $white;
+			-webkit-box-shadow: 0 5px 5px -5px darken($brown, 10%);
+			-moz-box-shadow: 0 5px 5px -5px darken($brown, 10%);
+			box-shadow: 0 5px 5px -5px darken($brown, 10%);
+		}
+		.card-footer {
+			background: $brown;
+		}
+	}
+	&.purple {
+		background: $purple;
+		.card-header {
+			background: $purple;
+			color: $white;
+			-webkit-box-shadow: 0 5px 5px -5px darken($purple, 10%);
+			-moz-box-shadow: 0 5px 5px -5px darken($purple, 10%);
+			box-shadow: 0 5px 5px -5px darken($purple, 10%);
+		}
+		.card-footer {
+			background: $purple;
+		}
+	}
+	&.violet {
+		background: $violet;
+		.card-header {
+			background: $violet;
+			color: $white;
+			-webkit-box-shadow: 0 5px 5px -5px darken($violet, 10%);
+			-moz-box-shadow: 0 5px 5px -5px darken($violet, 10%);
+			box-shadow: 0 5px 5px -5px darken($violet, 10%);
+		}
+		.card-footer {
+			background: $violet;
+		}
+	}
+	&.facebook {
+		background: $facebook;
+		.card-header {
+			color: $white;
+			background: $facebook;
+			-webkit-box-shadow: 0 5px 5px -5px darken($facebook, 10%);
+			-moz-box-shadow: 0 5px 5px -5px darken($facebook, 10%);
+			box-shadow: 0 5px 5px -5px darken($facebook, 10%);
+		}
+		.card-footer {
+			background: $facebook;
+		}
+	}
+}
+
+.card-deck {
+	margin-right: -7px;
+	margin-left: -7px;
+	.card {
+		margin: 0 7px;
+		margin-bottom: 0.8rem;
+	}
+}
+
+.card-message {
+	background-color: $white;
+	padding: 12px 20px;
+	border-bottom: 1px solid $border-bg;
+	i {
+		font-size: 2rem;
+		margin-right: 10px;
+		float: left;
+	}
+}
+
+/*************** 18 H. Card Header Tabs ***************/
+
+.card-header-tabs {
+	margin-right: 0;
+	margin-left: 0;
+}
+
+/*************** 18 I. Accordion Card ***************/
+
+.card-accordion {
+	.card {
+		margin-bottom: 0.3rem;
+	}
+}
+
+.accordion-icons {
+	a {
+		position: relative;
+		padding-left: 30px;
+		&:before {
+			position: absolute;
+			left: 0;
+			content: "\ea8a";
+			font-family: "icomoon";
+			font-size: 18px;
+		}
+		&.collapsed {
+			&:before {
+				content: "\ea7f";
+			}
+		}
+	}
+}
+
+/*************** 18 J. Tooltips ***************/
+
+.tooltip {
+	font-size: 0.75rem;
+}
+
+.tooltip-inner {
+	@include border-radius(0);
+}
+
+/*************** 18 K. Badges ***************/
+
+.badge {
+	padding: 0.4em 1em 0.4em 1em;
+	@include border-radius(3px);
+	font-weight: 400;
+}
+
+.badge-pill {
+	padding: 0.4em 1em 0.4em 1em;
+	@include border-radius(50px);
+}
+
+.badge-primary {
+	@include linear-gradient($primary-light-color, $primary-color);
+	&[href]:focus,
+	&[href]:hover {
+		background: darken($primary-color, 5%);
+	}
+}
+
+.badge-secondary {
+	@include linear-gradient($light-orange, $orange);
+	&[href]:focus,
+	&[href]:hover {
+		background: darken($secondary-color, 5%);
+	}
+}
+
+.badge-success {
+	@include linear-gradient($light-green, $green);
+	&[href]:focus,
+	&[href]:hover {
+		background: darken($green, 5%);
+	}
+}
+
+.badge-danger {
+	@include linear-gradient($light-red, $red);
+	&[href]:focus,
+	&[href]:hover {
+		background: darken($red, 5%);
+	}
+}
+
+.badge-warning {
+	@include linear-gradient($light-yellow, $yellow);
+	&[href]:focus,
+	&[href]:hover {
+		background: darken($yellow, 5%);
+	}
+}
+
+.badge-info {
+	@include linear-gradient($light-blue, $blue);
+	&[href]:focus,
+	&[href]:hover {
+		background: darken($blue, 5%);
+	}
+}
+
+.badge-light {
+	@include linear-gradient($light-color, lighten($light-color, 7%));
+	color: $black;
+	&[href]:focus,
+	&[href]:hover {
+		background: darken($light-color, 5%);
+	}
+}
+
+.badge-dark {
+	background-color: $black;
+	color: $white;
+	&[href]:focus,
+	&[href]:hover {
+		background: lighten($black, 30%);
+	}
+}
+
+.badge-white {
+	@include linear-gradient($white, $white);
+	color: $black;
+	&[href]:focus,
+	&[href]:hover {
+		background: lighten($light-color, 7%);
+	}
+}
+
+.badge-orange {
+	@include linear-gradient($light-orange, $orange);
+	color: $white;
+	&[href]:focus,
+	&[href]:hover {
+		background: $orange;
+	}
+}
+
+.badge-bdr,
+.badge-bdr-pill {
+	background: transparent;
+	&.badge-bdr-pill {
+		@include border-radius(50px);
+	}
+	&.badge-primary {
+		color: $primary-color;
+		border: 1px solid $primary-color;
+	}
+	&.badge-secondary {
+		color: $secondary-color;
+		border: 1px solid $secondary-color;
+	}
+	&.badge-danger {
+		color: $red;
+		border: 1px solid $red;
+	}
+	&.badge-success {
+		color: $green;
+		border: 1px solid $green;
+	}
+	&.badge-warning {
+		color: $yellow;
+		border: 1px solid $yellow;
+	}
+	&.badge-info {
+		color: $blue;
+		border: 1px solid $blue;
+	}
+	&.badge-dark {
+		color: $secondary-light-color;
+		border: 1px solid $secondary-light-color;
+	}
+	&.badge-light {
+		color: $primary-light-color;
+		border: 1px solid $primary-light-color;
+	}
+	&.badge-white {
+		color: $white;
+		border: 1px solid darken($white, 7%);
+	}
+	&.badge-orange {
+		color: $orange;
+		border: 1px solid $orange;
+	}
+}
+
+/*************** 18 L. Alerts ***************/
+
+.alert {
+	padding: 0.75rem 1rem;
+	position: relative;
+	@include border-radius(0.3rem);
+	margin-bottom: 1rem;
+	box-shadow: none; // box-shadow: 0 0 5px darken($body-bg, 3%);
+	line-height: 160%;
+	i {
+		font-size: 24px;
+		margin-right: 10px;
+		vertical-align: middle;
+	}
+	hr {
+		border-top-color: rgba(255, 255, 255, 0.2);
+	}
+}
+
+.alert-dismissible .close {
+	padding: 0.5rem 1rem;
+	top: -0.7rem;
+}
+
+.close {
+	text-shadow: none;
+}
+
+.alert-primary {
+	@include linear-gradient($primary-light-color, $primary-color);
+	border-color: $primary-color;
+	color: $white;
+	.alert-link {
+		color: $white;
+		text-decoration: underline;
+	}
+	i {
+		color: $white;
+	}
+}
+
+.alert-secondary {
+	@include linear-gradient($secondary-light-color, $secondary-color);
+	border-color: $secondary-color;
+	color: $white;
+	.alert-link {
+		color: $white;
+		text-decoration: underline;
+	}
+	i {
+		color: $white;
+	}
+}
+
+.alert-success {
+	@include linear-gradient($light-green, $green);
+	border-color: $green;
+	color: $white;
+	.alert-link {
+		color: $white;
+		text-decoration: underline;
+	}
+	i {
+		color: $white;
+	}
+}
+
+.alert-danger {
+	@include linear-gradient($light-red, $red);
+	border-color: $red;
+	color: $white;
+	.alert-link {
+		color: $white;
+		text-decoration: underline;
+	}
+	i {
+		color: $white;
+	}
+}
+
+.alert-warning {
+	@include linear-gradient($light-yellow, $yellow);
+	border-color: $dark-yellow;
+	color: $white;
+	.alert-link {
+		color: $white;
+		text-decoration: underline;
+	}
+	i {
+		color: $white;
+	}
+}
+
+.alert-info {
+	@include linear-gradient($light-blue, $blue);
+	border-color: $blue;
+	color: $white;
+	.alert-link {
+		color: $white;
+		text-decoration: underline;
+	}
+	i {
+		color: $white;
+	}
+}
+
+.alert-light {
+	@include linear-gradient(darken($white, 3%), darken($white, 10%));
+	border-color: darken($white, 10%);
+	color: $black;
+	.alert-link {
+		color: $black;
+		text-decoration: underline;
+	}
+	i {
+		color: $black;
+	}
+}
+
+.alert-dark {
+	@include linear-gradient(lighten($black, 20%), lighten($black, 30%));
+	border-color: lighten($black, 20%);
+	color: $white;
+	.alert-link {
+		color: $white;
+		text-decoration: underline;
+	}
+	i {
+		color: $white;
+	}
+}
+
+/*************** 18 M. Progress bars ***************/
+
+.progress {
+	@include border-radius(0);
+	background-color: $card-bg;
+	-webkit-box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.1);
+	-moz-box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.1);
+	box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.1);
+	&.no-shadow {
+		box-shadow: none;
+	}
+	.progress-bar-striped {
+		background-image: linear-gradient(
+			45deg,
+			rgba(255, 255, 255, 0.15) 25%,
+			transparent 25%,
+			transparent 50%,
+			rgba(255, 255, 255, 0.15) 50%,
+			rgba(255, 255, 255, 0.15) 75%,
+			transparent 75%,
+			transparent
+		);
+		&.bg-info {
+			background-color: $blue !important;
+		}
+		&.bg-success {
+			background-color: $green !important;
+		}
+		&.bg-danger {
+			background-color: $red !important;
+		}
+		&.bg-warning {
+			background-color: $yellow !important;
+		}
+		&.bg-orange {
+			background-color: $orange !important;
+		}
+		&.bg-pink {
+			background-color: $pink !important;
+		}
+	}
+	&.xl {
+		height: 20px;
+	}
+	&.md {
+		height: 8px;
+	}
+	&.sm {
+		height: 5px;
+	}
+	&.xs {
+		height: 2px;
+	}
+}
+
+/*************** 18 N. Popovers ***************/
+
+.popover {
+	@include border-radius(0);
+	border: 1px solid $sidebar-bg;
+	background: $sidebar-bg;
+	.popover-header {
+		background: lighten($sidebar-bg, 5%);
+		color: $white;
+		border-bottom: 1px solid lighten($sidebar-bg, 5%);
+	}
+	.popover-body {
+		color: $white;
+	}
+}
+
+.bs-popover-auto[x-placement^="top"] .arrow::after,
+.bs-popover-top .arrow::after {
+	border-top-color: $sidebar-bg;
+}
+
+.bs-popover-auto[x-placement^="right"] .arrow::after,
+.bs-popover-right .arrow::after {
+	border-right-color: $sidebar-bg;
+}
+
+.bs-popover-auto[x-placement^="bottom"] .arrow::after,
+.bs-popover-bottom .arrow::after {
+	border-bottom-color: $sidebar-bg;
+}
+
+.bs-popover-auto[x-placement^="left"] .arrow::after,
+.bs-popover-left .arrow::after {
+	border-left-color: $sidebar-bg;
+}
+
+/*************** 18 O. Tabs & Navs ***************/
+
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
+	border-color: $border-bg $border-bg $white;
+	color: $font-color;
+	background: $white;
+}
+
+.nav-tabs {
+	border: 1px solid $border-bg;
+	padding: 10px 10px 0 10px;
+	background: $white;
+	.nav-link {
+		@include border-radius(0);
+	}
+}
+
+.nav-link {
+	border: none;
+	position: relative;
+	padding: 0.8rem 1.2rem;
+	color: $primary-color;
+	i {
+		font-size: 1.3rem;
+		float: left;
+		margin-right: 5px;
+	}
+	&:hover {
+		color: darken($primary-color, 7%);
+	}
+	&.active {
+		text-decoration: none;
+		color: $orange;
+		font-weight: 700;
+	}
+	&.disabled {
+		pointer-events: none;
+		color: $font-color-light;
+	}
+}
+
+.tab-content {
+	padding: 1rem 1.5rem;
+	border: 1px solid $border-bg;
+	border-top: 0;
+	background: $white;
+	.tab-pane {
+		line-height: 180%;
+	}
+}
+
+/*************** 18 P. Pills ***************/
+
+.nav-pills {
+	.nav-link {
+		@include border-radius(0);
+		&:after {
+			background: transparent;
+		}
+		&.active {
+			@include linear-gradient($light-blue, $blue);
+		}
+	}
+}
+
+/*************** 18 Q. Page Item ***************/
+
+.page-item.active .page-link {
+	@include linear-gradient($light-blue, $blue);
+	border-color: $blue;
+}
+
+/*************** 18 R. Breadcrumbs ***************/
+
+.breadcrumb {
+	background-color: $body-bg;
+	@include border-radius(0);
+	.breadcrumb-item {
+		a {
+			color: $orange;
+			i {
+				font-size: 1rem;
+			}
+		}
+		&.active {
+			color: $font-color-light;
+		}
+	}
+	&.light {
+		background-color: $primary-color;
+		.breadcrumb-item {
+			a {
+				color: $font-color-light;
+				i {
+					font-size: 1rem;
+				}
+			}
+			&.active {
+				color: $white;
+			}
+		}
+	}
+}
+
+/*************** 18 S. jumbotron ***************/
+
+.jumbotron {
+	background-color: $body-bg;
+}
+
+/*************** 18 T. List Group ***************/
+
+.list-group-item {
+	&.disabled {
+		color: $font-color-light;
+	}
+	&:disabled {
+		color: $font-color-light;
+	}
+	&.active {
+		background-color: $primary-color;
+		border-color: $primary-color;
+	}
+}
+
+.list-group-item-primary {
+	background: $primary-color;
+	color: $white;
+	&.list-group-item-action {
+		&:focus,
+		&:hover {
+			background: darken($primary-color, 3%);
+			color: $white;
+		}
+	}
+}
+
+.list-group-item-secondary {
+	background: $secondary-color;
+	color: $white;
+	&.list-group-item-action {
+		&:focus,
+		&:hover {
+			background: darken($secondary-color, 3%);
+			color: $white;
+		}
+	}
+}
+
+.list-group-item-success {
+	background: $green;
+	color: $white;
+	&.list-group-item-action {
+		&:focus,
+		&:hover {
+			background: darken($green, 3%);
+			color: $white;
+		}
+	}
+}
+
+.list-group-item-danger {
+	background: $red;
+	color: $white;
+	&.list-group-item-action {
+		&:focus,
+		&:hover {
+			background: darken($red, 3%);
+			color: $white;
+		}
+	}
+}
+
+.list-group-item-info {
+	background: $blue;
+	color: $white;
+	&.list-group-item-action {
+		&:focus,
+		&:hover {
+			background: darken($blue, 3%);
+			color: $white;
+		}
+	}
+}
+
+.list-group-item-warning {
+	background: $yellow;
+	color: $white;
+	&.list-group-item-action {
+		&:focus,
+		&:hover {
+			background: darken($yellow, 3%);
+			color: $white;
+		}
+	}
+}
+
+.list-group-item-light {
+	background: $primary-light-color;
+	color: $white;
+	&.list-group-item-action {
+		&:focus,
+		&:hover {
+			background: darken($primary-light-color, 5%);
+			color: $white;
+		}
+	}
+}
+
+.list-group-item-dark {
+	background: $secondary-light-color;
+	color: $white;
+	&.list-group-item-action {
+		&:focus,
+		&:hover {
+			background: darken($secondary-light-color, 3%);
+			color: $white;
+		}
+	}
+}
+
+a.list-group-item-primary {
+	background: $primary-color;
+	color: $white;
+	&:hover {
+		background: darken($primary-color, 5%);
+		color: $white;
+	}
+}
+
+a.list-group-item-secondary {
+	background: $secondary-color;
+	color: $white;
+	&:hover {
+		background: darken($secondary-color, 5%);
+		color: $white;
+	}
+}
+
+a.list-group-item-success {
+	background: $green;
+	color: $white;
+	&:hover {
+		background: darken($green, 5%);
+		color: $white;
+	}
+}
+
+a.list-group-item-danger {
+	background: $red;
+	color: $white;
+	&:hover {
+		background: darken($red, 5%);
+		color: $white;
+	}
+}
+
+a.list-group-item-info {
+	background: $blue;
+	color: $white;
+	&:hover {
+		background: darken($blue, 5%);
+		color: $white;
+	}
+}
+
+a.list-group-item-warning {
+	background: $yellow;
+	color: $white;
+	&:hover {
+		background: darken($yellow, 5%);
+		color: $white;
+	}
+}
+
+a.list-group-item-light {
+	background: $primary-light-color;
+	color: $white;
+	&:hover {
+		background: darken($primary-light-color, 5%);
+		color: $white;
+	}
+}
+
+a.list-group-item-dark {
+	background: $secondary-light-color;
+	color: $white;
+	&:hover {
+		background: darken($secondary-light-color, 5%);
+		color: $white;
+	}
+}
+
+/*************** 18 U. Pagination ***************/
+
+.page-item {
+	&:first-child {
+		.page-link {
+			@include border-radius(0);
+		}
+	}
+	&:last-child {
+		.page-link {
+			@include border-radius(0);
+		}
+	}
+}
+
+.pagination-lg {
+	.page-item {
+		&:first-child {
+			.page-link {
+				@include border-radius(0);
+			}
+		}
+		&:last-child {
+			.page-link {
+				@include border-radius(0);
+			}
+		}
+	}
+}
+
+.pagination-sm {
+	.page-item {
+		&:first-child {
+			.page-link {
+				@include border-radius(0);
+			}
+		}
+		&:last-child {
+			.page-link {
+				@include border-radius(0);
+			}
+		}
+	}
+}
+
+.page-link {
+	color: $primary-color;
+	border: 1px solid $border-bg;
+	&:hover {
+		background: $body-bg;
+		border-color: $border-bg;
+	}
+}
+
+.card.dark {
+	ul.pagination {
+		.page-item .page-link {
+			background: $sidebar-bg;
+			border-color: lighten($sidebar-bg, 10%);
+			color: $font-color-light;
+		}
+		.page-item.active .page-link {
+			background: $orange;
+			border-color: $orange;
+			color: $white;
+		}
+	}
+}
+
+/*************** 18 V. Blockquote ***************/
+
+.blockquote {
+	font-size: 1rem;
+	line-height: 150%;
+	margin-bottom: 2rem;
+	p {
+		margin: 0;
+	}
+}
+
+/*************** 18 W. Custom File Labels ***************/
+
+.custom-file-label {
+	border: 1px solid darken($border-bg, 7%);
+	@include border-radius(0);
+	&::after {
+		background: $body-bg;
+		@include border-radius(0);
+		border: 1px solid $body-bg;
+	}
+}
+
+.custom-file-label-primary {
+	border: 1px solid $primary-color;
+	@include border-radius(0);
+	&::after {
+		background: $primary-color;
+		@include border-radius(0);
+		border: 1px solid $primary-color;
+		color: $white;
+	}
+}
+
+.custom-file-label-secondary {
+	border: 1px solid $orange;
+	@include border-radius(0);
+	&::after {
+		background: $orange;
+		@include border-radius(0);
+		border: 1px solid $orange;
+		color: $white;
+	}
+}
+
+/*************** 18 X. Form Controls ***************/
+
+.input-group-text {
+	border: 1px solid darken($border-bg, 7%);
+	background: $body-bg;
+	&.min-w-120 {
+		width: 120px;
+	}
+}
+
+.form-control {
+	border: 1px solid darken($border-bg, 7%);
+	@include border-radius(0);
+	&.no-bdr {
+		border: 1px solid transparent;
+	}
+	&:focus {
+		border: 1px solid $primary-color;
+	}
+	&::-webkit-input-placeholder {
+		color: $font-color-light;
+	}
+	&:-moz-placeholder {
+		color: $font-color-light;
+	}
+	&::-moz-placeholder {
+		color: $font-color-light;
+	}
+	&:-ms-input-placeholder {
+		color: $font-color-light;
+	}
+}
+
+.input-group-text {
+	@include border-radius(0);
+}
+
+// Validi Inputs
+.custom-select.is-invalid,
+.form-control.is-invalid,
+.was-validated .custom-select:invalid,
+.was-validated .form-control:invalid {
+	border-color: $red;
+}
+
+.custom-select.is-valid,
+.form-control.is-valid,
+.was-validated .custom-select:valid,
+.was-validated .form-control:valid {
+	border-color: $green;
+}
+
+.custom-select.is-warning,
+.form-control.is-warning {
+	border-color: $dark-yellow;
+}
+
+.input-group-addon {
+	border: 1px solid $border-bg;
+	background: $body-bg;
+	@include border-radius(0);
+	color: $font-color-light;
+}
+
+/*************** 18 Y. Checkbox & Radios ***************/
+
+.form-check {
+	padding-bottom: 0.5rem;
+	font-size: 1rem;
+}
+
+.form-check-label {
+	font-size: 0.85rem;
+}
+
+.form-check-input {
+	margin-top: 0.25rem;
+}
+
+.custom-control-label::before {
+	top: 0.1rem;
+}
+
+.custom-control-label::after {
+	top: 0.1rem;
+}
+
+// Custom Checkboxes
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+	background-color: $orange;
+}
+
+.custom-radio .custom-control-input:checked ~ .custom-control-label::before {
+	background-color: $orange;
+}
+
+/*************** 18 Z. Navbar ***************/
+
+.navbar {
+	.navbar-brand {
+		font-size: 1.2rem;
+		font-weight: 600;
+		img {
+			max-height: 30px;
+			margin-right: 10px;
+		}
+	}
+}
+
+/*************** 19. Tables ***************/
+
+.table {
+	font-size: 0.85rem;
+	color: lighten($black, 45%);
+}
+
+.table-dark {
+	color: lighten($black, 65%);
+}
+
+.table.no-border {
+	border: 0;
+}
+
+.table-bordered {
+	border: 1px solid $body-bg;
+	td,
+	th {
+		border: 1px solid $body-bg;
+	}
+}
+
+.table-hover tbody tr:hover {
+	background-color: lighten($body-bg, 3%);
+}
+
+.table {
+	thead th {
+		border-top: 0;
+		border-bottom: 0;
+	}
+	td {
+		vertical-align: middle;
+		border-top: 1px solid $body-bg;
+	}
+	&.table-dark {
+		thead th {
+			border-color: lighten($black, 25%);
+		}
+		td {
+			border-color: lighten($black, 20%);
+		}
+	}
+	.thead-light {
+		th {
+			border-color: lighten($body-bg, 3%);
+			background: lighten($body-bg, 3%);
+		}
+	}
+}
+
+.table-success,
+.table-success > td,
+.table-success > th {
+	background: lighten($green, 45%);
+	border-color: lighten($green, 30%);
+	color: darken($green, 30%);
+}
+
+.table-danger,
+.table-danger > td,
+.table-danger > th {
+	background: lighten($red, 43%);
+	border-color: lighten($red, 38%);
+	color: darken($red, 30%);
+}
+
+.table-warning,
+.table-warning > td,
+.table-warning > th {
+	background: lighten($yellow, 30%);
+	border-color: lighten($yellow, 15%);
+	color: darken($yellow, 30%);
+}
+
+.table-info,
+.table-info > td,
+.table-info > th {
+	background: lighten($blue, 40%);
+	border-color: lighten($blue, 35%);
+	color: darken($blue, 30%);
+}
+
+.table-light,
+.table-light > td,
+.table-light > th {
+	background: $light-color;
+	border-color: darken($light-color, 7%);
+	color: darken($light-color, 25%);
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+	background-color: lighten($body-bg, 5%);
+}
+
+.table-active,
+.table-active > td,
+.table-active > th {
+	background: $body-bg;
+}
+
+/************************************************
+	************************************************
+										20 Gutters
+	************************************************
+************************************************/
+
+.gutters {
+	margin-right: -7px;
+	margin-left: -7px;
+}
+
+.gutters > .col,
+.gutters > [class*="col-"] {
+	padding-right: 7px;
+	padding-left: 7px;
+}
+
+.no-gutters {
+	margin-right: -0px;
+	margin-left: -0px;
+}
+
+.no-gutters > .col,
+.no-gutters > [class*="col-"] {
+	padding-right: 0px;
+	padding-left: 0px;
+}
+
+/************************************************
+	************************************************
+							21 Code Syntax Highlight
+	************************************************
+************************************************/
+
+.hll {
+	background-color: #ffc;
+}
+
+.c {
+	color: #999;
+}
+
+.k {
+	color: #069;
+}
+
+.o {
+	color: #555;
+}
+
+.cm {
+	color: #999;
+}
+
+.cp {
+	color: #099;
+}
+
+.c1 {
+	color: #999;
+}
+
+.cs {
+	color: #999;
+}
+
+.gd {
+	background-color: #fcc;
+	border: 1px solid #c00;
+}
+
+.ge {
+	font-style: italic;
+}
+
+.gr {
+	color: #f00;
+}
+
+.gh {
+	color: #030;
+}
+
+.gi {
+	background-color: #cfc;
+	border: 1px solid #0c0;
+}
+
+.go {
+	color: #aaa;
+}
+
+.gp {
+	color: #009;
+}
+
+.gu {
+	color: #030;
+}
+
+.gt {
+	color: #9c6;
+}
+
+.kc {
+	color: #069;
+}
+
+.kd {
+	color: #069;
+}
+
+.kn {
+	color: #069;
+}
+
+.kp {
+	color: #069;
+}
+
+.kr {
+	color: #069;
+}
+
+.kt {
+	color: #078;
+}
+
+.m {
+	color: #f60;
+}
+
+.s {
+	color: #d44950;
+}
+
+.na {
+	color: #4f9fcf;
+}
+
+.nb {
+	color: #366;
+}
+
+.nc {
+	color: #0a8;
+}
+
+.no {
+	color: #360;
+}
+
+.nd {
+	color: #99f;
+}
+
+.ni {
+	color: #999;
+}
+
+.ne {
+	color: #c00;
+}
+
+.nf {
+	color: #c0f;
+}
+
+.nl {
+	color: #99f;
+}
+
+.nn {
+	color: #0cf;
+}
+
+.nt {
+	color: #2f6f9f;
+}
+
+.nv {
+	color: #033;
+}
+
+.ow {
+	color: #000;
+}
+
+.w {
+	color: #bbb;
+}
+
+.mf {
+	color: #f60;
+}
+
+.mh {
+	color: #f60;
+}
+
+.mi {
+	color: #f60;
+}
+
+.mo {
+	color: #f60;
+}
+
+.sb {
+	color: #c30;
+}
+
+.sc {
+	color: #c30;
+}
+
+.sd {
+	font-style: italic;
+	color: #c30;
+}
+
+.s2 {
+	color: #c30;
+}
+
+.se {
+	color: #c30;
+}
+
+.sh {
+	color: #c30;
+}
+
+.si {
+	color: #a00;
+}
+
+.sx {
+	color: #c30;
+}
+
+.sr {
+	color: #3aa;
+}
+
+.s1 {
+	color: #c30;
+}
+
+.ss {
+	color: #fc3;
+}
+
+.bp {
+	color: #366;
+}
+
+.vc {
+	color: #033;
+}
+
+.vg {
+	color: #033;
+}
+
+.vi {
+	color: #033;
+}
+
+.il {
+	color: #f60;
+}
+
+.css .o,
+.css .o + .nt,
+.css .nt + .nt {
+	color: #999;
+}
+
+.language-bash::before,
+.language-sh::before {
+	color: #009;
+	content: "$ ";
+	user-select: none;
+}
+
+.language-powershell::before {
+	color: #009;
+	content: "PM> ";
+	user-select: none;
+}
+
+.highlight {
+	font-size: 1rem;
+	line-height: 150%;
+	margin-bottom: 30px;
+	pre {
+		padding: 0;
+		margin-top: 0;
+		margin-bottom: 0;
+		background-color: transparent;
+		border: 0;
+	}
+	pre code {
+		font-size: inherit;
+		color: $font-color-light;
+	}
+}

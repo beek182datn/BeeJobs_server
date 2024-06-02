@@ -1,0 +1,566 @@
+/************************************************
+  ************************************************
+                  Datepicker CSS
+  ************************************************
+************************************************/
+.datepicket-container {
+  background: #ffffff;
+  box-shadow: 0 0 20px #dce4ee;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  margin-bottom: .8rem;
+}
+
+.datepicket-container .cal-img {
+  padding: 2px;
+  -webkit-border-radius: 5px 5px 0 0;
+  -moz-border-radius: 5px 5px 0 0;
+  border-radius: 5px 5px 0 0;
+}
+
+.datepicket-container.primary {
+  background-color: #118cf1;
+  /* Fallback Color */
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#1ad0fc), to(#118cf1));
+  /* Saf4+, Chrome */
+  background-image: -webkit-linear-gradient(right, #1ad0fc, #118cf1);
+  /* Chrome 10+, Saf5.1+, iOS 5+ */
+  background-image: -moz-linear-gradient(right, #1ad0fc, #118cf1);
+  /* FF3.6 */
+  background-image: -ms-linear-gradient(right, #1ad0fc, #118cf1);
+  /* IE10 */
+  background-image: -o-linear-gradient(right, #1ad0fc, #118cf1);
+  /* Opera 11.10+ */
+  background-image: linear-gradient(right, #1ad0fc, #118cf1);
+}
+
+.datepicket-container.primary .ui-state-highlight,
+.datepicket-container.primary .ui-widget-content .ui-state-highlight {
+  background-color: #ff0000;
+  /* Fallback Color */
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#ff7f34), to(#ff0000));
+  /* Saf4+, Chrome */
+  background-image: -webkit-linear-gradient(right, #ff7f34, #ff0000);
+  /* Chrome 10+, Saf5.1+, iOS 5+ */
+  background-image: -moz-linear-gradient(right, #ff7f34, #ff0000);
+  /* FF3.6 */
+  background-image: -ms-linear-gradient(right, #ff7f34, #ff0000);
+  /* IE10 */
+  background-image: -o-linear-gradient(right, #ff7f34, #ff0000);
+  /* Opera 11.10+ */
+  background-image: linear-gradient(right, #ff7f34, #ff0000);
+}
+
+.datepicket-container.primary .ui-datepicker-title {
+  color: #ffffff;
+}
+
+.datepicket-container.secondary {
+  background-color: #ff0000;
+  /* Fallback Color */
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#ff7f34), to(#ff0000));
+  /* Saf4+, Chrome */
+  background-image: -webkit-linear-gradient(right, #ff7f34, #ff0000);
+  /* Chrome 10+, Saf5.1+, iOS 5+ */
+  background-image: -moz-linear-gradient(right, #ff7f34, #ff0000);
+  /* FF3.6 */
+  background-image: -ms-linear-gradient(right, #ff7f34, #ff0000);
+  /* IE10 */
+  background-image: -o-linear-gradient(right, #ff7f34, #ff0000);
+  /* Opera 11.10+ */
+  background-image: linear-gradient(right, #ff7f34, #ff0000);
+}
+
+.datepicket-container.secondary .ui-state-highlight,
+.datepicket-container.secondary .ui-widget-content .ui-state-highlight {
+  background-color: #118cf1;
+  /* Fallback Color */
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#62BCF6), to(#118cf1));
+  /* Saf4+, Chrome */
+  background-image: -webkit-linear-gradient(right, #62BCF6, #118cf1);
+  /* Chrome 10+, Saf5.1+, iOS 5+ */
+  background-image: -moz-linear-gradient(right, #62BCF6, #118cf1);
+  /* FF3.6 */
+  background-image: -ms-linear-gradient(right, #62BCF6, #118cf1);
+  /* IE10 */
+  background-image: -o-linear-gradient(right, #62BCF6, #118cf1);
+  /* Opera 11.10+ */
+  background-image: linear-gradient(right, #62BCF6, #118cf1);
+}
+
+.datepicket-container.secondary .ui-datepicker-title {
+  color: #ffffff;
+}
+
+.datepicket-container.green {
+  background-color: #50b924;
+  /* Fallback Color */
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#a5b936), to(#50b924));
+  /* Saf4+, Chrome */
+  background-image: -webkit-linear-gradient(right, #a5b936, #50b924);
+  /* Chrome 10+, Saf5.1+, iOS 5+ */
+  background-image: -moz-linear-gradient(right, #a5b936, #50b924);
+  /* FF3.6 */
+  background-image: -ms-linear-gradient(right, #a5b936, #50b924);
+  /* IE10 */
+  background-image: -o-linear-gradient(right, #a5b936, #50b924);
+  /* Opera 11.10+ */
+  background-image: linear-gradient(right, #a5b936, #50b924);
+}
+
+.datepicket-container.green .ui-state-highlight,
+.datepicket-container.green .ui-widget-content .ui-state-highlight {
+  background-color: #ffda3e;
+  /* Fallback Color */
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#ff9f3d), to(#ffda3e));
+  /* Saf4+, Chrome */
+  background-image: -webkit-linear-gradient(right, #ff9f3d, #ffda3e);
+  /* Chrome 10+, Saf5.1+, iOS 5+ */
+  background-image: -moz-linear-gradient(right, #ff9f3d, #ffda3e);
+  /* FF3.6 */
+  background-image: -ms-linear-gradient(right, #ff9f3d, #ffda3e);
+  /* IE10 */
+  background-image: -o-linear-gradient(right, #ff9f3d, #ffda3e);
+  /* Opera 11.10+ */
+  background-image: linear-gradient(right, #ff9f3d, #ffda3e);
+}
+
+.datepicket-container.green .ui-datepicker-title {
+  color: #ffffff;
+}
+
+.datepicket-container.blue {
+  background-color: #79574b;
+  /* Fallback Color */
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#5a4037), to(#79574b));
+  /* Saf4+, Chrome */
+  background-image: -webkit-linear-gradient(right, #5a4037, #79574b);
+  /* Chrome 10+, Saf5.1+, iOS 5+ */
+  background-image: -moz-linear-gradient(right, #5a4037, #79574b);
+  /* FF3.6 */
+  background-image: -ms-linear-gradient(right, #5a4037, #79574b);
+  /* IE10 */
+  background-image: -o-linear-gradient(right, #5a4037, #79574b);
+  /* Opera 11.10+ */
+  background-image: linear-gradient(right, #5a4037, #79574b);
+}
+
+.datepicket-container.blue .ui-state-highlight,
+.datepicket-container.blue .ui-widget-content .ui-state-highlight {
+  background-color: #ffda3e;
+  /* Fallback Color */
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#ff9f3d), to(#ffda3e));
+  /* Saf4+, Chrome */
+  background-image: -webkit-linear-gradient(right, #ff9f3d, #ffda3e);
+  /* Chrome 10+, Saf5.1+, iOS 5+ */
+  background-image: -moz-linear-gradient(right, #ff9f3d, #ffda3e);
+  /* FF3.6 */
+  background-image: -ms-linear-gradient(right, #ff9f3d, #ffda3e);
+  /* IE10 */
+  background-image: -o-linear-gradient(right, #ff9f3d, #ffda3e);
+  /* Opera 11.10+ */
+  background-image: linear-gradient(right, #ff9f3d, #ffda3e);
+}
+
+.datepicket-container.blue .ui-datepicker-title {
+  color: #ffffff;
+}
+
+.datepicket-container.pink {
+  background-color: #f15f79;
+  /* Fallback Color */
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#b24592), to(#f15f79));
+  /* Saf4+, Chrome */
+  background-image: -webkit-linear-gradient(right, #b24592, #f15f79);
+  /* Chrome 10+, Saf5.1+, iOS 5+ */
+  background-image: -moz-linear-gradient(right, #b24592, #f15f79);
+  /* FF3.6 */
+  background-image: -ms-linear-gradient(right, #b24592, #f15f79);
+  /* IE10 */
+  background-image: -o-linear-gradient(right, #b24592, #f15f79);
+  /* Opera 11.10+ */
+  background-image: linear-gradient(right, #b24592, #f15f79);
+}
+
+.datepicket-container.pink .ui-state-highlight,
+.datepicket-container.pink .ui-widget-content .ui-state-highlight {
+  background-color: #118cf1;
+  /* Fallback Color */
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#62BCF6), to(#118cf1));
+  /* Saf4+, Chrome */
+  background-image: -webkit-linear-gradient(right, #62BCF6, #118cf1);
+  /* Chrome 10+, Saf5.1+, iOS 5+ */
+  background-image: -moz-linear-gradient(right, #62BCF6, #118cf1);
+  /* FF3.6 */
+  background-image: -ms-linear-gradient(right, #62BCF6, #118cf1);
+  /* IE10 */
+  background-image: -o-linear-gradient(right, #62BCF6, #118cf1);
+  /* Opera 11.10+ */
+  background-image: linear-gradient(right, #62BCF6, #118cf1);
+}
+
+.datepicket-container.pink .ui-datepicker-title {
+  color: #ffffff;
+}
+
+.datepicket-container.teal {
+  background-color: #1abaca;
+  /* Fallback Color */
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#47BCC7), to(#1abaca));
+  /* Saf4+, Chrome */
+  background-image: -webkit-linear-gradient(right, #47BCC7, #1abaca);
+  /* Chrome 10+, Saf5.1+, iOS 5+ */
+  background-image: -moz-linear-gradient(right, #47BCC7, #1abaca);
+  /* FF3.6 */
+  background-image: -ms-linear-gradient(right, #47BCC7, #1abaca);
+  /* IE10 */
+  background-image: -o-linear-gradient(right, #47BCC7, #1abaca);
+  /* Opera 11.10+ */
+  background-image: linear-gradient(right, #47BCC7, #1abaca);
+}
+
+.datepicket-container.teal .ui-state-highlight,
+.datepicket-container.teal .ui-widget-content .ui-state-highlight {
+  background-color: #FF7E39;
+  /* Fallback Color */
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#FFB280), to(#FF7E39));
+  /* Saf4+, Chrome */
+  background-image: -webkit-linear-gradient(right, #FFB280, #FF7E39);
+  /* Chrome 10+, Saf5.1+, iOS 5+ */
+  background-image: -moz-linear-gradient(right, #FFB280, #FF7E39);
+  /* FF3.6 */
+  background-image: -ms-linear-gradient(right, #FFB280, #FF7E39);
+  /* IE10 */
+  background-image: -o-linear-gradient(right, #FFB280, #FF7E39);
+  /* Opera 11.10+ */
+  background-image: linear-gradient(right, #FFB280, #FF7E39);
+}
+
+.datepicket-container.teal .ui-datepicker-title {
+  color: #ffffff;
+}
+
+.datepicket-container.secondary-light {
+  background: #ffffff;
+  border: 1px solid #6053da;
+}
+
+.datepicket-container.secondary-light .ui-state-highlight,
+.datepicket-container.secondary-light .ui-widget-content .ui-state-highlight {
+  background: #6053da !important;
+  color: #ffffff !important;
+}
+
+.datepicket-container.secondary-light .ui-datepicker-title {
+  color: #6053da;
+}
+
+.datepicket-container.secondary-light .ui-datepicker th {
+  color: #000000;
+}
+
+.datepicket-container.secondary-light .ui-widget-content .ui-state-default {
+  background: rgba(255, 255, 255, 0.5);
+  color: #000000;
+}
+
+.datepicket-container.secondary-light .ui-widget-content .ui-state-default:hover {
+  background: rgba(255, 255, 255, 0.8);
+  color: #000000;
+}
+
+.datepicket-container.secondary-light .ui-datepicker .ui-datepicker-prev span {
+  border-right: 10px solid #6053da;
+}
+
+.datepicket-container.secondary-light .ui-datepicker .ui-datepicker-next span {
+  border-left: 10px solid #6053da;
+}
+
+.datepicket-container.primary-light {
+  background: #ffffff;
+  border: 1px solid #118cf1;
+}
+
+.datepicket-container.primary-light .ui-state-highlight,
+.datepicket-container.primary-light .ui-widget-content .ui-state-highlight {
+  background: #118cf1 !important;
+  color: #ffffff !important;
+}
+
+.datepicket-container.primary-light .ui-datepicker-title {
+  color: #118cf1;
+}
+
+.datepicket-container.primary-light .ui-datepicker th {
+  color: #000000;
+}
+
+.datepicket-container.primary-light .ui-widget-content .ui-state-default {
+  background: rgba(255, 255, 255, 0.5);
+  color: #000000;
+}
+
+.datepicket-container.primary-light .ui-widget-content .ui-state-default:hover {
+  background: rgba(255, 255, 255, 0.8);
+  color: #000000;
+}
+
+.datepicket-container.primary-light .ui-datepicker .ui-datepicker-prev span {
+  border-right: 10px solid #118cf1;
+}
+
+.datepicket-container.primary-light .ui-datepicker .ui-datepicker-next span {
+  border-left: 10px solid #118cf1;
+}
+
+.datepicket-container.light-green {
+  background: #ffffff;
+  border: 1px solid #50b924;
+}
+
+.datepicket-container.light-green .ui-state-highlight,
+.datepicket-container.light-green .ui-widget-content .ui-state-highlight {
+  background: #50b924 !important;
+  color: #ffffff !important;
+}
+
+.datepicket-container.light-green .ui-datepicker-title {
+  color: #50b924;
+}
+
+.datepicket-container.light-green .ui-datepicker th {
+  color: #000000;
+}
+
+.datepicket-container.light-green .ui-widget-content .ui-state-default {
+  background: rgba(255, 255, 255, 0.5);
+  color: #000000;
+}
+
+.datepicket-container.light-green .ui-widget-content .ui-state-default:hover {
+  background: rgba(255, 255, 255, 0.8);
+  color: #000000;
+}
+
+.datepicket-container.light-green .ui-datepicker .ui-datepicker-prev span {
+  border-right: 10px solid #50b924;
+}
+
+.datepicket-container.light-green .ui-datepicker .ui-datepicker-next span {
+  border-left: 10px solid #50b924;
+}
+
+.datepicket-container.light-red {
+  background: #ffffff;
+  border: 1px solid #ff0000;
+}
+
+.datepicket-container.light-red .ui-state-highlight,
+.datepicket-container.light-red .ui-widget-content .ui-state-highlight {
+  background: #ff0000 !important;
+  color: #ffffff !important;
+}
+
+.datepicket-container.light-red .ui-datepicker-title {
+  color: #ff0000;
+}
+
+.datepicket-container.light-red .ui-datepicker th {
+  color: #000000;
+}
+
+.datepicket-container.light-red .ui-widget-content .ui-state-default {
+  background: rgba(255, 255, 255, 0.5);
+  color: #000000;
+}
+
+.datepicket-container.light-red .ui-widget-content .ui-state-default:hover {
+  background: rgba(255, 255, 255, 0.8);
+  color: #000000;
+}
+
+.datepicket-container.light-red .ui-datepicker .ui-datepicker-prev span {
+  border-right: 10px solid #ff0000;
+}
+
+.datepicket-container.light-red .ui-datepicker .ui-datepicker-next span {
+  border-left: 10px solid #ff0000;
+}
+
+.datepicket-container.custom-height {
+  min-height: 290px;
+}
+
+.datepicket-container .ui-widget-content {
+  width: 100%;
+}
+
+.datepicket-container .ui-datepicker {
+  padding: .3em .3em .7em .3em;
+}
+
+.datepicket-container .ui-datepicker td span,
+.datepicket-container .ui-datepicker td a {
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+}
+
+.datepicket-container .ui-widget.ui-widget-content {
+  border: 0;
+  background: transparent;
+}
+
+.datepicket-container .ui-datepicker .ui-datepicker-prev,
+.datepicket-container .ui-datepicker .ui-datepicker-next {
+  width: 45px;
+  height: 45px;
+  cursor: pointer;
+}
+
+.datepicket-container .ui-datepicker .ui-datepicker-next span {
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 10px solid #ffffff;
+}
+
+.datepicket-container .ui-datepicker .ui-datepicker-prev span {
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 10px solid #ffffff;
+  margin-left: 0;
+  left: 10px;
+}
+
+.datepicket-container .ui-datepicker .ui-datepicker-next span {
+  margin-left: 0;
+  right: 10px;
+}
+
+.datepicket-container .ui-datepicker .ui-datepicker-prev {
+  top: 0;
+  left: 0;
+}
+
+.datepicket-container .ui-datepicker .ui-datepicker-next {
+  top: 0;
+  right: 0;
+}
+
+.datepicket-container .ui-datepicker .ui-datepicker-prev-hover {
+  top: 0;
+  left: 0;
+}
+
+.datepicket-container .ui-datepicker .ui-datepicker-next-hover {
+  top: 0;
+  right: 0;
+}
+
+.datepicket-container .ui-state-default,
+.datepicket-container .ui-widget-content .ui-state-default,
+.datepicket-container .ui-widget-header .ui-state-default,
+.datepicket-container .ui-button {
+  border: none;
+  background: transparent;
+  color: #ffffff;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  margin: auto;
+}
+
+.datepicket-container .ui-state-default:active,
+.datepicket-container .ui-state-default.ui-state-active:hover,
+.datepicket-container .ui-widget-content .ui-state-default:active,
+.datepicket-container .ui-widget-content .ui-state-default.ui-state-active:hover,
+.datepicket-container .ui-widget-header .ui-state-default:active,
+.datepicket-container .ui-widget-header .ui-state-default.ui-state-active:hover,
+.datepicket-container .ui-button:active,
+.datepicket-container .ui-button.ui-state-active:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: #ffffff;
+}
+
+.datepicket-container .ui-state-default:hover,
+.datepicket-container .ui-state-default:focus,
+.datepicket-container .ui-widget-content .ui-state-default:hover,
+.datepicket-container .ui-widget-content .ui-state-default:focus,
+.datepicket-container .ui-widget-header .ui-state-default:hover,
+.datepicket-container .ui-widget-header .ui-state-default:focus,
+.datepicket-container .ui-button:hover,
+.datepicket-container .ui-button:focus {
+  border: 0;
+  background: rgba(0, 0, 0, 0.1);
+  color: #ffffff;
+}
+
+.datepicket-container .ui-state-active,
+.datepicket-container .ui-widget-content .ui-state-active,
+.datepicket-container .ui-widget-header .ui-state-active,
+.datepicket-container a.ui-button:active {
+  background: rgba(0, 0, 0, 0.2);
+  color: #ffffff;
+}
+
+.datepicket-container .ui-widget-header {
+  border: 0;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.datepicket-container .ui-widget-header .ui-state-highlight {
+  background: #ff0000;
+  color: #ffffff;
+}
+
+.datepicket-container .ui-datepicker .ui-datepicker-header {
+  padding: 10px 0;
+  font-size: 14px;
+}
+
+.datepicket-container .ui-datepicker th {
+  color: #ffffff;
+}
+
+.datepicket-container .ui-state-hover,
+.datepicket-container .ui-widget-content .ui-state-hover,
+.datepicket-container .ui-state-focus,
+.datepicket-container .ui-widget-content .ui-state-focus {
+  border: 0;
+  background: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+}
+
+.datepicket-container .ui-widget-header .ui-state-hover,
+.datepicket-container .ui-widget-header .ui-state-focus {
+  border: 0;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.datepicket-container .ui-state-highlight,
+.datepicket-container .ui-widget-content .ui-state-highlight {
+  background: #ff0000;
+  color: #ffffff;
+}
+
+.datepicket-container.danger .ui-state-default,
+.ui-widget-content .datepicket-container.danger .ui-state-default,
+.ui-widget-header .datepicket-container.danger .ui-state-default,
+.ui-button {
+  border-radius: 30px;
+  text-align: center;
+}
+
+.datepicket-container.info .ui-state-default,
+.ui-widget-content .datepicket-container.info .ui-state-default,
+.ui-widget-header .datepicket-container.info .ui-state-default,
+.ui-button {
+  border-radius: 4px;
+  text-align: center;
+}
