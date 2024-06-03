@@ -5,6 +5,7 @@ var Role = require("../controller/Roles");
 var Dashboard = require("../controller/Dashboard");
 var Auth = require("../controller/Auth");
 var CheckLogin = require("../middleware/LoginCheck");
+var api_worker = require("../api/Workers/Workers_Api");
 const router = express.Router();
 
 
@@ -38,4 +39,6 @@ router.get('/Dashboard/index',CheckLogin.ycLogin,Dashboard.index);
   return app.use("/",router);
 }
 
+//==================Worker=========================
+router.post('/api/workers/create',api_worker.create_Workers);
 module.exports = initWebRouter;

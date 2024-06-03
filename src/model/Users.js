@@ -9,7 +9,7 @@ const userSchema= new db.mongoose.Schema(
         accout_name: {type:String, require:true},
         gender: {type:String, require:true},
       
-        name:{type:String,require:true},
+        full_name:{type:String,require:true},
         avata:{type:String,required:false},
         active:{type:String,require: true},
         verify: { type: Date, default: Date.now},

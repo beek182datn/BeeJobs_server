@@ -18,7 +18,7 @@ exports.SignIn = async (req, res, next) => {
       console.log(objU);
       if (objU !== null) {
         if (objU.hash_pass == hashPassGen) {
-          
+
 
           let objUserRole = await userRoleMD.UserRoleModel.findOne({
             IdUser: objU._id,
