@@ -8,9 +8,9 @@ const userSchema= new db.mongoose.Schema(
         phone:{type:String, require:true},
         accout_name: {type:String, require:true},
         gender: {type:String, require:true},
-        Hashpassword:{type:String, require:true},
-        Name:{type:String,require:true},
-        Avata:{type:String,required:false},
+      
+        name:{type:String,require:true},
+        avata:{type:String,required:false},
         active:{type:String,require: true},
         verify: { type: Date, default: Date.now},
         create_at :{ type: Date, default: Date.now },

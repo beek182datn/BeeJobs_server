@@ -120,8 +120,8 @@ exports.api_SignUp = async (req, res, next) => {
             if(objRole){
                 let objUserRole = new userRoleMD.UserRoleModel();
 
-                objUserRole.IdUser = objU._id;
-                objUserRole.IdRole = objRole._id;
+                objUserRole.id_User = objU._id;
+                objUserRole.id_Role = objRole._id;
             await objUserRole.save();
 
             }

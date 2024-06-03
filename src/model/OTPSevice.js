@@ -4,7 +4,9 @@ const OtpServiceSchema= new db.mongoose.Schema(
     {
         email: { type: String, required: true },
         otp: { type: String, required: true },
-        createdAt: { type: Date, default: Date.now, expires: 300 }
+        type: { type: String, required: true },
+
+        created_at: { type: Date, default: Date.now, expires: 300 }
        
 
 
@@ -12,7 +14,7 @@ const OtpServiceSchema= new db.mongoose.Schema(
 
     },
     {
-        collection:'OtpService'
+        collection:'OtpServices'
     }
 
 );

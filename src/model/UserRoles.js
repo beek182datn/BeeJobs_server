@@ -2,8 +2,8 @@ const { default: mongoose } = require("mongoose");
 var db = require("../config/db");
 const UserRoleSchema= new db.mongoose.Schema(
     {
-        IdUser:{type:String, require:true},
-        IdRole:{type:String, require:true},
+        id_User:{type:String, require:true},
+        id_Role:{type:String, require:true},
        
 
 

@@ -1,15 +1,15 @@
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 
-const { MAIL_MAILER, MAIL_USERNAME, MAIL_PASSSWORD } = require('../config/MailerConfig');
+const MAILER = require('../config/MailerConfig');
 
 var OtpServiceMD = require('../model/OTPSevice');
 // Cấu hình transporter cho Nodemailer
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user:  MAIL_USERNAME, // Thay bằng email của bạn
-    pass: MAIL_PASSSWORD  // Thay bằng mật khẩu của bạn
+    user:  MAILER.MAIL_USERNAME, // Thay bằng email của bạn
+    pass: MAILER.MAIL_PASSSWORD  // Thay bằng mật khẩu của bạn
   }
 });
 
@@ -24,7 +24,7 @@ async function sendOtp(email) {
 
   // Cấu hình email
   const mailOptions = {
-    from: MAIL_USERNAME,
+    from: MAILER.MAIL_USERNAME,
     to: email,
     subject: 'Xác nhận đăng ký',
     text: `Mã OTP của bạn là: ${otp}`
