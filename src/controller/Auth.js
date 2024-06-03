@@ -1,6 +1,6 @@
-var userMD = require("../model/User");
-var roleMD = require("../model/Role");
-var userRoleMD = require("../model/UserRole");
+var userMD = require("../model/Users");
+var roleMD = require("../model/Roles");
+var userRoleMD = require("../model/UserRoles");
 
 var { jwtMiddleware, createJWT } = require("../middleware/JWT");
 

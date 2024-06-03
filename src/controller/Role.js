@@ -1,4 +1,4 @@
-var RoleMD = require("../model/Role");
+var RoleMD = require("../model/Roles");
 
 
 exports.CreateRole = async (req,res) => {

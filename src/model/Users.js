@@ -1,5 +1,5 @@
 
-var db = require("./db");
+var db = require("../config/db");
 const userSchema= new db.mongoose.Schema(
     {
         email:{type:String, require:true},
@@ -12,13 +12,15 @@ const userSchema= new db.mongoose.Schema(
         Name:{type:String,require:true},
         Avata:{type:String,required:false},
         active:{type:String,require: true},
+        verify: { type: Date, default: Date.now},
+        create_at :{ type: Date, default: Date.now },
 
 
         
 
     },
     {
-        collection:'user'
+        collection:'Users'
     }
 
 );

@@ -1,6 +1,6 @@
 const express = require('express') 
 
-var api_user = require("../api/Auth/user_api");
+var api_user = require("../api/Auth/Users_api");
 var Role = require("../controller/Role");
 var Dashboard = require("../controller/Dashboard");
 var Auth = require("../controller/Auth");
@@ -17,7 +17,9 @@ const initWebRouter = (app) =>{
   router.get('/api/login',api_user.api_Login);
   router.post('/api/login',api_user.api_Login);
   router.post('/api/signup',api_user.api_SignUp);
-  router.post('/api/user',api_user.api_getInfo);
+  router.post('/api/users',api_user.api_getInfo);
+  router.post('/api/usersverifyotp',api_user.api_verifyOtp);
+
 
 
 //=================Auth Router ===============================

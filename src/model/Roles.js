@@ -1,5 +1,5 @@
 const { default: mongoose } = require("mongoose");
-var db = require("./db");
+var db = require("../config/db");
 const RoleSchema= new db.mongoose.Schema(
     {
         Name:{type:String, require:true},
@@ -11,7 +11,7 @@ const RoleSchema= new db.mongoose.Schema(
 
     },
     {
-        collection:'Role'
+        collection:'Roles'
     }
 
 );

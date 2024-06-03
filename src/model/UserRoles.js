@@ -1,5 +1,5 @@
 const { default: mongoose } = require("mongoose");
-var db = require("./db");
+var db = require("../config/db");
 const UserRoleSchema= new db.mongoose.Schema(
     {
         IdUser:{type:String, require:true},
@@ -11,7 +11,7 @@ const UserRoleSchema= new db.mongoose.Schema(
 
     },
     {
-        collection:'UserRole'
+        collection:'UserRoles'
     }
 
 );

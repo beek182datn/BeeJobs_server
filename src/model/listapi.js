@@ -1,5 +1,5 @@
 const { default: mongoose } = require("mongoose");
-var db = require("./db");
+var db = require("../config/db");
 const ApiListSchema= new db.mongoose.Schema(
     {
         Name:{type:String, require:true},

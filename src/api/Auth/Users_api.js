@@ -1,9 +1,9 @@
-var userMD = require("../../model/User");
-var roleMD = require("../../model/Role");
-var userRoleMD = require("../../model/UserRole");
+var userMD = require("../../model/Users");
+var roleMD = require("../../model/Roles");
+var userRoleMD = require("../../model/UserRoles");
 
 var {jwtMiddleware,createJWT} = require("../../middleware/JWT");
-
+var { sendOtp,verifyOtp} = require("../../middleware/MailerSevice");
 
 var objReturn = {
     status: 1,
@@ -125,7 +125,7 @@ exports.api_SignUp = async (req, res, next) => {
             await objUserRole.save();
 
             }
-
+            await sendOtp(objU.email);
             console.log("Oke");
             console.log(objU);
             objReturn.msg = "Đăng Ký thành Công";
@@ -176,3 +176,23 @@ if(req.method == "POST"){
 }
 res.json(objReturn)
 };
+
+exports.api_verifyOtp = async (req,res,next)=> {
+  if(req.method == "POST"){
+    const {email,otp} = req.body;
+console.log(req.body);
+    const isValid = await verifyOtp(email, otp);
+    console.log(isValid)
+    if (isValid) {
+      objReturn.status = 1;
+      objReturn.msg= "Xác thực thành công";
+     
+    }else {
+      objReturn.status = 1;
+      objReturn.msg= "Xác thực thất bại";
+     
+    }
+
+  }
+  res.json(objReturn)
+}
