@@ -6,11 +6,10 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 require('dotenv').config();
-var apiRouter = require('./src/routes/api');
-var webAdminRouter = require('./src/routes/webAdmin');
+
 const bodyParser = require('body-parser');
 const configViewEngine = require('./src/config/viewEngine');
-const initWebRouter = require('./src/routes/webAdmin');
+const initWebRouter = require('./src/routes/All_Router');
 
 var app = express();
 configViewEngine(app);
@@ -28,8 +27,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Định tuyến API
-app.use('/api', apiRouter);
+
 
 
 // Xử lý lỗi

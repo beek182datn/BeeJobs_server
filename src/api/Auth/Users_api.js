@@ -1,10 +1,10 @@
 var userMD = require("../../model/Users");
 var roleMD = require("../../model/Roles");
-var userRoleMD = require("../../model/UserRoles");
+var userRoleMD = require("../../model/Users_Roles");
 
 var {jwtMiddleware,createJWT} = require("../../middleware/JWT");
 var { sendOtp,verifyOtp} = require("../../middleware/MailerSevice");
-const { MAIL_TYPE } = require("../../config/MailerConfig");
+const { MAIL_TYPE } = require("../../config/Mailer_Config");
 
 var objReturn = {
     status: 1,

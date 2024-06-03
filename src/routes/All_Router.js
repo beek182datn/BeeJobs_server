@@ -1,7 +1,7 @@
 const express = require('express') 
 
 var api_user = require("../api/Auth/Users_api");
-var Role = require("../controller/Role");
+var Role = require("../controller/Roles");
 var Dashboard = require("../controller/Dashboard");
 var Auth = require("../controller/Auth");
 var CheckLogin = require("../middleware/LoginCheck");

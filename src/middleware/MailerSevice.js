@@ -1,9 +1,9 @@
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 
-const MAILER = require('../config/MailerConfig');
+const MAILER = require('../config/Mailer_Config');
 
-var OtpServiceMD = require('../model/OTPSevice');
+var OtpServiceMD = require('../model/OTP_Sevice');
 // Cấu hình transporter cho Nodemailer
 const transporter = nodemailer.createTransport({
   service: 'gmail',
