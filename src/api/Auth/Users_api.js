@@ -4,6 +4,7 @@ var userRoleMD = require("../../model/UserRoles");
 
 var {jwtMiddleware,createJWT} = require("../../middleware/JWT");
 var { sendOtp,verifyOtp} = require("../../middleware/MailerSevice");
+const { MAIL_TYPE } = require("../../config/MailerConfig");
 
 var objReturn = {
     status: 1,
@@ -125,7 +126,7 @@ exports.api_SignUp = async (req, res, next) => {
             await objUserRole.save();
 
             }
-            await sendOtp(objU.email);
+            await sendOtp(objU.email,MAIL_TYPE.OTP_SignUp);
             console.log("Oke");
             console.log(objU);
             objReturn.msg = "Đăng Ký thành Công";
@@ -181,7 +182,7 @@ exports.api_verifyOtp = async (req,res,next)=> {
   if(req.method == "POST"){
     const {email,otp} = req.body;
 console.log(req.body);
-    const isValid = await verifyOtp(email, otp);
+    const isValid = await verifyOtp(email, otp,MAIL_TYPE.OTP_SignUp);
     console.log(isValid)
     if (isValid) {
       objReturn.status = 1;

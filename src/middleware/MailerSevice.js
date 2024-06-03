@@ -14,12 +14,12 @@ const transporter = nodemailer.createTransport({
 });
 
 // Hàm gửi OTP
-async function sendOtp(email) {
+async function sendOtp(email,type) {
   // Tạo OTP ngẫu nhiên
   const otp = crypto.randomBytes(3).toString('hex');
 
   // Lưu OTP vào MongoDB
-  const newOtp = new OtpServiceMD.OtpServiceModel({ email:email, otp:otp });
+  const newOtp = new OtpServiceMD.OtpServiceModel({ email:email, otp:otp,type:type });
   await newOtp.save();
 
   // Cấu hình email
@@ -37,10 +37,10 @@ console.log(check);
 }
 
 // Hàm xác nhận OTP
-async function verifyOtp(email, otp) {
+async function verifyOtp(email, otp,type) {
   // Tìm OTP trong MongoDB
   console.log(email, otp)
-  const foundOtp = await OtpServiceMD.OtpServiceModel.findOne({ email:email, otp:otp });
+  const foundOtp = await OtpServiceMD.OtpServiceModel.findOne({ email:email, otp:otp,type:type });
 
   if (foundOtp) {
     // OTP hợp lệ
