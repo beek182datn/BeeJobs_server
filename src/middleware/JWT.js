@@ -40,6 +40,26 @@ console.log(process.env.MONGODB_URL_CONNECTION);
 }
 
 
+
+
+const checkJWT = (tokenAuth) =>{
+    const [endcodedHeader, encodedPayload, tokensignature] = tokenAuth.split(".")
+    const tokenData = `${endcodedHeader}.${encodedPayload}`
+    const newsignature= createJWT(tokenData);
+
+    if (newsignature=== tokensignature) {
+      const payload = JSON.parse(atob(encodedPayload));
+
+        return payload; 
+     
+      
+    }else{
+        return null;
+    }
+   
+}
+
+
 const jwtMiddleware = (req, res, next) => {
     if (!req.user) {
         return res.status(401).json({ message: "User not authenticated" });
@@ -51,5 +71,5 @@ const jwtMiddleware = (req, res, next) => {
     next();
 }
 
-module.exports = {jwtMiddleware,createJWT};
+module.exports = {jwtMiddleware,createJWT,checkJWT};
 // module.exports = createJWT;
