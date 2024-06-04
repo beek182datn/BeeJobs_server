@@ -31,7 +31,7 @@ const setTokenData = (user,Role) => {
 
 const createJWT = (tokenData) =>{
   
-console.log(process.env.MONGODB_URL_CONNECTION);
+
     const hmac = crypto.createHmac("sha256", process.env.JWT_secret);
     const signature = hmac.update(tokenData).digest("base64url")
     
@@ -41,23 +41,27 @@ console.log(process.env.MONGODB_URL_CONNECTION);
 
 
 
-
-const checkJWT = (tokenAuth) =>{
-    const [endcodedHeader, encodedPayload, tokensignature] = tokenAuth.split(".")
-    const tokenData = `${endcodedHeader}.${encodedPayload}`
-    const newsignature= createJWT(tokenData);
-
-    if (newsignature=== tokensignature) {
+const checkJWT = (tokenAuth) => {
+    const [encodedHeader, encodedPayload, signature] = tokenAuth.split(".");
+    const tokenData = `${encodedHeader}.${encodedPayload}`;
+    const newSignature = createJWT(tokenData);
+  
+    if (newSignature === signature) {
       const payload = JSON.parse(atob(encodedPayload));
-
-        return payload; 
-     
-      
-    }else{
-        return null;
+      const currentTime = Math.floor(Date.now() / 1000);
+  
+      if (payload.exp && currentTime > payload.exp) {
+        // Token hết hạn
+        return { isValid: false, message: "Token đã hết hạn" };
+      } else {
+        // Token hợp lệ
+        return { isValid: true, payload };
+      }
+    } else {
+      // Token không hợp lệ
+      return { isValid: false, message: "Token không hợp lệ" };
     }
-   
-}
+  };
 
 
 const jwtMiddleware = (req, res, next) => {

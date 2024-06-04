@@ -1,10 +1,11 @@
 var userMD = require("../../model/Users");
 var roleMD = require("../../model/Roles");
 var userRoleMD = require("../../model/Users_Roles");
-
+var bcrypt = require('bcrypt');
 var { jwtMiddleware, createJWT, checkJWT } = require("../../middleware/JWT");
 var { sendOtp, verifyOtp } = require("../../middleware/MailerSevice");
 const { MAIL_TYPE } = require("../../config/Mailer_Config");
+const { hashPassword, checkPassword } = require("../../middleware/hashEveryone");
 
 var objReturn = {
   status: 1,
@@ -19,8 +20,8 @@ exports.api_Login = async (req, res, next) => {
   if (req.method == "POST") {
     const { passwd, username } = req.body;
     console.log(req.body);
-    const hashPassGen = btoa(passwd)
-    console.log(hashPassGen);
+   
+  
     try {
 
 
@@ -29,8 +30,10 @@ exports.api_Login = async (req, res, next) => {
       });
       console.log(objU);
       if (objU !== null) {
+        
+        const isPasswordMatch = await bcrypt.compare(passwd, objU.hash_pass);
 
-        if (objU.hash_pass == hashPassGen) {
+        if (isPasswordMatch) {
 
           token.UserInfo = objU
 
@@ -81,52 +84,40 @@ exports.api_Login = async (req, res, next) => {
 exports.api_SignUp = async (req, res, next) => {
   console.log(req.body);
   console.log("Đây");
-
   if (req.method == "POST") {
     console.log(req.body.email);
-    const { email, passwd, accout_name,type_role } = req.body;
-
+    const { email, passwd, accout_name, type_role } = req.body;
     let objU = await userMD.userModel.findOne({
       $or: [{ accout_name: accout_name }, { email: email }]
     });
-
     //lưu CSDL
-
-    if (
-      email != null &&
-      passwd != null &&
-      accout_name != null
-    ) {
+    if (email != null && passwd != null && accout_name != null) {
       if (objU != null) {
         objReturn.msg = "Tài Khoản này đã được đăng ký";
         objReturn.status = 3;
         console.log("Tài khoản trùng");
       } else {
         try {
-
-          const hash_password = btoa(passwd)
+          // Mã hóa mật khẩu bằng bcrypt
+          const salt = await bcrypt.genSalt(10);
+          const hashedPassword = await bcrypt.hash(passwd, salt);
 
           let objU = new userMD.userModel();
           objU.accout_name = accout_name;
-
-          objU.hash_pass = hash_password;
+          objU.hash_pass = hashedPassword; // Lưu mật khẩu đã mã hóa vào trường hash_pass
           objU.email = email;
           objU.status = 1; // Người dùng đang kích hoạt
 
-
-
-
           await objU.save();
 
-          let objRole = await roleMD.RoleModel.findOne({ Code: type_role })
+          let objRole = await roleMD.RoleModel.findOne({ Code: type_role });
           if (objRole) {
             let objUserRole = new userRoleMD.UserRoleModel();
-
             objUserRole.id_User = objU._id;
             objUserRole.id_Role = objRole._id;
             await objUserRole.save();
-
           }
+
           await sendOtp(objU.email, MAIL_TYPE.OTP_SignUp);
           console.log("Oke");
           console.log(objU);
@@ -140,7 +131,6 @@ exports.api_SignUp = async (req, res, next) => {
       console.log("Chưa dk đc");
     }
   }
-
   res.json(objReturn);
 };
 
@@ -154,11 +144,15 @@ exports.api_getInfo = async (req, res, next) => {
         return res.status(401).json({ message: "Unauthorized" });
 
       }
-
       let tokencheck = await checkJWT(tokenAuth);
-      if (tokencheck) {
+
+      if (!tokencheck.isValid) {
+        // Token không hợp lệ hoặc hết hạn
+        return res.status(401).json({ message: tokencheck.message });
+      }
+      if (tokencheck.isValid) {
         console.log(tokencheck);
-        const user = await userMD.userModel.findOne({ _id: tokencheck.sub });
+        const user = await userMD.userModel.findOne({ _id: tokencheck.payload.sub });
         token.UserInfo = user;
         token.Role = tokencheck.Role;
         objReturn.token = token;

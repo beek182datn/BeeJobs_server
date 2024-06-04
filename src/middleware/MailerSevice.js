@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 
-const MAILER = require('../config/Mailer_Config');
+const {MAILER} = require('../config/Mailer_Config');
 
 var OtpServiceMD = require('../model/OTP_Sevice');
 // Cấu hình transporter cho Nodemailer
@@ -30,6 +30,8 @@ async function sendOtp(email,type) {
     text: `Mã OTP của bạn là: ${otp}`
   };
 console.log(mailOptions);
+console.log(MAILER.MAIL_USERNAME);
+
   // Gửi email
   let  check = await transporter.sendMail(mailOptions);
 console.log(check);
