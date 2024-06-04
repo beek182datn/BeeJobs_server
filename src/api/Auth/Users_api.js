@@ -209,7 +209,7 @@ exports.api_verifyOtp = async (req, res, next) => {
 
     }
 
-
+//------g
   }
   res.json(objReturn)
 }
