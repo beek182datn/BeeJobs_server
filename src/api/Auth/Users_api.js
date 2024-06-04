@@ -39,7 +39,7 @@ exports.api_Login = async (req, res, next) => {
           if (objUserRole) {
             let objRole = await roleMD.RoleModel.findOne({ _id: objUserRole.id_Role })
             console.log(objRole);
-            token.Role = objRole.Name;
+            token.Role = objRole.Code;
             req.Role = objRole.Code;
           }
 
@@ -84,7 +84,7 @@ exports.api_SignUp = async (req, res, next) => {
 
   if (req.method == "POST") {
     console.log(req.body.email);
-    const { email, passwd, accout_name } = req.body;
+    const { email, passwd, accout_name,type_role } = req.body;
 
     let objU = await userMD.userModel.findOne({
       $or: [{ accout_name: accout_name }, { email: email }]
@@ -118,7 +118,7 @@ exports.api_SignUp = async (req, res, next) => {
 
           await objU.save();
 
-          let objRole = await roleMD.RoleModel.findOne({ Code: " " })
+          let objRole = await roleMD.RoleModel.findOne({ Code: type_role })
           if (objRole) {
             let objUserRole = new userRoleMD.UserRoleModel();
 
@@ -160,6 +160,7 @@ exports.api_getInfo = async (req, res, next) => {
         console.log(tokencheck);
         const user = await userMD.userModel.findOne({ _id: tokencheck.sub });
         token.UserInfo = user;
+        token.Role = tokencheck.Role;
         objReturn.token = token;
 
 
