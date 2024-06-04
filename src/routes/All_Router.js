@@ -41,4 +41,7 @@ router.get('/Dashboard/index',CheckLogin.ycLogin,Dashboard.index);
 
 //==================Worker=========================
 router.post('/api/workers/create',api_worker.create_Workers);
+router.put('/api/workers/edit/:user_id/:worker_id', api_worker.edit_Workers);
+
+
 module.exports = initWebRouter;
