@@ -2,8 +2,9 @@ const WorkerMD = require('../../model/Workers');
 
 exports.create_Workers = async (req, res) => {
     if (req.method === "POST") {
+        let user_id = req.params.user_id;
         let worker = new WorkerMD({
-            user_id: req.body.user_id,
+            user_id: user_id,
             worker_name: req.body.worker_name,
             education: req.body.education,
             skills: req.body.skills,
@@ -16,7 +17,7 @@ exports.create_Workers = async (req, res) => {
 
         try {
             await worker.save();
-            let { user_id, worker_name, education, skills, certificate, hobbies, experience, age, address } = worker; //destructuring
+            let { user_id, worker_name, education, skills, certificate, hobbies, experience, age, address } = worker; // Destructuring
             return res.status(200).json({
                 dataPost: {
                     user_id, worker_name, education, skills, certificate, hobbies, experience, age, address
@@ -25,13 +26,20 @@ exports.create_Workers = async (req, res) => {
                 createdBy: "Sơn"
             });
         } catch (error) {
+            console.error("Error saving worker:", error);
             return res.status(500).json({
-                message: "Failed: " + error,
+                message: "Failed: " + error.message,
                 createdBy: "Sơn"
             });
         }
+    } else {
+        return res.status(405).json({
+            message: "Method Not Allowed",
+            createdBy: "Sơn"
+        });
     }
 };
+
 
 exports.edit_Workers = async (req, res) => {
     if (req.method === "PUT") {

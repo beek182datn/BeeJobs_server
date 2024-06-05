@@ -40,8 +40,8 @@ router.get('/Dashboard/index',CheckLogin.ycLogin,Dashboard.index);
 }
 
 //==================Worker=========================
-router.post('/api/workers/create',api_worker.create_Workers);
-router.put('/api/workers/edit/:user_id/:worker_id', api_worker.edit_Workers);
-
+router.post('/api/workers/create/:user_id',api_worker.create_Workers); //Thêm hồ sơ NLĐ
+router.put('/api/workers/edit/:user_id/:worker_id', api_worker.edit_Workers); //Sửa hồ sơ NLĐ
+// router.get('/api/workers/getListWorkersByUserId/:user_id',api_worker.getListWorkersByUserId); //Lấy danh sách hồ sơ theo User_id
 
 module.exports = initWebRouter;
