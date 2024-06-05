@@ -1,4 +1,4 @@
-const express = require('express') 
+const express = require('express')
 
 var api_user = require("../api/Auth/Users_api");
 var Role = require("../controller/Roles");
@@ -13,35 +13,35 @@ const router = express.Router();
  * 
  * @param {*} app : express app 
  */
-const initWebRouter = (app) =>{
+const initWebRouter = (app) => {
   // ==============auth api Router===========================
-  router.get('/api/login',api_user.api_Login);
-  router.post('/api/login',api_user.api_Login);
-  router.post('/api/signup',api_user.api_SignUp);
-  router.post('/api/users',api_user.api_getInfo);
-  router.post('/api/usersverifyotp',api_user.api_verifyOtp);
+  router.get('/api/login', api_user.api_Login);
+  router.post('/api/login', api_user.api_Login);
+  router.post('/api/signup', api_user.api_SignUp);
+  router.post('/api/users', api_user.api_getInfo);
+  router.post('/api/usersverifyotp', api_user.api_verifyOtp);
 
 
 
-//=================Auth Router ===============================
-router.get('/',Auth.SignIn);
-router.post('/',Auth.SignIn);
+  //=================Auth Router ===============================
+  router.get('/', Auth.SignIn);
+  router.post('/', Auth.SignIn);
 
 
 
   // ==============Role Router===========================
-router.post('/api/role/roleCrate',Role.CreateRole);
+  router.post('/api/role/roleCrate', Role.CreateRole);
 
-//=================Dashboard Router =====================
+  //=================Dashboard Router =====================
 
-router.get('/Dashboard/index',CheckLogin.ycLogin,Dashboard.index);
+  router.get('/Dashboard/index', CheckLogin.ycLogin, Dashboard.index);
 
-  return app.use("/",router);
+  return app.use("/", router);
 }
 
 //==================Worker=========================
-router.post('/api/workers/create/:user_id',api_worker.create_Workers); //Thêm hồ sơ NLĐ
+router.post('/api/workers/create/:user_id', api_worker.create_Workers); //Thêm hồ sơ NLĐ
 router.put('/api/workers/edit/:user_id/:worker_id', api_worker.edit_Workers); //Sửa hồ sơ NLĐ
-// router.get('/api/workers/getListWorkersByUserId/:user_id',api_worker.getListWorkersByUserId); //Lấy danh sách hồ sơ theo User_id
-
+router.get('/api/workers/getListWorkersByUserId/:user_id', api_worker.getListWorkersByUserId); //Lấy danh sách hồ sơ theo User_id
+router.delete('/api/workers/delete/:user_id/:worker_id', api_worker.deleteWorker); //Xóa hồ sơ bởi người tạo
 module.exports = initWebRouter;
