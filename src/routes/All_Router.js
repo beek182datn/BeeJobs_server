@@ -39,6 +39,7 @@ var Auth = require("../controller/Auth");
 var CheckLogin = require("../middleware/LoginCheck");
 var api_worker = require("../api/Workers/Workers_Api");
 var api_company = require("../api/Companies/Companies_Api");
+var api_job = require("../api/Jobs/Jobs_Api");
 const router = express.Router();
 
 /**
@@ -97,5 +98,20 @@ router.get("/api/companies/search", api_company.getCompanyByCompanyName); // tì
 router.delete(
   "/api/companies/delete/:user_id/:company_id",
   api_company.delete_company
-); // Xóa daonh nghiệp
+); // Xóa doanh nghiệp
+
+//=================Jobs===================
+
+router.post("/api/jobs/create/:company_id", api_job.createJob); // Tạo Job mới
+router.put("/api/jobs/edit/:company_id/:job_id", api_job.editJob); // Cập nhật Job
+router.get("/api/jobs/getListJobs", api_job.getListJobs); // Lấy danh sách tất cả công việc
+router.get("/api/jobs/getJobById/:job_id", api_job.getJobById); // Lấy công việc theo id
+router.get(
+  "/api/jobs/getJobsByIdCompany/:company_id",
+  api_job.getJobsByIdCompany
+); //Lấy tất cả công việc của 1 DN
+router.get("/api/jobs/getJobsBySalary", api_job.getJobsBySalary); //Tìm công việc theo mức lương
+router.get("/api/jobs/getJobsByTitle", api_job.getJobsByTitle); //Tìm công việc theo tiêu đề == vị trí tuyển dụng
+router.get("/api/jobs/getJobsByLocation", api_job.getJobsByLocation); //Tìm việc theo địa điểm doanh nghiệp
+router.delete("/api/jobs/delete/:company_id/:job_id", api_job.delete_job); //Xóa Job
 module.exports = initWebRouter;
