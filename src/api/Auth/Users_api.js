@@ -119,7 +119,7 @@ exports.api_SignUp = async (req, res, next) => {
           console.log("Oke");
           console.log(objU);
           objReturn.msg = "Đăng Ký thành Công";
-          objReturn.status = 0;
+          objReturn.status = 200;
         } catch (error) {
           console.log(error);
         }
@@ -154,6 +154,7 @@ exports.api_getInfo = async (req, res, next) => {
         user_info.Role = tokencheck.payload.Role;
         objReturn.token = token;
 
+        objReturn.status = 200;
 
         objReturn.msg = "Lấy ok";
       }
