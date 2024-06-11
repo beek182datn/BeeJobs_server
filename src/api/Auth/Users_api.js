@@ -65,7 +65,7 @@ exports.api_Login = async (req, res, next) => {
           console.log(objU);
         }
       } else {
-        objReturn.msg = "Không có thông tin người dùng " + accout_name;
+        objReturn.msg = "Không có thông tin người dùng " ;
         objReturn.info_user = "";
         objReturn.status = 400;
       }
