@@ -12,7 +12,7 @@ const userSchema= new db.mongoose.Schema(
         full_name:{type:String,require:true},
         avata:{type:String,required:false},
         active:{type:String,require: true},
-        verify: { type: Date, default: Date.now},
+        verify: { type: Boolean, default: false},
         create_at :{ type: Date, default: Date.now },
 
 

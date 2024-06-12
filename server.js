@@ -6,7 +6,7 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 require("dotenv").config();
-
+require('./src/middleware/cron');
 const bodyParser = require("body-parser");
 const configViewEngine = require("./src/config/viewEngine");
 const initWebRouter = require("./src/routes/All_Router");
