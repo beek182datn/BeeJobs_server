@@ -79,6 +79,7 @@ exports.api_Login = async (req, res, next) => {
 };
 
 exports.api_SignUp = async (req, res, next) => {
+ 
   console.log(req.body);
   console.log("Đây");
   if (req.method == "POST") {
@@ -174,6 +175,9 @@ exports.api_verifyOtp = async (req, res, next) => {
     if (type == MAIL_TYPE.OTP_SignUp) {
       let isValid = await verifyOtp(email, otp, MAIL_TYPE.OTP_SignUp);
       if (isValid) {
+        const user = await userMD.userModel.findOne({ email: email });
+        user.verify = true;
+        await user.save();
         objReturn.status = 200;
         objReturn.msg = "Xác thực thành công";
 
@@ -184,11 +188,11 @@ exports.api_verifyOtp = async (req, res, next) => {
       }
       console.log(isValid)
 
-    } else if (type == MAIL_TYPE.OTP_SignUp) {
+    } else if (type == MAIL_TYPE.OTP_FogotPassword) {
 
       let isValid = await verifyOtp(email, otp, MAIL_TYPE.OTP_FogotPassword);
       if (isValid) {
-        objReturn.status = 1;
+        objReturn.status = 200;
         objReturn.msg = "Xác thực thành công";
    
 
@@ -201,6 +205,9 @@ exports.api_verifyOtp = async (req, res, next) => {
 
       }
 
+    }else {
+      objReturn.status = 400;
+      objReturn.msg = "Type không hợp lệ";
     }
 
 //------g
