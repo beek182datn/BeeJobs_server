@@ -1,6 +1,7 @@
 const { companyModel } = require("../../model/Companies");
 
 var fs = require("fs");
+const path = require("path");
 
 exports.create_company = async (req, res) => {
   if (req.method === "POST") {
@@ -17,13 +18,34 @@ exports.create_company = async (req, res) => {
       }
 
       // Nếu accout_id chưa tồn tại, tiến hành tạo mới
-      const cpn_logo =
-        "https://png.pngtree.com/png-clipart/20190603/original/pngtree-graphic-logo-design-png-image_51949.jpg";
+      let url_logo =
+        "http://beejobs.io.vn:14307/uploads/company_logo_outline.jpg";
+      let url_certificate = "";
+
+      if (req.files["company_logo"]) {
+        const logoFile = req.files["company_logo"][0];
+        const newPathLogo = path.join("./public/uploads/", logoFile.filename);
+        fs.renameSync(logoFile.path, newPathLogo);
+        url_logo = "/uploads/" + logoFile.filename;
+      }
+
+      if (req.files["company_certification"]) {
+        const certificateFile = req.files["company_certification"][0];
+        const newPathCertificate = path.join(
+          "./public/uploads/",
+          certificateFile.filename
+        );
+        fs.renameSync(certificateFile.path, newPathCertificate);
+        url_certificate = "/uploads/" + certificateFile.filename;
+      }
       let company = new companyModel({
         user_id: req.params.user_id,
         company_name: req.body.company_name,
         company_address: req.body.company_address,
-        company_logo: cpn_logo,
+        company_scale: req.body.company_scale,
+        company_website: req.body.company_website,
+        company_certification: url_certificate,
+        company_logo: url_logo,
         taxcode: req.body.taxcode,
         active: req.body.active,
         updated_at: new Date(),
@@ -35,6 +57,9 @@ exports.create_company = async (req, res) => {
         user_id,
         company_name,
         company_address,
+        company_website,
+        company_scale,
+        company_certification,
         company_logo,
         taxcode,
         active,
@@ -46,6 +71,9 @@ exports.create_company = async (req, res) => {
           user_id,
           company_name,
           company_address,
+          company_website,
+          company_scale,
+          company_certification,
           company_logo,
           taxcode,
           active,
@@ -99,19 +127,33 @@ exports.edit_company = async (req, res) => {
       });
     }
 
-    let url_image = checkCompany.company_logo;
-    if (req.file) {
-      const imageFile = req.file;
-      const newPath = "./public/uploads/" + imageFile.filename;
-      fs.renameSync(imageFile.path, newPath);
-      url_image = "/uploads/" + imageFile.filename;
+    let url_logo = checkCompany.company_logo;
+    let url_certificate = checkCompany.company_certification;
+    if (req.files["company_logo"]) {
+      const logoFile = req.files["company_logo"][0];
+      const newPathLogo = path.join("./public/uploads/", logoFile.filename);
+      fs.renameSync(logoFile.path, newPathLogo);
+      url_logo = "/uploads/" + logoFile.filename;
+    }
+
+    if (req.files["company_certification"]) {
+      const certificateFile = req.files["company_certification"][0];
+      const newPathCertificate = path.join(
+        "./public/uploads/",
+        certificateFile.filename
+      );
+      fs.renameSync(certificateFile.path, newPathCertificate);
+      url_certificate = "/uploads/" + certificateFile.filename;
     }
 
     // Cập nhật thông tin công ty
     const updateFields = {
       company_name: req.body.company_name,
       company_address: req.body.company_address,
-      company_logo: url_image,
+      company_logo: url_logo,
+      company_scale: req.body.company_scale,
+      company_website: req.body.company_website,
+      company_certification: url_certificate,
       taxcode: req.body.taxcode,
       active: req.body.active,
       updated_at: new Date(),
@@ -134,6 +176,9 @@ exports.edit_company = async (req, res) => {
       company_name,
       company_address,
       company_logo,
+      company_website,
+      company_scale,
+      company_certification,
       taxcode,
       active,
       updated_at,
@@ -144,12 +189,109 @@ exports.edit_company = async (req, res) => {
         company_name,
         company_address,
         company_logo,
+        company_website,
+        company_scale,
+        company_certification,
         taxcode,
         active,
         updated_at,
         created_at,
       },
       message: "Cập nhật thông tin công ty thành công!",
+      createdBy: "Hệ thống",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi: " + error.message,
+      createdBy: "Hệ thống",
+    });
+  }
+};
+
+exports.edit_company_logo = async (req, res) => {
+  if (req.method !== "PUT") {
+    return res.status(405).json({
+      message: "Phương thức không được hỗ trợ, hãy sử dụng: PUT!",
+      createdBy: "Hệ thống",
+    });
+  }
+
+  try {
+    const company_id = req.params.company_id;
+    const user_id = req.params.user_id;
+
+    // Kiểm tra sự tồn tại của công ty
+    let checkCompany = await companyModel.findOne({ _id: company_id });
+    if (!checkCompany) {
+      return res.status(404).json({
+        message: "Thông tin công ty không tồn tại!",
+        createdBy: "Hệ thống",
+      });
+    }
+
+    // Kiểm tra quyền sở hữu
+    if (checkCompany.user_id.toString() !== user_id) {
+      return res.status(403).json({
+        message: "Thông tin công ty chỉ được chỉnh sửa bởi người tạo!",
+        createdBy: "Hệ thống",
+      });
+    }
+
+    let url_logo = checkCompany.company_logo;
+
+    if (req.files["company_logo"]) {
+      const logoFile = req.files["company_logo"][0];
+      const newPathLogo = path.join("./public/uploads/", logoFile.filename);
+      fs.renameSync(logoFile.path, newPathLogo);
+      url_logo = "/uploads/" + logoFile.filename;
+    }
+
+    // Cập nhật thông tin công ty chỉ với company_logo
+    const updateFields = {
+      company_logo: url_logo,
+      updated_at: new Date(),
+    };
+
+    const checkEdit = await companyModel.findByIdAndUpdate(
+      company_id,
+      updateFields,
+      { new: true }
+    );
+
+    if (!checkEdit) {
+      return res.status(500).json({
+        message: "Không thể cập nhật thông tin công ty!",
+        createdBy: "Hệ thống",
+      });
+    }
+
+    let {
+      company_name,
+      company_address,
+      company_logo,
+      company_website,
+      company_scale,
+      company_certification,
+      taxcode,
+      active,
+      updated_at,
+      created_at,
+    } = checkEdit;
+
+    return res.status(200).json({
+      dataUpdated: {
+        company_name,
+        company_address,
+        company_logo,
+        company_website,
+        company_scale,
+        company_certification,
+        taxcode,
+        active,
+        updated_at,
+        created_at,
+      },
+      message: "Cập nhật thông tin logo công ty thành công!",
       createdBy: "Hệ thống",
     });
   } catch (error) {
