@@ -15,7 +15,7 @@ const deleteUnverifiedUsers = async () => {
         if (unverifiedUsers.length > 0) {
             console.log('Deleting unverified users older than 1 minute:');
             unverifiedUsers.forEach(user => {
-                console.log(`User: ${user.account_name}, Email: ${user.email}`);
+                console.log(`User: ${user.accout_name}, Email: ${user.email}`);
             });
 
             // Xóa người dùng chưa xác thực sau 1 phút
