@@ -192,7 +192,7 @@ exports.api_verifyOtp = async (req, res, next) => {
 
       let isValid = await verifyOtp(email, otp, MAIL_TYPE.OTP_FogotPassword);
       if (isValid) {
-        objReturn.status = 1;
+        objReturn.status = 200;
         objReturn.msg = "Xác thực thành công";
    
 
@@ -205,6 +205,9 @@ exports.api_verifyOtp = async (req, res, next) => {
 
       }
 
+    }else {
+      objReturn.status = 400;
+      objReturn.msg = "Type không hợp lệ";
     }
 
 //------g
