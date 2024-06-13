@@ -30,7 +30,7 @@ const uploader = multer({
   storage: storage,
   fileFilter: fileFilter,
   limits: { fileSize: 1024 * 1024 * 5 }, // Giới hạn kích thước file (5MB)
-}).single("company_logo");
+});
 
 var api_user = require("../api/Auth/Users_api");
 var Role = require("../controller/Roles");
@@ -40,6 +40,7 @@ var CheckLogin = require("../middleware/LoginCheck");
 var api_worker = require("../api/Workers/Workers_Api");
 var api_company = require("../api/Companies/Companies_Api");
 var api_job = require("../api/Jobs/Jobs_Api");
+var api_applyjob = require("../api/ApplyJobs/ApplyJobs_Api");
 const router = express.Router();
 
 /**
@@ -81,12 +82,28 @@ router.delete(
 ); //Xóa hồ sơ bởi người tạo
 
 //=======================Companies====================
-router.post("/api/companies/create/:user_id", api_company.create_company); //thêm Doanh Nghiệp
+router.post(
+  "/api/companies/create/:user_id",
+  uploader.fields([
+    { name: "company_logo", maxCount: 1 },
+    { name: "company_certification", maxCount: 1 },
+  ]),
+  api_company.create_company
+); //thêm Doanh Nghiệp
 router.put(
   "/api/companies/edit/:user_id/:company_id",
-  uploader,
+  uploader.fields([
+    { name: "company_logo", maxCount: 1 },
+    { name: "company_certification", maxCount: 1 },
+  ]),
   api_company.edit_company
 ); // Sửa doanh nghiệp
+
+router.put(
+  "/api/companies/editLogo/:user_id/:company_id",
+  uploader.fields([{ name: "company_logo", maxCount: 1 }]),
+  api_company.edit_company_logo
+); // Sửa nguyên logo
 router.get("/api/companies/getListCompany", api_company.getListCompany); //Lấy  danh sách doanh nghiệp
 
 router.get(
@@ -113,5 +130,29 @@ router.get(
 router.get("/api/jobs/getJobsBySalary", api_job.getJobsBySalary); //Tìm công việc theo mức lương
 router.get("/api/jobs/getJobsByTitle", api_job.getJobsByTitle); //Tìm công việc theo tiêu đề == vị trí tuyển dụng
 router.get("/api/jobs/getJobsByLocation", api_job.getJobsByLocation); //Tìm việc theo địa điểm doanh nghiệp
+router.get("/api/jobs/getJobsByForm", api_job.getJobsByForm); //Tìm việc theo hình thức (Thực tập, ....)
 router.delete("/api/jobs/delete/:company_id/:job_id", api_job.delete_job); //Xóa Job
+
+//===================ApplyJobs================
+
+router.post(
+  "/api/applyJobs/create/:worker_id/:job_id",
+  uploader.fields([{ name: "cv", maxCount: 1 }]),
+  api_applyjob.create_applyjob
+); // Ứng tuyển cv - Tạo applyjob
+
+router.get("/api/applyJobs/getAllApplyJobs", api_applyjob.getAll_applyJob); // Lấy tất cả applyjobs  - Admin
+router.get(
+  "/api/applyJobs/getApylyJobsByIdWorker/:worker_id",
+  api_applyjob.getApplyJobsByIdWorker
+); // Lấy tất cả applyjob của NLD
+router.get(
+  "/api/applyJobs/getApylyJobsByIdJob/:job_id",
+  api_applyjob.getApplyJobsByIdJob
+); //lấy tất cả applyjob của job
+
+router.get(
+  "/api/applyJobs/getApylyJobsByIdCompany/:company_id",
+  api_applyjob.getApplyJobsByCompanyId
+); // lấy tất cả applỵob theo id công ty
 module.exports = initWebRouter;

@@ -1,6 +1,7 @@
 const db = require("../config/db");
 
-const workerSchema = new db.mongoose.Schema({
+const workerSchema = new db.mongoose.Schema(
+  {
     user_id: { type: String, required: true },
     worker_name: { type: String, required: true },
     education: { type: String, required: true },
@@ -10,9 +11,11 @@ const workerSchema = new db.mongoose.Schema({
     experience: { type: String, required: true },
     age: { type: Number, required: true },
     address: { type: String, required: true },
-}, {
-    collection: 'Workers'
-});
+  },
+  {
+    collection: "Workers",
+  }
+);
 
 const WorkerMD = db.mongoose.model("WorkerMD", workerSchema);
 module.exports = WorkerMD;
