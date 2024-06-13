@@ -1,5 +1,5 @@
 const cron = require('node-cron');
-
+const logger = require('./logger');
 const User = require('../model/Users');
 
 
@@ -13,18 +13,18 @@ const deleteUnverifiedUsers = async () => {
 
         // Nếu có người dùng bị xóa, log thông tin của họ
         if (unverifiedUsers.length > 0) {
-            console.log('Deleting unverified users older than 5 minute:');
+            logger.info('Deleting unverified users older than 5 minute:');
             unverifiedUsers.forEach(user => {
-                console.log(`User: ${user.accout_name}, Email: ${user.email}`);
+                logger.info(`User: ${user.accout_name}, Email: ${user.email}`);
             });
 
             // Xóa người dùng chưa xác thực sau 1 phút
             await User.userModel.deleteMany({ _id: { $in: unverifiedUsers.map(user => user._id) } });
         } else {
-            console.log('No unverified users older than 5 minute found.');
+            logger.info('No unverified users older than 5 minute found.');
         }
     } catch (error) {
-        console.error('Error while deleting unverified users:', error);
+        logger.error('Error while deleting unverified users:', error);
     }
 };
 
