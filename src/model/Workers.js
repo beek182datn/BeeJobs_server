@@ -1,6 +1,7 @@
 const db = require("../config/db");
 
-const workerSchema = new db.mongoose.Schema({
+const workerSchema = new db.mongoose.Schema(
+  {
     user_id: { type: String, required: true },
     worker_name: { type: String, required: true },
     worker_avatar: { type: String, required: true },

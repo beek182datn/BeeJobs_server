@@ -25,10 +25,13 @@ exports.createJob = async (req, res) => {
       company_id: req.params.company_id,
       title: req.body.title,
       desc: req.body.desc,
+      form: req.body.form,
+      number_of_recruitments: req.body.number_of_recruitments,
       requirements: req.body.requirements,
       salary: req.body.salary,
       benefits: req.body.benefits,
       location: req.body.location,
+      deadline: req.body.deadline,
       created_at: new Date(),
       updated_at: new Date(),
     });
@@ -82,10 +85,13 @@ exports.editJob = async (req, res) => {
     const updateFields = {
       title: req.body.title,
       desc: req.body.desc,
+      form: req.body.form,
+      number_of_recruitments: req.body.number_of_recruitments,
       requirements: req.body.requirements,
       salary: req.body.salary,
       benefits: req.body.benefits,
       location: req.body.location,
+      deadline: req.body.deadline,
       updated_at: new Date(),
     };
 
@@ -249,7 +255,7 @@ exports.getJobsByTitle = async (req, res) => {
 
     if (!jobs || jobs.length === 0) {
       return res.status(404).json({
-        message: "Không tìm thấy công việc nào với mức lương này!",
+        message: "Không tìm thấy công việc với tên này!",
         createdBy: "Hệ thống",
       });
     }
@@ -281,6 +287,37 @@ exports.getJobsByLocation = async (req, res) => {
     if (!jobs || jobs.length === 0) {
       return res.status(404).json({
         message: "Không tìm thấy công việc nào với địa điểm này!",
+        createdBy: "Hệ thống",
+      });
+    }
+
+    return res.status(200).json({
+      data: jobs,
+      message: "Danh sách công việc",
+      createdBy: "Hệ thống",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi: " + error.message,
+      createdBy: "Hệ thống",
+    });
+  }
+};
+
+exports.getJobsByForm = async (req, res) => {
+  try {
+    const searchKeyword = req.query.keyword || "";
+
+    const query = {};
+
+    if (searchKeyword) {
+      query.form = { $regex: searchKeyword, $options: "i" };
+    }
+    const jobs = await jobModel.find(query);
+
+    if (!jobs || jobs.length === 0) {
+      return res.status(404).json({
+        message: "Không tìm thấy công việc nào với hình thức này!",
         createdBy: "Hệ thống",
       });
     }
