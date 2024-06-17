@@ -6,21 +6,17 @@ exports.create_Workers = async (req, res) => {
         let worker = new WorkerMD({
             user_id: user_id,
             worker_name: req.body.worker_name,
-            education: req.body.education,
-            skills: req.body.skills,
-            certificate: req.body.certificate,
-            hobbies: req.body.hobbies,
-            experience: req.body.experience,
-            age: req.body.age,
-            address: req.body.address
+            worker_avatar: req.body.worker_avatar,
+            phone: req.body.phone,
+            email: req.body.email
         });
 
         try {
             await worker.save();
-            let { user_id, worker_name, education, skills, certificate, hobbies, experience, age, address } = worker; // Destructuring
+            let { user_id, worker_name, worker_avatar, phone, email } = worker; // Destructuring
             return res.status(200).json({
                 dataPost: {
-                    user_id, worker_name, education, skills, certificate, hobbies, experience, age, address
+                    user_id, worker_name, worker_avatar, phone, email
                 },
                 message: "Tạo hồ sơ NLĐ thành công",
                 createdBy: "Sơn"
@@ -52,20 +48,16 @@ exports.edit_Workers = async (req, res) => {
                 if (checkWorker.user_id == user_id) { // Sử dụng checkWorker
                     const update_worker = {
                         worker_name: req.body.worker_name,
-                        education: req.body.education,
-                        skills: req.body.skills,
-                        certificate: req.body.certificate,
-                        hobbies: req.body.hobbies,
-                        experience: req.body.experience,
-                        age: req.body.age,
-                        address: req.body.address
+                        worker_avatar: req.body.worker_avatar,
+                        phone: req.body.phone,
+                        email: req.body.email
                     };
 
                     const checkEdit = await WorkerMD.findByIdAndUpdate(worker_id, update_worker, { new: true }); // Thêm { new: true }
                     if (checkEdit) {
-                        let { worker_name, education, skills, certificate, hobbies, experience, age, address } = update_worker; // destructuring
+                        let { worker_name, worker_avatar, phone, email } = update_worker; // destructuring
                         return res.status(200).json({
-                            dataUpdated: { worker_name, education, skills, certificate, hobbies, experience, age, address },
+                            dataUpdated: { worker_name, worker_avatar, phone, email },
                             message: "Cập nhật hồ sơ NLĐ tại bảng Workers thành công!",
                             createdBy: "Sơn"
                         });
@@ -101,20 +93,21 @@ exports.edit_Workers = async (req, res) => {
     }
 };
 
-exports.getListWorkersByUserId = async (req, res) => {
+exports.getInforWorker = async (req, res) => {
     if (req.method === "GET") {
         try {
             let user_id = req.params.user_id;
-            const listWorkers = await WorkerMD.find({ user_id: user_id });
-            if (listWorkers.length > 0) {
-                let listResult = [];
-                listWorkers.forEach(worker => {
-                    let { worker_name, education, skills, certificate, hobbies, experience, age, address } = worker;
-                    listResult.push({ worker_name, education, skills, certificate, hobbies, experience, age, address });
-                });
+            const findWorker = await WorkerMD.findOne({ user_id: user_id });
+            if (findWorker) {
+                // findWorker.forEach(worker => {
+                //     let { worker_name, education, skills, certificate, hobbies, experience, age, address } = worker;
+                //     listResult.push({ worker_name, education, skills, certificate, hobbies, experience, age, address });
+                // });
+
+                let {worker_name, worker_avatar, phone, email} = findWorker;
                 return res.status(200).json({
-                    data: listResult,
-                    message: "Lấy danh sách workers theo user_id thành công!",
+                    worker_infor: {worker_name, worker_avatar, phone, email},
+                    message: "Lấy worker infor theo user_id thành công!",
                     createdBy: "Sơn"
                 });
             }

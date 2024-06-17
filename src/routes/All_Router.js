@@ -72,8 +72,8 @@ const initWebRouter = (app) => {
 router.post("/api/workers/create/:user_id", api_worker.create_Workers); //Thêm hồ sơ NLĐ
 router.put("/api/workers/edit/:user_id/:worker_id", api_worker.edit_Workers); //Sửa hồ sơ NLĐ
 router.get(
-  "/api/workers/getListWorkersByUserId/:user_id",
-  api_worker.getListWorkersByUserId
+  "/api/workers/getInforWorker/:user_id",
+  api_worker.getInforWorker
 ); //Lấy danh sách hồ sơ theo User_id
 router.delete(
   "/api/workers/delete/:user_id/:worker_id",
