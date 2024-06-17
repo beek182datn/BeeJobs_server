@@ -132,8 +132,18 @@ exports.getListJobs = async (req, res) => {
     // Lấy tất cả các công việc
     const jobs = await jobModel.find({});
 
+    const jobsWithCompanyLogo = await Promise.all(
+      jobs.map(async (job) => {
+        const company = await companyModel.findById(job.company_id);
+        return {
+          ...job.toObject(),
+          company_logo: company ? company.company_logo : null,
+        };
+      })
+    );
+
     return res.status(200).json({
-      data: jobs,
+      data: jobsWithCompanyLogo,
       message: "Danh sách các công việc",
       createdBy: "Hệ thống",
     });
@@ -144,7 +154,6 @@ exports.getListJobs = async (req, res) => {
     });
   }
 };
-
 exports.getJobById = async (req, res) => {
   if (req.method !== "GET") {
     return res.status(405).json({
@@ -164,8 +173,21 @@ exports.getJobById = async (req, res) => {
       });
     }
 
+    const company_id = job.company_id;
+    const company = await companyModel.findById(company_id);
+    if (!company) {
+      return res.status(404).json({
+        message: "Thông tin công ty không tồn tại!",
+        createdBy: "Hệ thống",
+      });
+    }
+    const jobWithCompanyLogo = {
+      ...job.toObject(),
+      company_logo: company.company_logo, // Thêm company_logo vào dữ liệu công việc
+    };
+
     return res.status(200).json({
-      data: job,
+      data: jobWithCompanyLogo,
       message: "Thông tin công việc",
       createdBy: "Hệ thống",
     });
@@ -195,11 +217,16 @@ exports.getJobsByIdCompany = async (req, res) => {
         createdBy: "Hệ thống",
       });
     }
+    const company_logo = checkCompany.company_logo;
 
     const jobs = await jobModel.find({ company_id });
+    const jobsWithCompanyLogo = jobs.map((job) => ({
+      ...job.toObject(),
+      company_logo: company_logo, // Thêm company_logo vào từng công việc
+    }));
 
     return res.status(200).json({
-      data: jobs,
+      data: jobsWithCompanyLogo,
       message: "Danh sách các công việc của công ty",
       createdBy: "Hệ thống",
     });
@@ -229,8 +256,18 @@ exports.getJobsBySalary = async (req, res) => {
       });
     }
 
+    const jobsWithCompanyLogo = await Promise.all(
+      jobs.map(async (job) => {
+        const company = await companyModel.findById(job.company_id);
+        return {
+          ...job.toObject(),
+          company_logo: company ? company.company_logo : null,
+        };
+      })
+    );
+
     return res.status(200).json({
-      data: jobs,
+      data: jobsWithCompanyLogo,
       message: "Danh sách công việc",
       createdBy: "Hệ thống",
     });
@@ -259,9 +296,18 @@ exports.getJobsByTitle = async (req, res) => {
         createdBy: "Hệ thống",
       });
     }
+    const jobsWithCompanyLogo = await Promise.all(
+      jobs.map(async (job) => {
+        const company = await companyModel.findById(job.company_id);
+        return {
+          ...job.toObject(),
+          company_logo: company ? company.company_logo : null,
+        };
+      })
+    );
 
     return res.status(200).json({
-      data: jobs,
+      data: jobsWithCompanyLogo,
       message: "Danh sách công việc",
       createdBy: "Hệ thống",
     });
@@ -290,9 +336,18 @@ exports.getJobsByLocation = async (req, res) => {
         createdBy: "Hệ thống",
       });
     }
+    const jobsWithCompanyLogo = await Promise.all(
+      jobs.map(async (job) => {
+        const company = await companyModel.findById(job.company_id);
+        return {
+          ...job.toObject(),
+          company_logo: company ? company.company_logo : null,
+        };
+      })
+    );
 
     return res.status(200).json({
-      data: jobs,
+      data: jobsWithCompanyLogo,
       message: "Danh sách công việc",
       createdBy: "Hệ thống",
     });
@@ -321,9 +376,18 @@ exports.getJobsByForm = async (req, res) => {
         createdBy: "Hệ thống",
       });
     }
+    const jobsWithCompanyLogo = await Promise.all(
+      jobs.map(async (job) => {
+        const company = await companyModel.findById(job.company_id);
+        return {
+          ...job.toObject(),
+          company_logo: company ? company.company_logo : null,
+        };
+      })
+    );
 
     return res.status(200).json({
-      data: jobs,
+      data: jobsWithCompanyLogo,
       message: "Danh sách công việc",
       createdBy: "Hệ thống",
     });
