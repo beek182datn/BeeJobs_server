@@ -42,7 +42,7 @@ exports.SignIn = async (req, res, next) => {
             console.log(req.token);
             res.cookie("jwt", req.token, {
               httpOnly: true, // Chỉ trình duyệt có thể truy cập cookie này
-              secure: true, // Chỉ gửi cookie qua HTTPS
+              // secure: true, // Chỉ gửi cookie qua HTTPS
               maxAge: 3600000, // Thời gian sống của cookie (1 giờ)
               sameSite: "strict", // Chống CSRF
             });
