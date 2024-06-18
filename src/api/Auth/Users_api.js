@@ -228,8 +228,37 @@ exports.api_FogotPasswords = (req, res) => {
 };
 
 
+
+
+
 exports.api_EditUser = async (req, res) => {
-  if (req.method == 'POST') {
+  if (req.method == 'GET') {
+    const tokenAuth = req.body.authorization;
+    try {
+      if (!tokenAuth) {
+        return res.status(401).json({ message: "Unauthorized" });
+
+      }
+ 
+      let tokencheck = await checkJWT(tokenAuth);
+  
+      if (tokencheck.isValid) {
+        let objU = await userMD.userModel.findOne({_id: tokencheck.payload.sub})
+
+        objReturn.status = 200;
+        objReturn.user_info = objU;
+      objReturn.msg ="";
+
+      }else {
+      objReturn.status = 400;
+      objReturn.msg ="Token không đúng";
+    }
+    } catch (error) {
+      objReturn.status = 400;
+      objReturn.msg = "Lỗi :" +  error.message;
+      
+    }
+  }else if (req.method == 'POST'){
     const tokenAuth = req.body.authorization;
     try {
       if (!tokenAuth) {
@@ -238,56 +267,30 @@ exports.api_EditUser = async (req, res) => {
       }
       let tokencheck = await checkJWT(tokenAuth);
       if (tokencheck) {
-
+    
          
         let IMGAvata = "";
-    if (req.files["avata_profile"]) {
+    if (req.files!= null && req.files["avata_profile"]) {
       const IMGFile = req.files["avata_profile"][0];
       const newPathLogo = path.join("./public/uploads/", IMGFile.filename);
       fs.renameSync(cvFile.path, newPathLogo);
       IMGAvata = "/uploads/" + IMGFile.filename;
     }
 
-    var objU = new userMD.userModel();
+    var objU = await userMD.userModel.findOne({_id: tokencheck.payload.sub});
     
     // Ánh xạ các trường từ req.body vào objU
     const objUMD =  _.assign(objU, req.body);
-    
+    await objUMD.save();
     objReturn.status  = 200;
     objReturn.user_info = objUMD;
+    objReturn.msg = "Cập nhật thành công";
 
 
       }
     } catch (error) {
       objReturn.status = 400;
       objReturn.msg = "Lỗi :" +  error.message;
-    }
-  }
-
-res.json(objReturn)
-
-};
-
-
-exports.api_EditUser = async (req, res) => {
-  if (req.method == 'GET') {
-    const tokenAuth = req.params.authorization;
-    try {
-      if (!tokenAuth) {
-        return res.status(401).json({ message: "Unauthorized" });
-
-      }
-      let tokencheck = await checkJWT(tokenAuth);
-      if (tokencheck) {
-        let objU = await userMD.userModel.findOne({_id: tokenAuth.payload.sub})
-
-        objReturn.status = 200;
-        objReturn.user_info = objU;
-      }
-    } catch (error) {
-      objReturn.status = 400;
-      objReturn.msg = "Lỗi :" +  error.message;
-      
     }
   }
 
