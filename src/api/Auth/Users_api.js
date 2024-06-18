@@ -1,6 +1,7 @@
 var userMD = require("../../model/Users");
 var roleMD = require("../../model/Roles");
 var userRoleMD = require("../../model/Users_Roles");
+const _ = require('lodash');
 var bcrypt = require('bcrypt');
 var { jwtMiddleware, createJWT, checkJWT } = require("../../middleware/JWT");
 var { sendOtp, verifyOtp } = require("../../middleware/MailerSevice");
@@ -11,7 +12,8 @@ var objReturn = {
   status: 1,
   msg: " ",
   token: " ",
-  user_info:" "
+  user_info:" ",
+  createBy: "Hệ Thống"
 };
 var user_info = {
   
@@ -48,7 +50,7 @@ exports.api_Login = async (req, res, next) => {
             userInfo.Role = objRole.Code; // Gán giá trị Role vào userInfo
             req.Role = objRole.Code;
           }
-
+          
           req.user = objU;
           jwtMiddleware(req, res, () => {
             objReturn.token = req.token;
@@ -223,4 +225,72 @@ exports.api_FogotPasswords = (req, res) => {
       console.log(error)
     }
   }
+};
+
+
+exports.api_EditUser = async (req, res) => {
+  if (req.method == 'POST') {
+    const tokenAuth = req.body.authorization;
+    try {
+      if (!tokenAuth) {
+        return res.status(401).json({ message: "Unauthorized" });
+
+      }
+      let tokencheck = await checkJWT(tokenAuth);
+      if (tokencheck) {
+
+         
+        let IMGAvata = "";
+    if (req.files["avata_profile"]) {
+      const IMGFile = req.files["avata_profile"][0];
+      const newPathLogo = path.join("./public/uploads/", IMGFile.filename);
+      fs.renameSync(cvFile.path, newPathLogo);
+      IMGAvata = "/uploads/" + IMGFile.filename;
+    }
+
+    var objU = new userMD.userModel();
+    
+    // Ánh xạ các trường từ req.body vào objU
+    const objUMD =  _.assign(objU, req.body);
+    
+    objReturn.status  = 200;
+    objReturn.user_info = objUMD;
+
+
+      }
+    } catch (error) {
+      objReturn.status = 400;
+      objReturn.msg = "Lỗi :" +  error.message;
+    }
+  }
+
+res.json(objReturn)
+
+};
+
+
+exports.api_EditUser = async (req, res) => {
+  if (req.method == 'GET') {
+    const tokenAuth = req.params.authorization;
+    try {
+      if (!tokenAuth) {
+        return res.status(401).json({ message: "Unauthorized" });
+
+      }
+      let tokencheck = await checkJWT(tokenAuth);
+      if (tokencheck) {
+        let objU = await userMD.userModel.findOne({_id: tokenAuth.payload.sub})
+
+        objReturn.status = 200;
+        objReturn.user_info = objU;
+      }
+    } catch (error) {
+      objReturn.status = 400;
+      objReturn.msg = "Lỗi :" +  error.message;
+      
+    }
+  }
+
+res.json(objReturn)
+
 };
