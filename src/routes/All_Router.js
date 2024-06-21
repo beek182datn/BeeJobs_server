@@ -71,12 +71,12 @@ const initWebRouter = (app) => {
   router.get("/Dashboard/index", CheckLogin.ycLogin, Dashboard.index);
 
 
-    //=================Companies Router =====================
+  //=================Companies Router =====================
 
-    router.get("/Companies/index", CheckLogin.ycLogin,Companies.index );
-    router.get("/compamies/active/:company_id", CheckLogin.ycLogin,Companies.acitve );
+  router.get("/Companies/index", CheckLogin.ycLogin, Companies.index);
+  router.get("/compamies/active/:company_id", CheckLogin.ycLogin, Companies.acitve);
 
-    
+
 
   return app.use("/", router);
 };
@@ -84,9 +84,9 @@ const initWebRouter = (app) => {
 //==================Worker=========================
 router.post("/api/workers/create/:user_id", api_worker.create_Workers); //Thêm hồ sơ ứng tuyển của NLĐ
 router.put("/api/workers/edit/:user_id/:worker_id", api_worker.edit_Workers); //Sửa hồ sơ ứng tuyển
-router.get("/api/workers/getListWorkerByIdUser/:user_id",api_worker.getListWorkerByIdUser); //Lấy danh các hồ sơ ứng tuyển của NLĐ
-router.get("/api/workers/getInforWorker/:worker_id",api_worker.getInforWorker); //Xem hồ sơ người lao động. Chờ cập nhật. Không sử dụng API này
-router.delete("/api/workers/delete/:user_id/:worker_id",api_worker.deleteWorker); //Xóa hồ sơ bởi người tạo
+router.get("/api/workers/getListWorkerByIdUser/:user_id", api_worker.getListWorkerByIdUser); //Lấy danh các hồ sơ ứng tuyển của NLĐ
+router.get("/api/workers/getInforWorker/:worker_id", api_worker.getInforWorker); //Xem hồ sơ người lao động. Chờ cập nhật. Không sử dụng API này
+router.delete("/api/workers/delete/:user_id/:worker_id", api_worker.deleteWorker); //Xóa hồ sơ bởi người tạo
 
 
 //=======================Companies====================
