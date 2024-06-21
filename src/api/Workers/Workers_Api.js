@@ -131,8 +131,9 @@ exports.getListWorkerByIdUser = async (req, res) => {
 exports.getInforWorker = async (req, res) => {
     if (req.method === "GET") {
         try {
-            let user_id = req.params.user_id;
-            const findWorker = await WorkerMD.findOne({ user_id: user_id });
+            let worker_id = req.params.worker_id; // Loại bỏ các ký tự không hợp lệ
+
+            const findWorker = await WorkerMD.findOne({ worker_id: worker_id });
             if (findWorker) {
                 // findWorker.forEach(worker => {
                 //     let { worker_name, education, skills, certificate, hobbies, experience, age, address } = worker;
@@ -142,12 +143,12 @@ exports.getInforWorker = async (req, res) => {
                 let { worker_name, worker_avatar, phone, email } = findWorker;
                 return res.status(200).json({
                     worker_infor: { worker_name, worker_avatar, phone, email },
-                    message: "Lấy worker infor theo user_id thành công!",
+                    message: "Lấy worker infor thành công!",
                     createdBy: "Sơn"
                 });
             }
             return res.status(404).json({
-                message: "Không có hồ sơ của người dùng có id: " + user_id,
+                message: "Không tìm thấy hồ sơ ứng tuyển",
                 createdBy: "Sơn"
             });
         } catch (error) {
