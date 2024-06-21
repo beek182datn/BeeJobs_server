@@ -1,0 +1,81 @@
+<%- include('../inc/header.ejs') %> <%- include('../inc/nav_header.ejs') %>
+
+<!-- section container start -->
+<div class="section-container">
+  <p class="section-title">Danh sách doanh nghiệp</p>
+
+  <!--*************************
+    *************************
+    *************************
+    Basic Table start
+    *************************
+    *************************
+    *************************-->
+  <div class="table-responsive">
+    <table class="table m-0">
+      <thead>
+        <tr>
+          <th>STT</th>
+          <th>Tên doanh nghiệp</th>
+          <th>Địa chỉ</th>
+          <th>Ngày tạo</th>
+          <th>Trạng thái</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% var stt = 1; list.forEach((lstCompanies) => { %>
+
+        <tr>
+          <td>
+            <span class="text-info"><%= stt %></span>
+          </td>
+          <td><%= lstCompanies.company_name %></td>
+          <td><%= lstCompanies.company_address %></td>
+          <td><%= lstCompanies.created_at %></td>
+          <td>
+            <% if(lstCompanies.active){ %>
+            <span class="badge badge-pill badge-success">Đã duyệt</span>
+
+            <% }else { %>
+            <span class="badge badge-pill badge-danger">Chưa duyệt</span>
+
+            <% } %>
+          </td>
+          <td>
+            <div class="btn-group">
+              <button
+                type="button"
+                class="btn btn-info dropdown-toggle"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                Action
+              </button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">Xem chi tiết</a>
+                <a class="dropdown-item" href="#">Khoá doanh nghiệp</a>
+                <% if(!lstCompanies.active){ %>
+                <a class="dropdown-item" href="/compamies/active/<%= lstCompanies._id %>">Duyệt doanh nghiệp</a>
+                <% }%>
+              </div>
+            </div>
+          </td>
+        </tr>
+
+        <% stt++; }); %>
+      </tbody>
+    </table>
+  </div>
+  <!--*************************
+    *************************
+    *************************
+    Basic Table end
+    *************************
+    *************************
+    *************************-->
+</div>
+<!-- section container end -->
+
+<%- include('../inc/nav_footer.ejs') %> <%- include('../inc/footer.ejs') %>

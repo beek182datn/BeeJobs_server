@@ -1,6 +1,7 @@
 var userMD = require("../model/Users");
 var roleMD = require("../model/Roles");
 var userRoleMD = require("../model/Users_Roles");
+var bcrypt = require('bcrypt');
 
 var { jwtMiddleware, createJWT } = require("../middleware/JWT");
 
@@ -9,15 +10,15 @@ exports.SignIn = async (req, res, next) => {
   if (req.method == "POST") {
     const { username, password } = req.body;
     console.log(req.body);
-    const hashPassGen = btoa(password);
-    console.log(hashPassGen);
+    
     try {
       let objU = await userMD.userModel.findOne({
         $or: [{ accout_name: username }, { email: username }],
       });
       console.log(objU);
       if (objU !== null) {
-        if (objU.hash_pass == hashPassGen) {
+        const isPasswordMatch = await bcrypt.compare(password, objU.hash_pass);
+        if (isPasswordMatch) {
 
 
           let objUserRole = await userRoleMD.UserRoleModel.findOne({
@@ -41,7 +42,7 @@ exports.SignIn = async (req, res, next) => {
             console.log(req.token);
             res.cookie("jwt", req.token, {
               httpOnly: true, // Chỉ trình duyệt có thể truy cập cookie này
-              secure: true, // Chỉ gửi cookie qua HTTPS
+              // secure: true, // Chỉ gửi cookie qua HTTPS
               maxAge: 3600000, // Thời gian sống của cookie (1 giờ)
               sameSite: "strict", // Chống CSRF
             });

@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+const { verifyOtp } = require('./MailerSevice');
 require('dotenv').config();
 
 const base64url = (str) => {
@@ -17,6 +18,7 @@ const setTokenData = (user,Role) => {
     const payload = {
         sub: user._id,
         Role: Role,
+        verify: user.verify,
         exp: Math.floor(Date.now() / 1000) + 3600 // 1 hour expiration
     }
     const encodedHeader = base64url(JSON.stringify(header));

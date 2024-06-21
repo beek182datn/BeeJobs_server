@@ -36,6 +36,7 @@ var api_user = require("../api/Auth/Users_api");
 var Role = require("../controller/Roles");
 var Dashboard = require("../controller/Dashboard");
 var Auth = require("../controller/Auth");
+var Companies = require("../controller/Companies");
 var CheckLogin = require("../middleware/LoginCheck");
 var api_worker = require("../api/Workers/Workers_Api");
 var api_company = require("../api/Companies/Companies_Api");
@@ -54,6 +55,9 @@ const initWebRouter = (app) => {
   router.post("/api/signup", api_user.api_SignUp);
   router.post("/api/users", api_user.api_getInfo);
   router.post("/api/usersverifyotp", api_user.api_verifyOtp);
+  // ==============auth api Router===========================
+  router.get("/api/EditUser", api_user.api_EditUser);
+  router.post("/api/EditUser", api_user.api_EditUser);
 
   //=================Auth Router ===============================
   router.get("/", Auth.SignIn);
@@ -65,6 +69,14 @@ const initWebRouter = (app) => {
   //=================Dashboard Router =====================
 
   router.get("/Dashboard/index", CheckLogin.ycLogin, Dashboard.index);
+
+
+    //=================Companies Router =====================
+
+    router.get("/Companies/index", CheckLogin.ycLogin,Companies.index );
+    router.get("/compamies/active/:company_id", CheckLogin.ycLogin,Companies.acitve );
+
+    
 
   return app.use("/", router);
 };
