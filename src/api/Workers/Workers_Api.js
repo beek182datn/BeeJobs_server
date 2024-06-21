@@ -36,7 +36,6 @@ exports.create_Workers = async (req, res) => {
     }
 };
 
-
 exports.edit_Workers = async (req, res) => {
     if (req.method === "PUT") {
         try {
@@ -93,6 +92,42 @@ exports.edit_Workers = async (req, res) => {
     }
 };
 
+exports.getListWorkerByIdUser = async (req, res) => {
+    if (req.method === "GET") {
+        try {
+            let user_id = req.params.user_id;
+            const listWorkers = await WorkerMD.find({ user_id: user_id });
+            if (listWorkers && listWorkers.length > 0) {
+                let listWorkersResult = listWorkers.map(worker => {
+                    let { user_id, worker_name, worker_avatar, phone, email } = worker;
+                    return { user_id, worker_name, worker_avatar, phone, email };
+                });
+                return res.status(200).json({
+                    data: listWorkersResult,
+                    msg: "Lấy danh sách hồ sơ ứng tuyển thành công!"
+                });
+            } else {
+                return res.status(404).json({
+                    message: "Danh sách hồ sơ ứng tuyển trống!",
+                    createdBy: "Sơn"
+                });
+            }
+        } catch (error) {
+            console.error(error); // Using console.error for logging errors
+            return res.status(500).json({
+                data: null,
+                msg: "Server Error: Xảy ra khi lấy ds hồ sơ ứng tuyển theo user_id",
+                success: false
+            });
+        }
+    } else {
+        return res.status(405).json({
+            message: "Phương thức không được hỗ trợ, hãy sử dụng: GET!",
+            createdBy: "Sơn"
+        });
+    }
+}
+
 exports.getInforWorker = async (req, res) => {
     if (req.method === "GET") {
         try {
@@ -104,9 +139,9 @@ exports.getInforWorker = async (req, res) => {
                 //     listResult.push({ worker_name, education, skills, certificate, hobbies, experience, age, address });
                 // });
 
-                let {worker_name, worker_avatar, phone, email} = findWorker;
+                let { worker_name, worker_avatar, phone, email } = findWorker;
                 return res.status(200).json({
-                    worker_infor: {worker_name, worker_avatar, phone, email},
+                    worker_infor: { worker_name, worker_avatar, phone, email },
                     message: "Lấy worker infor theo user_id thành công!",
                     createdBy: "Sơn"
                 });
