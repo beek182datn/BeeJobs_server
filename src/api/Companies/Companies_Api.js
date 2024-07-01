@@ -417,3 +417,30 @@ exports.delete_company = async (req, res) => {
     });
   }
 };
+
+exports.checkCompanyByUserId = async (req, res) => {
+  try {
+    const user_id = req.params.user_id;
+    const company = await companyModel.findOne({ user_id: user_id });
+
+    if (!company) {
+      return res.status(200).json({
+        registered: false,
+        message: "User chưa đăng ký công ty.",
+        createdBy: "Hệ thống",
+      });
+    }
+
+    return res.status(200).json({
+      registered: true,
+      data: company,
+      message: "User đã đăng ký công ty.",
+      createdBy: "Hệ thống",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi: " + error.message,
+      createdBy: "Hệ thống",
+    });
+  }
+};

@@ -49,6 +49,38 @@ exports.create_applyjob = async (req, res) => {
   }
 };
 
+exports.editApplyJob = async (req, res) => {
+  try {
+    const applyJobId = req.params.applyJob_id;
+    const { status } = req.body;
+
+    // Tìm và cập nhật chỉ trường status
+    const updatedApplyJob = await applyJobModel.findByIdAndUpdate(
+      applyJobId,
+      { status },
+      { new: true }
+    );
+
+    if (!updatedApplyJob) {
+      return res.status(404).json({
+        message: "Công việc không tồn tại!",
+        createdBy: "Hệ thống",
+      });
+    }
+
+    return res.status(200).json({
+      data: updatedApplyJob,
+      message: "Update thành công",
+      createdBy: "Hệ thống",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi: " + error.message,
+      createdBy: "Hệ thống",
+    });
+  }
+};
+
 exports.getAll_applyJob = async (req, res) => {
   if (req.method !== "GET") {
     return res.status(405).json({

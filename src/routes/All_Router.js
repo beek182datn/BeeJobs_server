@@ -70,13 +70,14 @@ const initWebRouter = (app) => {
 
   router.get("/Dashboard/index", CheckLogin.ycLogin, Dashboard.index);
 
-
   //=================Companies Router =====================
 
   router.get("/Companies/index", CheckLogin.ycLogin, Companies.index);
-  router.get("/compamies/active/:company_id", CheckLogin.ycLogin, Companies.acitve);
-
-
+  router.get(
+    "/compamies/active/:company_id",
+    CheckLogin.ycLogin,
+    Companies.acitve
+  );
 
   return app.use("/", router);
 };
@@ -84,10 +85,15 @@ const initWebRouter = (app) => {
 //==================Worker=========================
 router.post("/api/workers/create/:user_id", api_worker.create_Workers); //Thêm hồ sơ ứng tuyển của NLĐ
 router.put("/api/workers/edit/:user_id/:worker_id", api_worker.edit_Workers); //Sửa hồ sơ ứng tuyển
-router.get("/api/workers/getListWorkerByIdUser/:user_id", api_worker.getListWorkerByIdUser); //Lấy danh các hồ sơ ứng tuyển của NLĐ
+router.get(
+  "/api/workers/getListWorkerByIdUser/:user_id",
+  api_worker.getListWorkerByIdUser
+); //Lấy danh các hồ sơ ứng tuyển của NLĐ
 router.get("/api/workers/getInforWorker/:worker_id", api_worker.getInforWorker); //Xem hồ sơ người lao động. Chờ cập nhật. Không sử dụng API này
-router.delete("/api/workers/delete/:user_id/:worker_id", api_worker.deleteWorker); //Xóa hồ sơ bởi người tạo
-
+router.delete(
+  "/api/workers/delete/:user_id/:worker_id",
+  api_worker.deleteWorker
+); //Xóa hồ sơ bởi người tạo
 
 //=======================Companies====================
 router.post(
@@ -124,6 +130,10 @@ router.delete(
   "/api/companies/delete/:user_id/:company_id",
   api_company.delete_company
 ); // Xóa doanh nghiệp
+router.get(
+  "/api/companies/checkCompany/:user_id",
+  api_company.checkCompanyByUserId
+);
 
 //=================Jobs===================
 
@@ -148,6 +158,11 @@ router.post(
   uploader.fields([{ name: "cv", maxCount: 1 }]),
   api_applyjob.create_applyjob
 ); // Ứng tuyển cv - Tạo applyjob
+
+router.put(
+  "/api/applyJobs/editApplyJobStatus/:applyJob_id",
+  api_applyjob.editApplyJob
+); // Thay đổi trạng thái của đơn ứng tuyển
 
 router.get("/api/applyJobs/getAllApplyJobs", api_applyjob.getAll_applyJob); // Lấy tất cả applyjobs  - Admin
 router.get(
