@@ -26,6 +26,7 @@ exports.createJob = async (req, res) => {
       title: req.body.title,
       desc: req.body.desc,
       form: req.body.form,
+      majors: req.body.majors,
       number_of_recruitments: req.body.number_of_recruitments,
       requirements: req.body.requirements,
       salary: req.body.salary,
@@ -86,6 +87,7 @@ exports.editJob = async (req, res) => {
       title: req.body.title,
       desc: req.body.desc,
       form: req.body.form,
+      majors: req.body.majors,
       number_of_recruitments: req.body.number_of_recruitments,
       requirements: req.body.requirements,
       salary: req.body.salary,
@@ -430,6 +432,246 @@ exports.delete_job = async (req, res) => {
 
     return res.status(200).json({
       message: "Xoá công việc thành công!",
+      createdBy: "Hệ thống",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi: " + error.message,
+      createdBy: "Hệ thống",
+    });
+  }
+};
+
+exports.getJobsByMajorsAndSalary = async (req, res) => {
+  try {
+    const { salary, major } = req.query;
+
+    const query = {};
+
+    if (salary) {
+      query.salary = { $regex: salary, $options: "i" };
+    }
+
+    if (major) {
+      query.major = { $regex: major, $options: "i" };
+    }
+
+    const jobs = await jobModel.find(query);
+
+    if (!jobs || jobs.length === 0) {
+      return res.status(404).json({
+        message: "Không tìm thấy công việc nào phù hợp với bộ lọc này!",
+        createdBy: "Hệ thống",
+      });
+    }
+
+    const jobsWithCompanyLogo = await Promise.all(
+      jobs.map(async (job) => {
+        const company = await companyModel.findById(job.company_id);
+        return {
+          ...job.toObject(),
+          company_logo: company ? company.company_logo : null,
+        };
+      })
+    );
+
+    return res.status(200).json({
+      data: jobsWithCompanyLogo,
+      message: "Danh sách công việc",
+      createdBy: "Hệ thống",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi: " + error.message,
+      createdBy: "Hệ thống",
+    });
+  }
+};
+
+exports.getJobsByMajorsAndTitle = async (req, res) => {
+  try {
+    const { title, major } = req.query;
+
+    const query = {};
+
+    if (title) {
+      query.title = { $regex: title, $options: "i" };
+    }
+
+    if (major) {
+      query.major = { $regex: major, $options: "i" };
+    }
+
+    const jobs = await jobModel.find(query);
+
+    if (!jobs || jobs.length === 0) {
+      return res.status(404).json({
+        message: "Không tìm thấy công việc nào phù hợp với bộ lọc này!",
+        createdBy: "Hệ thống",
+      });
+    }
+
+    const jobsWithCompanyLogo = await Promise.all(
+      jobs.map(async (job) => {
+        const company = await companyModel.findById(job.company_id);
+        return {
+          ...job.toObject(),
+          company_logo: company ? company.company_logo : null,
+        };
+      })
+    );
+
+    return res.status(200).json({
+      data: jobsWithCompanyLogo,
+      message: "Danh sách công việc",
+      createdBy: "Hệ thống",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi: " + error.message,
+      createdBy: "Hệ thống",
+    });
+  }
+};
+
+exports.getJobsByMajorsAndLocation = async (req, res) => {
+  try {
+    const { location, major } = req.query;
+
+    const query = {};
+
+    if (location) {
+      query.location = { $regex: location, $options: "i" };
+    }
+
+    if (major) {
+      query.major = { $regex: major, $options: "i" };
+    }
+
+    const jobs = await jobModel.find(query);
+
+    if (!jobs || jobs.length === 0) {
+      return res.status(404).json({
+        message: "Không tìm thấy công việc nào phù hợp với bộ lọc này!",
+        createdBy: "Hệ thống",
+      });
+    }
+
+    const jobsWithCompanyLogo = await Promise.all(
+      jobs.map(async (job) => {
+        const company = await companyModel.findById(job.company_id);
+        return {
+          ...job.toObject(),
+          company_logo: company ? company.company_logo : null,
+        };
+      })
+    );
+
+    return res.status(200).json({
+      data: jobsWithCompanyLogo,
+      message: "Danh sách công việc",
+      createdBy: "Hệ thống",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi: " + error.message,
+      createdBy: "Hệ thống",
+    });
+  }
+};
+
+exports.getJobsByMajorsAndForm = async (req, res) => {
+  try {
+    const { form, major } = req.query;
+
+    const query = {};
+
+    if (form) {
+      query.form = { $regex: form, $options: "i" };
+    }
+
+    if (major) {
+      query.major = { $regex: major, $options: "i" };
+    }
+
+    const jobs = await jobModel.find(query);
+
+    if (!jobs || jobs.length === 0) {
+      return res.status(404).json({
+        message: "Không tìm thấy công việc nào phù hợp với bộ lọc này!",
+        createdBy: "Hệ thống",
+      });
+    }
+
+    const jobsWithCompanyLogo = await Promise.all(
+      jobs.map(async (job) => {
+        const company = await companyModel.findById(job.company_id);
+        return {
+          ...job.toObject(),
+          company_logo: company ? company.company_logo : null,
+        };
+      })
+    );
+
+    return res.status(200).json({
+      data: jobsWithCompanyLogo,
+      message: "Danh sách công việc",
+      createdBy: "Hệ thống",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi: " + error.message,
+      createdBy: "Hệ thống",
+    });
+  }
+};
+
+exports.getJobsByFilters = async (req, res) => {
+  try {
+    const { salary, major, location, title, form } = req.query;
+
+    const query = {};
+
+    if (salary) {
+      query.salary = { $regex: salary, $options: "i" };
+    }
+
+    if (major) {
+      query.major = { $regex: major, $options: "i" };
+    }
+
+    if (location) {
+      query.location = { $regex: location, $options: "i" };
+    }
+    if (title) {
+      query.title = { $regex: title, $options: "i" };
+    }
+    if (form) {
+      query.form = { $regex: form, $options: "i" };
+    }
+
+    const jobs = await jobModel.find(query);
+
+    if (!jobs || jobs.length === 0) {
+      return res.status(404).json({
+        message: "Không tìm thấy công việc nào phù hợp với bộ lọc này!",
+        createdBy: "Hệ thống",
+      });
+    }
+
+    const jobsWithCompanyLogo = await Promise.all(
+      jobs.map(async (job) => {
+        const company = await companyModel.findById(job.company_id);
+        return {
+          ...job.toObject(),
+          company_logo: company ? company.company_logo : null,
+        };
+      })
+    );
+
+    return res.status(200).json({
+      data: jobsWithCompanyLogo,
+      message: "Danh sách công việc",
       createdBy: "Hệ thống",
     });
   } catch (error) {

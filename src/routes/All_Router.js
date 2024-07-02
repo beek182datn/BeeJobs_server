@@ -149,6 +149,7 @@ router.get("/api/jobs/getJobsBySalary", api_job.getJobsBySalary); //Tìm công v
 router.get("/api/jobs/getJobsByTitle", api_job.getJobsByTitle); //Tìm công việc theo tiêu đề == vị trí tuyển dụng
 router.get("/api/jobs/getJobsByLocation", api_job.getJobsByLocation); //Tìm việc theo địa điểm doanh nghiệp
 router.get("/api/jobs/getJobsByForm", api_job.getJobsByForm); //Tìm việc theo hình thức (Thực tập, ....)
+router.get("/api/jobs/getJobsByFilters", api_job.getJobsByFilters); // Tìm việc theo bộ lọc
 router.delete("/api/jobs/delete/:company_id/:job_id", api_job.delete_job); //Xóa Job
 
 //===================ApplyJobs================

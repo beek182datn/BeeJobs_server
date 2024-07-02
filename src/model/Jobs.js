@@ -8,6 +8,7 @@ const jobSchema = new db.mongoose.Schema(
     title: { type: String, require: true },
     desc: { type: String, require: true },
     form: { type: String, require: true },
+    majors: { type: String, require: true },
     number_of_recruitments: { type: String, require: true },
     requirements: { type: String, require: true },
     salary: { type: String, require: true },

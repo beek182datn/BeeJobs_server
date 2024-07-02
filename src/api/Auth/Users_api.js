@@ -1,26 +1,26 @@
 var userMD = require("../../model/Users");
 var roleMD = require("../../model/Roles");
 var userRoleMD = require("../../model/Users_Roles");
-const _ = require('lodash');
-var bcrypt = require('bcrypt');
+const _ = require("lodash");
+var bcrypt = require("bcrypt");
 var { jwtMiddleware, createJWT, checkJWT } = require("../../middleware/JWT");
 var { sendOtp, verifyOtp } = require("../../middleware/MailerSevice");
 const { MAIL_TYPE } = require("../../config/Mailer_Config");
-const { hashPassword, checkPassword } = require("../../middleware/hashEveryone");
+const {
+  hashPassword,
+  checkPassword,
+} = require("../../middleware/hashEveryone");
 
 var objReturn = {
   status: 1,
   msg: " ",
   token: " ",
-  user_info:" ",
-  createBy: "Hệ Thống"
+  user_info: " ",
+  createBy: "Hệ Thống",
 };
 var user_info = {
-  
   Role: "",
-}
-
-
+};
 
 exports.api_Login = async (req, res, next) => {
   if (req.method == "POST") {
@@ -29,7 +29,7 @@ exports.api_Login = async (req, res, next) => {
 
     try {
       const objU = await userMD.userModel.findOne({
-        $or: [{ accout_name: username }, { email: username }]
+        $or: [{ accout_name: username }, { email: username }],
       });
       console.log(objU);
 
@@ -38,19 +38,23 @@ exports.api_Login = async (req, res, next) => {
         if (isPasswordMatch) {
           const userInfo = {
             // ...objU._doc, // Sao chép tất cả thuộc tính của objU vào userInfo
-            id_user : objU._id,
+            id_user: objU._id,
             Username: objU.accout_name,
-            Role: null // Khởi tạo Role ban đầu là null
+            Role: null, // Khởi tạo Role ban đầu là null
           };
 
-          let objUserRole = await userRoleMD.UserRoleModel.findOne({ id_User: objU._id });
+          let objUserRole = await userRoleMD.UserRoleModel.findOne({
+            id_User: objU._id,
+          });
           if (objUserRole) {
-            let objRole = await roleMD.RoleModel.findOne({ _id: objUserRole.id_Role });
+            let objRole = await roleMD.RoleModel.findOne({
+              _id: objUserRole.id_Role,
+            });
             console.log(objRole);
             userInfo.Role = objRole.Code; // Gán giá trị Role vào userInfo
             req.Role = objRole.Code;
           }
-          
+
           req.user = objU;
           jwtMiddleware(req, res, () => {
             objReturn.token = req.token;
@@ -67,7 +71,7 @@ exports.api_Login = async (req, res, next) => {
           console.log(objU);
         }
       } else {
-        objReturn.msg = "Không có thông tin người dùng " ;
+        objReturn.msg = "Không có thông tin người dùng ";
         objReturn.info_user = "";
         objReturn.status = 400;
       }
@@ -81,14 +85,13 @@ exports.api_Login = async (req, res, next) => {
 };
 
 exports.api_SignUp = async (req, res, next) => {
- 
   console.log(req.body);
   console.log("Đây");
   if (req.method == "POST") {
     console.log(req.body.email);
     const { email, passwd, accout_name, type_role } = req.body;
     let objU = await userMD.userModel.findOne({
-      $or: [{ accout_name: accout_name }, { email: email }]
+      $or: [{ accout_name: accout_name }, { email: email }],
     });
     //lưu CSDL
     if (email != null && passwd != null && accout_name != null) {
@@ -134,7 +137,6 @@ exports.api_SignUp = async (req, res, next) => {
   res.json(objReturn);
 };
 
-
 exports.api_getInfo = async (req, res, next) => {
   if (req.method == "POST") {
     const tokenAuth = req.body.authorization;
@@ -142,7 +144,6 @@ exports.api_getInfo = async (req, res, next) => {
     try {
       if (!tokenAuth) {
         return res.status(401).json({ message: "Unauthorized" });
-
       }
       let tokencheck = await checkJWT(tokenAuth);
 
@@ -152,7 +153,9 @@ exports.api_getInfo = async (req, res, next) => {
       }
       if (tokencheck.isValid) {
         console.log(tokencheck);
-        const user = await userMD.userModel.findOne({ _id: tokencheck.payload.sub });
+        const user = await userMD.userModel.findOne({
+          _id: tokencheck.payload.sub,
+        });
         token.UserInfo = user;
         user_info.Role = tokencheck.payload.Role;
         objReturn.token = token;
@@ -161,13 +164,11 @@ exports.api_getInfo = async (req, res, next) => {
 
         objReturn.msg = "Lấy ok";
       }
-
-
     } catch (error) {
       console.log(error.message);
     }
   }
-  res.json(objReturn)
+  res.json(objReturn);
 };
 
 exports.api_verifyOtp = async (req, res, next) => {
@@ -182,118 +183,98 @@ exports.api_verifyOtp = async (req, res, next) => {
         await user.save();
         objReturn.status = 200;
         objReturn.msg = "Xác thực thành công";
-
       } else {
         objReturn.status = 400;
         objReturn.msg = "Xác thực thất bại";
-
       }
-      console.log(isValid)
-
+      console.log(isValid);
     } else if (type == MAIL_TYPE.OTP_FogotPassword) {
-
       let isValid = await verifyOtp(email, otp, MAIL_TYPE.OTP_FogotPassword);
       if (isValid) {
         objReturn.status = 200;
         objReturn.msg = "Xác thực thành công";
-   
-
-
-       
-
       } else {
         objReturn.status = 400;
         objReturn.msg = "Xác thực thất bại";
-
       }
-
-    }else {
+    } else {
       objReturn.status = 400;
       objReturn.msg = "Type không hợp lệ";
     }
 
-//------g
+    //------g
   }
-  res.json(objReturn)
-}
+  res.json(objReturn);
+};
 
 exports.api_FogotPasswords = (req, res) => {
-  if (req.method == 'POST') {
+  if (req.method == "POST") {
     try {
       const { email } = req.body;
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 };
 
-
-
-
-
 exports.api_EditUser = async (req, res) => {
-  if (req.method == 'GET') {
+  if (req.method == "GET") {
     const tokenAuth = req.body.authorization;
     try {
       if (!tokenAuth) {
         return res.status(401).json({ message: "Unauthorized" });
-
       }
- 
+
       let tokencheck = await checkJWT(tokenAuth);
-  
+
       if (tokencheck.isValid) {
-        let objU = await userMD.userModel.findOne({_id: tokencheck.payload.sub})
+        let objU = await userMD.userModel.findOne({
+          _id: tokencheck.payload.sub,
+        });
 
         objReturn.status = 200;
         objReturn.user_info = objU;
-      objReturn.msg ="";
-
-      }else {
-      objReturn.status = 400;
-      objReturn.msg ="Token không đúng";
-    }
+        objReturn.msg = "";
+      } else {
+        objReturn.status = 400;
+        objReturn.msg = "Token không đúng";
+      }
     } catch (error) {
       objReturn.status = 400;
-      objReturn.msg = "Lỗi :" +  error.message;
-      
+      objReturn.msg = "Lỗi :" + error.message;
     }
-  }else if (req.method == 'POST'){
+  } else if (req.method == "POST") {
     const tokenAuth = req.body.authorization;
     try {
       if (!tokenAuth) {
         return res.status(401).json({ message: "Unauthorized" });
-
       }
       let tokencheck = await checkJWT(tokenAuth);
       if (tokencheck) {
-    
-         
         let IMGAvata = "";
-    if (req.files!= null && req.files["avata_profile"]) {
-      const IMGFile = req.files["avata_profile"][0];
-      const newPathLogo = path.join("./public/uploads/", IMGFile.filename);
-      fs.renameSync(cvFile.path, newPathLogo);
-      IMGAvata = "/uploads/" + IMGFile.filename;
-    }
+        if (req.files != null && req.files["avata_profile"]) {
+          const IMGFile = req.files["avata_profile"][0];
+          const newPathLogo = path.join("./public/uploads/", IMGFile.filename);
+          fs.renameSync(cvFile.path, newPathLogo);
+          IMGAvata = "/uploads/" + IMGFile.filename;
+        }
 
-    var objU = await userMD.userModel.findOne({_id: tokencheck.payload.sub});
-    
-    // Ánh xạ các trường từ req.body vào objU
-    const objUMD =  _.assign(objU, req.body);
-    await objUMD.save();
-    objReturn.status  = 200;
-    objReturn.user_info = objUMD;
-    objReturn.msg = "Cập nhật thành công";
+        var objU = await userMD.userModel.findOne({
+          _id: tokencheck.payload.sub,
+        });
 
-
+        // Ánh xạ các trường từ req.body vào objU
+        const objUMD = _.assign(objU, req.body);
+        await objUMD.save();
+        objReturn.status = 200;
+        objReturn.user_info = objUMD;
+        objReturn.msg = "Cập nhật thành công";
       }
     } catch (error) {
       objReturn.status = 400;
-      objReturn.msg = "Lỗi :" +  error.message;
+      objReturn.msg = "Lỗi :" + error.message;
     }
   }
 
-res.json(objReturn)
-
+  res.json(objReturn);
 };
