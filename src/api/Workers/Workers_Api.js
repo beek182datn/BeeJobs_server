@@ -96,7 +96,7 @@ exports.getListWorkerByIdUser = async (req, res) => {
     if (req.method === "GET") {
         try {
             let user_id = req.params.user_id;
-            const listWorkers = await WorkerMD.find({ user_id: user_id });
+            const listWorkers = await WorkerMD.findOne({ user_id: user_id });
             if (listWorkers && listWorkers.length > 0) {
                 let listWorkersResult = listWorkers.map(worker => {
                     let { user_id, worker_name, worker_avatar, phone, email } = worker;
@@ -131,33 +131,35 @@ exports.getListWorkerByIdUser = async (req, res) => {
 exports.getInforWorker = async (req, res) => {
     if (req.method === "GET") {
         try {
-            let worker_id = req.params.worker_id; // Loại bỏ các ký tự không hợp lệ
+            let worker_id = req.params.worker_id; // Lấy worker_id từ request params
 
-            const findWorker = await WorkerMD.findOne({ worker_id: worker_id });
+            // Tìm kiếm thông tin worker bằng worker_id
+            const findWorker = await WorkerMD.findOne({ _id: worker_id });
+
             if (findWorker) {
-                // findWorker.forEach(worker => {
-                //     let { worker_name, education, skills, certificate, hobbies, experience, age, address } = worker;
-                //     listResult.push({ worker_name, education, skills, certificate, hobbies, experience, age, address });
-                // });
-
+                // Nếu tìm thấy worker, trả về thông tin cần thiết
                 let { worker_name, worker_avatar, phone, email } = findWorker;
                 return res.status(200).json({
-                    worker_infor: { worker_name, worker_avatar, phone, email },
-                    message: "Lấy worker infor thành công!",
+                    worker_info: { worker_name, worker_avatar, phone, email },
+                    message: "Lấy thông tin worker thành công!",
+                    createdBy: "Sơn"
+                });
+            } else {
+                // Nếu không tìm thấy worker, trả về mã lỗi 404
+                return res.status(404).json({
+                    message: "Không tìm thấy worker",
                     createdBy: "Sơn"
                 });
             }
-            return res.status(404).json({
-                message: "Không tìm thấy hồ sơ ứng tuyển",
-                createdBy: "Sơn"
-            });
         } catch (error) {
+            // Bắt lỗi nếu có vấn đề xảy ra trong quá trình tìm kiếm
             return res.status(500).json({
                 message: "Lỗi: " + error.message,
                 createdBy: "Sơn"
             });
         }
     } else {
+        // Trả về mã lỗi 405 nếu phương thức request không phải là GET
         return res.status(405).json({
             message: "Phương thức không được hỗ trợ, hãy sử dụng: GET!",
             createdBy: "Sơn"
