@@ -90,7 +90,7 @@ router.get(
   "/api/workers/getListWorkerByIdUser/:user_id",
   api_worker.getListWorkerByIdUser
 ); //Lấy danh các hồ sơ ứng tuyển của NLĐ
-router.get("/api/workers/getInforWorker/:worker_id", api_worker.getInforWorker); //Xem hồ sơ người lao động. Chờ cập nhật. Không sử dụng API này
+router.get("/api/workers/getInforWorker/:user_id", api_worker.getInforWorker); //Xem hồ sơ người lao động. Chờ cập nhật. Không sử dụng API này
 router.delete(
   "/api/workers/delete/:user_id/:worker_id",
   api_worker.deleteWorker
