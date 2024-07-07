@@ -42,6 +42,7 @@ var api_worker = require("../api/Workers/Workers_Api");
 var api_company = require("../api/Companies/Companies_Api");
 var api_job = require("../api/Jobs/Jobs_Api");
 var api_applyjob = require("../api/ApplyJobs/ApplyJobs_Api");
+var api_suportLong = require("../api/Api_SuportLong/Api_SuportLong"); //Dùng tạm thời để support Long demo với Imatech
 const router = express.Router();
 
 /**
@@ -94,6 +95,7 @@ router.delete(
   "/api/workers/delete/:user_id/:worker_id",
   api_worker.deleteWorker
 ); //Xóa hồ sơ bởi người tạo
+router.get("/api/applyJobs/checkApplyJobs/:worker_id/:job_id", api_suportLong.checkApplyJobs); //Api tạm thời. Support Long demo với Imatech
 
 //=======================Companies====================
 router.post(
