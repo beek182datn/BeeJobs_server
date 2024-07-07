@@ -17,6 +17,7 @@ exports.create_applyjob = async (req, res) => {
     const { worker_id, job_id } = req.params;
 
     let url_cv = "";
+    let status_cv = "pending";
     if (req.files["cv"]) {
       const cvFile = req.files["cv"][0];
       const newPathLogo = path.join("./public/uploads/", cvFile.filename);
@@ -29,7 +30,7 @@ exports.create_applyjob = async (req, res) => {
       worker_id: worker_id,
       job_id: job_id,
       cv: url_cv,
-      status: req.body.status,
+      status: status_cv,
       applied_at: new Date(),
     });
 
