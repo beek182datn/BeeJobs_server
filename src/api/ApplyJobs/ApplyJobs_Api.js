@@ -1,5 +1,6 @@
 const { applyJobModel } = require("../../model/ApplyJobs");
 const { jobModel } = require("../../model/Jobs");
+const WorkerMD = require("../../model/Workers");
 
 var fs = require("fs");
 const path = require("path");
@@ -161,8 +162,19 @@ exports.getApplyJobsByIdJob = async (req, res) => {
       });
     }
 
+    const applicationsWithWorkerDetails = await Promise.all(
+      jobApplications.map(async (application) => {
+        const worker = await WorkerMD.findById(application.worker_id);
+        return {
+          ...application.toObject(),
+          worker_name: worker ? worker.worker_name : null,
+          phone: worker ? worker.phone : null,
+        };
+      })
+    );
+
     return res.status(200).json({
-      data: jobApplications,
+      data: applicationsWithWorkerDetails,
       message: "Lấy danh sách đơn ứng tuyển thành công!",
       createdBy: "Hệ thống",
     });
