@@ -131,10 +131,10 @@ exports.getListWorkerByIdUser = async (req, res) => {
 exports.getInforWorker = async (req, res) => {
     if (req.method === "GET") {
         try {
-            let worker_id = req.params.worker_id; // Lấy worker_id từ request params
+            let user_id = req.params.user_id; // Lấy worker_id từ request params
 
             // Tìm kiếm thông tin worker bằng worker_id
-            const findWorker = await WorkerMD.findOne({ _id: worker_id });
+            const findWorker = await WorkerMD.findOne({ user_id: user_id });
 
             if (findWorker) {
                 // Nếu tìm thấy worker, trả về thông tin cần thiết

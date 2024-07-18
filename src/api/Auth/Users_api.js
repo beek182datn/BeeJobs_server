@@ -40,6 +40,7 @@ exports.api_Login = async (req, res, next) => {
             // ...objU._doc, // Sao chép tất cả thuộc tính của objU vào userInfo
             id_user: objU._id,
             Username: objU.accout_name,
+            Veryfy: objU.verify,
             Role: null, // Khởi tạo Role ban đầu là null
           };
 
@@ -191,7 +192,10 @@ exports.api_verifyOtp = async (req, res, next) => {
     } else if (type == MAIL_TYPE.OTP_FogotPassword) {
       let isValid = await verifyOtp(email, otp, MAIL_TYPE.OTP_FogotPassword);
       if (isValid) {
+        const user =  await userMD.userModel.findOne({ email: email });
+       
         objReturn.status = 200;
+        objReturn.id_User = user._id
         objReturn.msg = "Xác thực thành công";
       } else {
         objReturn.status = 400;
@@ -207,14 +211,45 @@ exports.api_verifyOtp = async (req, res, next) => {
   res.json(objReturn);
 };
 
-exports.api_FogotPasswords = (req, res) => {
+exports.api_ForgotPasswords = async (req, res) => {
   if (req.method == "POST") {
     try {
       const { email } = req.body;
+
+      const checkEmail = userMD.userModel.findOne({ email: email });
+      if (checkEmail) {
+        await sendOtp(email, MAIL_TYPE.OTP_FogotPassword);
+        objReturn.status = 200;
+        
+        objReturn.msg = "Xác thực thành công";
+      }
+
     } catch (error) {
       console.log(error);
     }
   }
+  res.json(objReturn);
+};
+
+
+exports.apiChangeForgotPasswords = async (req, res) => {
+      if (req.method == "POST") {
+        try {
+          const { IdUser, newPass } = req.body;
+          const user = await userMD.userModel.findOne({_id: IdUser})
+          const salt = await bcrypt.genSalt(10);
+          const hashedPassword = await bcrypt.hash(newPass, salt);
+          user.hash_pass = hashedPassword;
+          console.log(user)
+          await user.save();
+          objReturn.status = 200;
+          
+          objReturn.msg = "Đổi mật khẩu thành công";
+        } catch (error) {
+          console.log(error);
+        }
+}
+res.json(objReturn);
 };
 
 exports.api_EditUser = async (req, res) => {
