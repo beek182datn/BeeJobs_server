@@ -6,6 +6,7 @@ const applyJobSchema = new db.mongoose.Schema(
     cv: { type: String, require: true },
     fullname: { type: String, require: true },
     phone_number: { type: String, require: true },
+    intro_letter: { type: String, require: true },
     status: { type: String, require: true },
     applied_at: { type: Date, require: true },
   },

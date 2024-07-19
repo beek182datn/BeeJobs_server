@@ -32,6 +32,7 @@ exports.create_applyjob = async (req, res) => {
       job_id: job_id,
       fullname: req.body.fullname,
       phone_number: req.body.phone_number,
+      intro_letter: req.body.intro_letter,
       cv: url_cv,
       status: status_cv,
       applied_at: new Date(),
@@ -166,12 +167,6 @@ exports.getApplyJobsByIdJob = async (req, res) => {
 
     return res.status(200).json({
       data: jobApplications,
-      message: "Lấy danh sách đơn ứng tuyển thành công!",
-      createdBy: "Hệ thống",
-    });
-
-    return res.status(200).json({
-      data: applicationsWithWorkerDetails,
       message: "Lấy danh sách đơn ứng tuyển thành công!",
       createdBy: "Hệ thống",
     });
