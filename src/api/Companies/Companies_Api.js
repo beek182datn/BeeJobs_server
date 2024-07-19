@@ -42,6 +42,7 @@ exports.create_company = async (req, res) => {
         user_id: req.params.user_id,
         company_name: req.body.company_name,
         company_address: req.body.company_address,
+        company_desc: req.body.company_desc,
         company_scale: req.body.company_scale,
         company_website: req.body.company_website,
         company_certification: url_certificate,
@@ -57,6 +58,7 @@ exports.create_company = async (req, res) => {
         user_id,
         company_name,
         company_address,
+        company_desc,
         company_website,
         company_scale,
         company_certification,
@@ -71,6 +73,7 @@ exports.create_company = async (req, res) => {
           user_id,
           company_name,
           company_address,
+          company_desc,
           company_website,
           company_scale,
           company_certification,
@@ -150,6 +153,7 @@ exports.edit_company = async (req, res) => {
     const updateFields = {
       company_name: req.body.company_name,
       company_address: req.body.company_address,
+      company_desc: req.body.company_desc,
       company_logo: url_logo,
       company_scale: req.body.company_scale,
       company_website: req.body.company_website,
@@ -175,6 +179,7 @@ exports.edit_company = async (req, res) => {
     let {
       company_name,
       company_address,
+      company_desc,
       company_logo,
       company_website,
       company_scale,
@@ -188,6 +193,7 @@ exports.edit_company = async (req, res) => {
       dataUpdated: {
         company_name,
         company_address,
+        company_desc,
         company_logo,
         company_website,
         company_scale,
@@ -268,6 +274,7 @@ exports.edit_company_logo = async (req, res) => {
     let {
       company_name,
       company_address,
+      company_desc,
       company_logo,
       company_website,
       company_scale,
@@ -282,6 +289,7 @@ exports.edit_company_logo = async (req, res) => {
       dataUpdated: {
         company_name,
         company_address,
+        company_desc,
         company_logo,
         company_website,
         company_scale,

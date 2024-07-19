@@ -3,6 +3,7 @@ const companySchema = new db.mongoose.Schema(
   {
     user_id: { type: db.mongoose.Schema.Types.ObjectId, ref: "userModel" },
     company_name: { type: String, require: true },
+    company_desc: { type: String, require: true },
     company_address: { type: String, require: true },
     company_logo: { type: String, require: false },
     company_scale: { type: String, require: false },

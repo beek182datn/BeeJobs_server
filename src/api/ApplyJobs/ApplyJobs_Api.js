@@ -30,6 +30,8 @@ exports.create_applyjob = async (req, res) => {
     const newApplyJob = new applyJobModel({
       worker_id: worker_id,
       job_id: job_id,
+      fullname: req.body.fullname,
+      phone_number: req.body.phone_number,
       cv: url_cv,
       status: status_cv,
       applied_at: new Date(),
@@ -162,16 +164,11 @@ exports.getApplyJobsByIdJob = async (req, res) => {
       });
     }
 
-    const applicationsWithWorkerDetails = await Promise.all(
-      jobApplications.map(async (application) => {
-        const worker = await WorkerMD.findById(application.worker_id);
-        return {
-          ...application.toObject(),
-          worker_name: worker ? worker.worker_name : null,
-          phone: worker ? worker.phone : null,
-        };
-      })
-    );
+    return res.status(200).json({
+      data: jobApplications,
+      message: "Lấy danh sách đơn ứng tuyển thành công!",
+      createdBy: "Hệ thống",
+    });
 
     return res.status(200).json({
       data: applicationsWithWorkerDetails,
