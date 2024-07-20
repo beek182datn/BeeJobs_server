@@ -192,10 +192,10 @@ exports.api_verifyOtp = async (req, res, next) => {
     } else if (type == MAIL_TYPE.OTP_FogotPassword) {
       let isValid = await verifyOtp(email, otp, MAIL_TYPE.OTP_FogotPassword);
       if (isValid) {
-        const user =  await userMD.userModel.findOne({ email: email });
-       
+        const user = await userMD.userModel.findOne({ email: email });
+
         objReturn.status = 200;
-        objReturn.id_User = user._id
+        objReturn.id_User = user._id;
         objReturn.msg = "Xác thực thành công";
       } else {
         objReturn.status = 400;
@@ -220,10 +220,9 @@ exports.api_ForgotPasswords = async (req, res) => {
       if (checkEmail) {
         await sendOtp(email, MAIL_TYPE.OTP_FogotPassword);
         objReturn.status = 200;
-        
+
         objReturn.msg = "Xác thực thành công";
       }
-
     } catch (error) {
       console.log(error);
     }
@@ -231,25 +230,24 @@ exports.api_ForgotPasswords = async (req, res) => {
   res.json(objReturn);
 };
 
-
 exports.apiChangeForgotPasswords = async (req, res) => {
-      if (req.method == "POST") {
-        try {
-          const { IdUser, newPass } = req.body;
-          const user = await userMD.userModel.findOne({_id: IdUser})
-          const salt = await bcrypt.genSalt(10);
-          const hashedPassword = await bcrypt.hash(newPass, salt);
-          user.hash_pass = hashedPassword;
-          console.log(user)
-          await user.save();
-          objReturn.status = 200;
-          
-          objReturn.msg = "Đổi mật khẩu thành công";
-        } catch (error) {
-          console.log(error);
-        }
-}
-res.json(objReturn);
+  if (req.method == "POST") {
+    try {
+      const { IdUser, newPass } = req.body;
+      const user = await userMD.userModel.findOne({ _id: IdUser });
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(newPass, salt);
+      user.hash_pass = hashedPassword;
+      console.log(user);
+      await user.save();
+      objReturn.status = 200;
+
+      objReturn.msg = "Đổi mật khẩu thành công";
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  res.json(objReturn);
 };
 
 exports.api_EditUser = async (req, res) => {
