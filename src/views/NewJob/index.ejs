@@ -1,0 +1,83 @@
+<%- include('../inc/header.ejs') %> <%- include('../inc/nav_header.ejs') %>
+
+<!-- section container start -->
+<div class="section-container">
+  <p class="section-title">Danh sách tin tuyển dụng</p>
+
+  <!--*************************
+    *************************
+    *************************
+    Basic Table start
+    *************************
+    *************************
+    *************************-->
+  <div class="table-responsive">
+    <table class="table m-0">
+      <thead>
+        <tr>
+          <th>STT</th>
+          <th>Tiêu đề</th>
+          <th>Mô tả</th>
+          <th>Công ty đăng tin</th>
+          <th>Thời hạn đăng tin</th>
+
+          <th>Trạng thái</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% var stt = 1; list.forEach((lstJobs) => { %>
+
+        <tr>
+          <td>
+            <span class="text-info"><%= stt %></span>
+          </td>
+          <td><%= lstJobs.full_name %></td>
+          <td><%= lstJobs.accout_name %></td>
+          <td><%= lstJobs.active %></td>
+          <td>
+            <% if(lstJobs.active){ %>
+            <span class="badge badge-pill badge-success">Đã duyệt</span>
+
+            <% }else { %>
+            <span class="badge badge-pill badge-danger">Chưa duyệt</span>
+
+            <% } %>
+          </td>
+          <td>
+            <div class="btn-group">
+              <button
+                type="button"
+                class="btn btn-info dropdown-toggle"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                Action
+              </button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">Xem chi tiết</a>
+                
+                <a class="dropdown-item" href="#">Khóa/ Cảnh báo về tin tuyển dụng </a>
+
+               
+              </div>
+            </div>
+          </td>
+        </tr>
+
+        <% stt++; }); %>
+      </tbody>
+    </table>
+  </div>
+  <!--*************************
+    *************************
+    *************************
+    Basic Table end
+    *************************
+    *************************
+    *************************-->
+</div>
+<!-- section container end -->
+
+<%- include('../inc/nav_footer.ejs') %> <%- include('../inc/footer.ejs') %>
