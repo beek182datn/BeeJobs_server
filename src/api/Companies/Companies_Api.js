@@ -54,35 +54,9 @@ exports.create_company = async (req, res) => {
       });
 
       await company.save();
-      let {
-        user_id,
-        company_name,
-        company_address,
-        company_desc,
-        company_website,
-        company_scale,
-        company_certification,
-        company_logo,
-        taxcode,
-        active,
-        updated_at,
-        created_at,
-      } = company; // Destructuring
+      // Destructuring
       return res.status(200).json({
-        dataPost: {
-          user_id,
-          company_name,
-          company_address,
-          company_desc,
-          company_website,
-          company_scale,
-          company_certification,
-          company_logo,
-          taxcode,
-          active,
-          updated_at,
-          created_at,
-        },
+        data: company,
         message: "Tạo công ty thành công",
         createdBy: "Hệ thống",
       });
