@@ -158,15 +158,15 @@ exports.getApplyJobsByIdJob = async (req, res) => {
 
     const jobApplications = await applyJobModel.find({ job_id });
 
-    if (!jobApplications || jobApplications.length === 0) {
+    if (!jobApplications) {
       return res.status(404).json({
-        message: "Không tìm thấy đơn ứng tuyển của công việc này!",
+        message: "ID job không hợp lệ",
         createdBy: "Hệ thống",
       });
     }
 
     return res.status(200).json({
-      data: jobApplications,
+      data: jobApplications || [],
       message: "Lấy danh sách đơn ứng tuyển thành công!",
       createdBy: "Hệ thống",
     });

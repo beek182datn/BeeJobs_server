@@ -60,7 +60,6 @@ const initWebRouter = (app) => {
   router.post("/api/forgottpass", api_user.api_ForgotPasswords);
   router.post("/api/changepass", api_user.apiChangeForgotPasswords);
 
-
   // ==============auth api Router===========================
   router.get("/api/EditUser", api_user.api_EditUser);
   router.post("/api/EditUser", api_user.api_EditUser);
@@ -78,16 +77,15 @@ const initWebRouter = (app) => {
 
   //=================Companies Router =====================
 
-  router.get("/Companies/index",  Companies.index);
+  router.get("/Companies/index", Companies.index);
   router.get(
     "/compamies/active/:company_id",
-   
+
     Companies.acitve
   );
   //=================Users Router =====================
 
   router.get("/Users/index", User.index);
-
 
   return app.use("/", router);
 };
@@ -104,7 +102,10 @@ router.delete(
   "/api/workers/delete/:user_id/:worker_id",
   api_worker.deleteWorker
 ); //Xóa hồ sơ bởi người tạo
-router.get("/api/applyJobs/checkApplyJobs/:worker_id/:job_id", api_suportLong.checkApplyJobs); //Api tạm thời. Support Long demo với Imatech
+router.get(
+  "/api/applyJobs/checkApplyJobs/:worker_id/:job_id",
+  api_suportLong.checkApplyJobs
+); //Api tạm thời. Support Long demo với Imatech
 
 //=======================Companies====================
 router.post(
