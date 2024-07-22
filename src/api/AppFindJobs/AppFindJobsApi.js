@@ -1,5 +1,8 @@
 const { FolowerCompany } = require('../../model/FolowerCompany');
 const { userModel } = require('../../model/Users');
+const WorkerMD = require('../../model/Workers');
+const fs = require('fs');
+const path = require('path');
 
 exports.folowCompany = async (req, res) => {
     try {
@@ -74,3 +77,52 @@ exports.getInfoUser = async (req, res) => {
         res.status(500).send({ error: 'Internal Server Error' });
     }
 }
+
+
+exports.create_Workers = async (req, res) => {
+    if (req.method === "POST") {
+        try {
+            let user_id = req.params.user_id;
+            let url_avatar = "http://beejobs.io.vn:14307/uploads/company_logo_outline.jpg"; // Đường dẫn ảnh đại diện mặc định
+            console.log(JSON.stringify(req.body))
+            console.log(JSON.stringify(req.files["worker_avatar"][0].filename))
+            // Xử lý file ảnh đại diện của worker nếu có
+            if (req.files["worker_avatar"]) {
+                const logoFile = req.files["worker_avatar"][0];
+                const newPathAvatar = path.join("./public/uploads/", logoFile.filename);
+                fs.renameSync(logoFile.path, newPathAvatar); // Di chuyển file đến thư mục public
+                url_avatar = "/uploads/" + logoFile.filename;
+            }
+
+            // Tạo mới đối tượng worker
+            let worker = new WorkerMD({
+                user_id: user_id,
+                worker_name: req.body.worker_name,
+                worker_avatar: url_avatar,
+                phone: req.body.phone,
+                email: req.body.email
+            });
+
+            // Lưu worker vào cơ sở dữ liệu
+            await worker.save();
+
+            // Phản hồi lại client với thông tin worker mới tạo
+            return res.status(200).json({
+                data: worker,
+                message: "Tạo worker thành công",
+                createdBy: "Hệ thống",
+            });
+        } catch (error) {
+            console.error("Error saving worker:", error);
+            return res.status(500).json({
+                message: "Failed: " + error.message,
+                createdBy: "Hệ thống",
+            });
+        }
+    } else {
+        return res.status(405).json({
+            message: "Phương thức không được hỗ trợ, hãy sử dụng: POST",
+            createdBy: "Hệ thống",
+        });
+    }
+};
