@@ -204,6 +204,10 @@ router.post("/workers/create/:user_id",
   uploader.fields([
     { name: "worker_avatar", maxCount: 1 },
   ]) ,appfindjobs.create_Workers);
+  router.post("/workers/update/:user_id",
+    uploader.fields([
+      { name: "worker_avatar", maxCount: 1 },
+    ]) ,appfindjobs.update_Workers);
 
 
 module.exports = initWebRouter;
