@@ -196,6 +196,7 @@ router.get(
 
 //=================AppFindJobs Router =====================
 router.post("/folow/:userId/:companyId", appfindjobs.folowCompany);
+router.get("/folow/:userId/:companyId", appfindjobs.checkIsFolowing);
 
 
 module.exports = initWebRouter;
