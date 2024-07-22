@@ -38,6 +38,7 @@ var Role = require("../controller/Roles");
 var Dashboard = require("../controller/Dashboard");
 var Auth = require("../controller/Auth");
 var Companies = require("../controller/Companies");
+var User = require("../controller/Users");
 var CheckLogin = require("../middleware/LoginCheck");
 var api_worker = require("../api/Workers/Workers_Api");
 var api_company = require("../api/Companies/Companies_Api");
@@ -73,16 +74,19 @@ const initWebRouter = (app) => {
 
   //=================Dashboard Router =====================
 
-  router.get("/Dashboard/index", CheckLogin.ycLogin, Dashboard.index);
+  router.get("/Dashboard/index", Dashboard.index);
 
   //=================Companies Router =====================
 
-  router.get("/Companies/index", CheckLogin.ycLogin, Companies.index);
+  router.get("/Companies/index", Companies.index);
   router.get(
     "/compamies/active/:company_id",
-    CheckLogin.ycLogin,
+
     Companies.acitve
   );
+  //=================Users Router =====================
+
+  router.get("/Users/index", User.index);
 
   return app.use("/", router);
 };
@@ -99,7 +103,10 @@ router.delete(
   "/api/workers/delete/:user_id/:worker_id",
   api_worker.deleteWorker
 ); //Xóa hồ sơ bởi người tạo
-router.get("/api/applyJobs/checkApplyJobs/:worker_id/:job_id", api_suportLong.checkApplyJobs); //Api tạm thời. Support Long demo với Imatech
+router.get(
+  "/api/applyJobs/checkApplyJobs/:worker_id/:job_id",
+  api_suportLong.checkApplyJobs
+); //Api tạm thời. Support Long demo với Imatech
 
 //=======================Companies====================
 router.post(
