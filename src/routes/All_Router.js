@@ -60,6 +60,7 @@ const initWebRouter = (app) => {
   router.post("/api/usersverifyotp", api_user.api_verifyOtp);
   router.post("/api/forgottpass", api_user.api_ForgotPasswords);
   router.post("/api/changepass", api_user.apiChangeForgotPasswords);
+  router.post("/api/changepassword/:userId", api_user.api_ChangePassWord);
 
   // ==============auth api Router===========================
   router.get("/api/EditUser", api_user.api_EditUser);
