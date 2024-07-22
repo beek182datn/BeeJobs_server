@@ -92,7 +92,9 @@ const initWebRouter = (app) => {
 };
 
 //==================Worker=========================
-router.post("/api/workers/create/:user_id", api_worker.create_Workers); //Thêm hồ sơ ứng tuyển của NLĐ
+router.post("/api/workers/create/:user_id",uploader.fields(
+  { name: "worker_avatar", maxCount: 1 },
+), api_worker.create_Workers); //Thêm hồ sơ ứng tuyển của NLĐ
 router.put("/api/workers/edit/:user_id/:worker_id", api_worker.edit_Workers); //Sửa hồ sơ ứng tuyển
 router.get(
   "/api/workers/getListWorkerByIdUser/:user_id",

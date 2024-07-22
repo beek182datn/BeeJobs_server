@@ -9,9 +9,9 @@ exports.create_Workers = async (req, res) => {
             let url_avatar = "http://beejobs.io.vn:14307/uploads/company_logo_outline.jpg"; // Đường dẫn ảnh đại diện mặc định
 
             // Xử lý file ảnh đại diện của worker nếu có
-            if (req.file) {
-                const avatarFile = req.file;
-                const newPathAvatar = path.join(__dirname, "../public/uploads/", avatarFile.filename);
+            if (req.file["worker_avatar"]) {
+                const avatarFile = req.files["company_logo"][0];
+                const newPathAvatar = path.join("./public/uploads/", avatarFile.filename);
                 fs.renameSync(avatarFile.path, newPathAvatar); // Di chuyển file đến thư mục public
                 url_avatar = "/uploads/" + avatarFile.filename;
             }
@@ -24,7 +24,6 @@ exports.create_Workers = async (req, res) => {
                 phone: req.body.phone,
                 email: req.body.email
             });
-
             // Lưu worker vào cơ sở dữ liệu
             await worker.save();
 
