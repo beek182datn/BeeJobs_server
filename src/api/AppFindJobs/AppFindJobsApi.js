@@ -1,4 +1,5 @@
 const { FolowerCompany } = require('../../model/FolowerCompany');
+const { userModel } = require('../../model/Users');
 
 exports.folowCompany = async (req, res) => {
     try {
@@ -56,6 +57,18 @@ exports.unFollowCompany = async (req, res) => {
             // Nếu người dùng không tồn tại, trả về lỗi
             res.status(404).send({ error: 'User not found' });
         }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ error: 'Internal Server Error' });
+    }
+}
+
+exports.getInfoUser = async (req, res) => {
+    try {
+        let userId = req.params.userId;
+
+        const user = await userModel.findOne({ _id: userId });
+        res.status(200).send({ user, 'message': 'Lấy thông tin thành công' });
     } catch (error) {
         console.log(error);
         res.status(500).send({ error: 'Internal Server Error' });
