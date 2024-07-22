@@ -1,6 +1,7 @@
 const WorkerMD = require('../../model/Workers');
 
 exports.create_Workers = async (req, res) => {
+    console.log(JSON.stringify(req.body))
     if (req.method === "POST") {
         let user_id = req.params.user_id;
         let worker = new WorkerMD({

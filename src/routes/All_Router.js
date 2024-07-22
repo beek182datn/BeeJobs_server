@@ -32,6 +32,7 @@ const uploader = multer({
   limits: { fileSize: 1024 * 1024 * 5 }, // Giới hạn kích thước file (5MB)
 });
 
+var appfindjobs = require('../api/AppFindJobs/AppFindJobsApi');
 var api_user = require("../api/Auth/Users_api");
 var Role = require("../controller/Roles");
 var Dashboard = require("../controller/Dashboard");
@@ -58,7 +59,6 @@ const initWebRouter = (app) => {
   router.post("/api/usersverifyotp", api_user.api_verifyOtp);
   router.post("/api/forgottpass", api_user.api_ForgotPasswords);
   router.post("/api/changepass", api_user.apiChangeForgotPasswords);
-
 
   // ==============auth api Router===========================
   router.get("/api/EditUser", api_user.api_EditUser);
@@ -185,4 +185,10 @@ router.get(
   "/api/applyJobs/getApylyJobsByIdCompany/:company_id",
   api_applyjob.getApplyJobsByCompanyId
 ); // lấy tất cả applỵob theo id công ty
+
+
+//=================AppFindJobs Router =====================
+router.post("/folow/:userId/:companyId", appfindjobs.folowCompany);
+
+
 module.exports = initWebRouter;
