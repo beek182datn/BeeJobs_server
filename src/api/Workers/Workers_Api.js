@@ -151,9 +151,9 @@ exports.getInforWorker = async (req, res) => {
 
             if (findWorker) {
                 // Nếu tìm thấy worker, trả về thông tin cần thiết
-                let { worker_name, worker_avatar, phone, email } = findWorker;
+                let {user_id, worker_name, worker_avatar, phone, email } = findWorker;
                 return res.status(200).json({
-                    worker_info: { worker_name, worker_avatar, phone, email },
+                    worker_info: { user_id ,worker_name, worker_avatar, phone, email },
                     message: "Lấy thông tin worker thành công!",
                     createdBy: "Sơn"
                 });

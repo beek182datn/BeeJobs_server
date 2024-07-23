@@ -192,7 +192,7 @@ exports.getApplyJobsByCompanyId = async (req, res) => {
     // Tìm tất cả các công việc của công ty có company_id
     const jobs = await jobModel.find({ company_id: company_id });
 
-    if (!jobs || jobs.length === 0) {
+    if (!jobs) {
       return res.status(404).json({
         message: "Không tìm thấy công việc nào cho công ty này!",
         createdBy: "Hệ thống",
@@ -205,7 +205,7 @@ exports.getApplyJobsByCompanyId = async (req, res) => {
     // Tìm tất cả các đơn ứng tuyển với job_id trong danh sách jobIds
     const applications = await applyJobModel.find({ job_id: { $in: jobIds } });
 
-    if (!applications || applications.length === 0) {
+    if (!applications) {
       return res.status(404).json({
         message: "Không tìm thấy đơn ứng tuyển nào cho công ty này!",
         createdBy: "Hệ thống",
@@ -213,8 +213,142 @@ exports.getApplyJobsByCompanyId = async (req, res) => {
     }
 
     return res.status(200).json({
-      data: applications,
+      data: applications || [],
       message: "Lấy danh sách đơn ứng tuyển thành công!",
+      createdBy: "Hệ thống",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi: " + error.message,
+      createdBy: "Hệ thống",
+    });
+  }
+};
+
+exports.getApplyJobsDoneByCompanyId = async (req, res) => {
+  if (req.method !== "GET") {
+    return res.status(405).json({
+      message: "Phương thức không được hỗ trợ, hãy sử dụng: GET!",
+      createdBy: "Hệ thống",
+    });
+  }
+
+  try {
+    const { company_id } = req.params;
+
+    // Tìm tất cả các công việc của công ty có company_id
+    const jobs = await jobModel.find({ company_id: company_id });
+
+    if (!jobs) {
+      return res.status(404).json({
+        message: "Không tìm thấy công việc nào cho công ty này!",
+        createdBy: "Hệ thống",
+      });
+    }
+
+    // Lấy danh sách job_id từ các công việc
+    const jobIds = jobs.map((job) => job._id);
+
+    // Tìm tất cả các đơn ứng tuyển với job_id trong danh sách jobIds và có trạng thái là "Phù hợp"
+    const applications = await applyJobModel.find({
+      job_id: { $in: jobIds },
+      status: "Phù hợp",
+    });
+
+    return res.status(200).json({
+      data: applications || [],
+      message: "Lấy danh sách đơn ứng tuyển thành công!",
+      createdBy: "Hệ thống",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi: " + error.message,
+      createdBy: "Hệ thống",
+    });
+  }
+};
+
+exports.getApplyJobsFalseByCompanyId = async (req, res) => {
+  if (req.method !== "GET") {
+    return res.status(405).json({
+      message: "Phương thức không được hỗ trợ, hãy sử dụng: GET!",
+      createdBy: "Hệ thống",
+    });
+  }
+
+  try {
+    const { company_id } = req.params;
+
+    // Tìm tất cả các công việc của công ty có company_id
+    const jobs = await jobModel.find({ company_id: company_id });
+
+    if (!jobs) {
+      return res.status(404).json({
+        message: "Không tìm thấy công việc nào cho công ty này!",
+        createdBy: "Hệ thống",
+      });
+    }
+
+    // Lấy danh sách job_id từ các công việc
+    const jobIds = jobs.map((job) => job._id);
+
+    // Tìm tất cả các đơn ứng tuyển với job_id trong danh sách jobIds và có trạng thái là "Phù hợp"
+    const applications = await applyJobModel.find({
+      job_id: { $in: jobIds },
+      status: "Chưa phù hợp",
+    });
+
+    return res.status(200).json({
+      data: applications || [],
+      message: "Lấy danh sách đơn ứng tuyển thành công!",
+      createdBy: "Hệ thống",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi: " + error.message,
+      createdBy: "Hệ thống",
+    });
+  }
+};
+
+exports.getWorkerAppliedByCompanyId = async (req, res) => {
+  if (req.method !== "GET") {
+    return res.status(405).json({
+      message: "Phương thức không được hỗ trợ, hãy sử dụng: GET!",
+      createdBy: "Hệ thống",
+    });
+  }
+
+  try {
+    const { company_id } = req.params;
+
+    // Tìm tất cả các công việc của công ty có company_id
+    const jobs = await jobModel.find({ company_id: company_id });
+
+    if (!jobs) {
+      return res.status(404).json({
+        message: "Không tìm thấy công việc nào cho công ty này!",
+        createdBy: "Hệ thống",
+      });
+    }
+
+    // Lấy danh sách job_id từ các công việc
+    const jobIds = jobs.map((job) => job._id);
+
+    // Tìm tất cả các worker đã ứng tuyển vào công ty này, không trùng lặp
+    const workers = await applyJobModel.aggregate([
+      { $match: { job_id: { $in: jobIds } } },
+      {
+        $group: {
+          _id: "$worker_id",
+          workerDetails: { $first: "$$ROOT" },
+        },
+      },
+    ]);
+
+    return res.status(200).json({
+      data: workers.length,
+      message: "Lấy tổng số worker đã ứng tuyển thành công!",
       createdBy: "Hệ thống",
     });
   } catch (error) {

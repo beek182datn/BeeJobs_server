@@ -311,3 +311,52 @@ exports.api_EditUser = async (req, res) => {
 
   res.json(objReturn);
 };
+
+
+exports.api_ChangePassWord = async (req, res, next) => {
+  if (req.method === "POST") {
+    const { newPassword, currentPassword } = req.body;
+    const userId = req.params.userId;
+    try {
+      // Tìm người dùng theo email
+      let user = await userMD.userModel.findOne({ _id: userId });
+
+      if (!user) {
+        objReturn.msg = "Tài khoản không tồn tại";
+        objReturn.status = 404;
+        console.log("Tài khoản không tồn tại");
+      } else {
+        // Kiểm tra mật khẩu hiện tại (nếu cần)
+        const isMatch = await bcrypt.compare(currentPassword, user.hash_pass);
+
+        if (!isMatch) {
+          objReturn.msg = "Mật khẩu hiện tại không đúng";
+          objReturn.status = 400;
+          console.log("Mật khẩu hiện tại không đúng");
+        } else {
+          // Mã hóa mật khẩu mới
+          const salt = await bcrypt.genSalt(10);
+          const hashedNewPassword = await bcrypt.hash(newPassword, salt);
+
+          // Cập nhật mật khẩu mới
+          user.hash_pass = hashedNewPassword;
+          await user.save();
+
+          objReturn.msg = "Cập nhật mật khẩu thành công";
+          objReturn.status = 200;
+          console.log("Cập nhật mật khẩu thành công");
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      objReturn.msg = "Có lỗi xảy ra";
+      objReturn.status = 500;
+    }
+  } else {
+    objReturn.msg = "Phương thức không hợp lệ";
+    objReturn.status = 405;
+    console.log("Phương thức không hợp lệ");
+  }
+
+  res.json(objReturn);
+};

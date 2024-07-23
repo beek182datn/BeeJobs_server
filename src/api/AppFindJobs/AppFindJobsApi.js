@@ -126,3 +126,54 @@ exports.create_Workers = async (req, res) => {
         });
     }
 };
+
+exports.update_Workers = async (req, res) => {
+    if (req.method === "POST") {
+        try {
+            let user_id = req.params.user_id;
+
+            // Tìm đối tượng worker theo user_id
+            let worker = await WorkerMD.findOne({ user_id: user_id });
+            if (!worker) {
+                return res.status(404).json({
+                    message: "Worker không tồn tại",
+                    createdBy: "Hệ thống",
+                });
+            }
+
+            // Xử lý file ảnh đại diện của worker nếu có
+            if (req.files && req.files["worker_avatar"]) {
+                const logoFile = req.files["worker_avatar"][0];
+                const newPathAvatar = path.join("./public/uploads/", logoFile.filename);
+                fs.renameSync(logoFile.path, newPathAvatar); // Di chuyển file đến thư mục public
+                worker.worker_avatar = "/uploads/" + logoFile.filename;
+            }
+
+            // Cập nhật thông tin worker
+            worker.worker_name = req.body.worker_name || worker.worker_name;
+            worker.phone = req.body.phone || worker.phone;
+            worker.email = req.body.email || worker.email;
+
+            // Lưu các thay đổi vào cơ sở dữ liệu
+            await worker.save();
+
+            // Phản hồi lại client với thông tin worker đã cập nhật
+            return res.status(200).json({
+                data: worker,
+                message: "Cập nhật worker thành công",
+                updatedBy: "Hệ thống",
+            });
+        } catch (error) {
+            console.error("Error updating worker:", error);
+            return res.status(500).json({
+                message: "Failed: " + error.message,
+                updatedBy: "Hệ thống",
+            });
+        }
+    } else {
+        return res.status(405).json({
+            message: "Phương thức không được hỗ trợ, hãy sử dụng: PUT",
+            updatedBy: "Hệ thống",
+        });
+    }
+};

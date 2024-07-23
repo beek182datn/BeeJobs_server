@@ -32,7 +32,7 @@ const uploader = multer({
   limits: { fileSize: 1024 * 1024 * 5 }, // Giới hạn kích thước file (5MB)
 });
 
-var appfindjobs = require('../api/AppFindJobs/AppFindJobsApi');
+var appfindjobs = require("../api/AppFindJobs/AppFindJobsApi");
 var api_user = require("../api/Auth/Users_api");
 var Role = require("../controller/Roles");
 var Dashboard = require("../controller/Dashboard");
@@ -60,6 +60,7 @@ const initWebRouter = (app) => {
   router.post("/api/usersverifyotp", api_user.api_verifyOtp);
   router.post("/api/forgottpass", api_user.api_ForgotPasswords);
   router.post("/api/changepass", api_user.apiChangeForgotPasswords);
+  router.post("/api/changepassword/:userId", api_user.api_ChangePassWord);
 
   // ==============auth api Router===========================
   router.get("/api/EditUser", api_user.api_EditUser);
@@ -166,6 +167,19 @@ router.get("/api/jobs/getJobsByLocation", api_job.getJobsByLocation); //Tìm vi�
 router.get("/api/jobs/getJobsByForm", api_job.getJobsByForm); //Tìm việc theo hình thức (Thực tập, ....)
 router.get("/api/jobs/getJobsByFilters", api_job.getJobsByFilters); // Tìm việc theo bộ lọc
 router.delete("/api/jobs/delete/:company_id/:job_id", api_job.delete_job); //Xóa Job
+router.get(
+  "/api/jobs/getJobsAppliedByCompanyId/:company_id",
+  api_job.getJobsAppliedByCompanyId
+);
+
+router.get(
+  "/api/jobs/getJobApplyDonedByCompanyId/:company_id",
+  api_job.getJobApplyDonedByCompanyId
+);
+router.get(
+  "/api/jobs/getDataJobApplyDonedByCompanyId/:company_id",
+  api_job.getDataJobApplyDonedByCompanyId
+);
 
 //===================ApplyJobs================
 
@@ -195,6 +209,18 @@ router.get(
   api_applyjob.getApplyJobsByCompanyId
 ); // lấy tất cả applỵob theo id công ty
 
+router.get(
+  "/api/applyJobs/getApplyJobsDoneByIdCompany/:company_id",
+  api_applyjob.getApplyJobsDoneByCompanyId
+);
+router.get(
+  "/api/applyJobs/getApplyJobsFalseByIdCompany/:company_id",
+  api_applyjob.getApplyJobsFalseByCompanyId
+);
+router.get(
+  "/api/applyJobs/getWorkerAppliedByCompanyId/:company_id",
+  api_applyjob.getWorkerAppliedByCompanyId
+);
 
 //=================AppFindJobs Router =====================
 router.post("/follow/:userId/:companyId", appfindjobs.folowCompany);
@@ -205,6 +231,9 @@ router.post("/workers/create/:user_id",
   uploader.fields([
     { name: "worker_avatar", maxCount: 1 },
   ]) ,appfindjobs.create_Workers);
-
+  router.post("/workers/update/:user_id",
+    uploader.fields([
+      { name: "worker_avatar", maxCount: 1 },
+    ]) ,appfindjobs.update_Workers);
 
 module.exports = initWebRouter;
