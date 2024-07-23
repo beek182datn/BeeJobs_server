@@ -81,15 +81,23 @@ const initWebRouter = (app) => {
   //=================Companies Router =====================
 
   router.get("/Companies/index", Companies.index);
+  router.get("/Companies/lockcompani/:company_id", Companies.LockCompanies);
   router.get(
     "/compamies/active/:company_id",
 
     Companies.acitve
   );
+
+  router.get("/compamies/detail/:Idcompany", Companies.GetInfoCompany);
   //=================Users Router =====================
 
   router.get("/Users/index", User.index);
+  router.post("/Users/addUser", uploader.fields([{ name: "avata_profile", maxCount: 1 }]), User.Add_user);
+  router.get("/Users/editUser/:user_id", User.EditUser);
+  router.post("/Users/editUser/:user_id", uploader.fields([{ name: "avata_profile", maxCount: 1 }]), User.EditUser);
 
+  router.get("/Users/detail/:user_id", User.Detail);
+  router.get("/Users/lockuser/:user_id", User.LockUser)
   return app.use("/", router);
 };
 
@@ -166,6 +174,19 @@ router.get("/api/jobs/getJobsByLocation", api_job.getJobsByLocation); //Tìm vi�
 router.get("/api/jobs/getJobsByForm", api_job.getJobsByForm); //Tìm việc theo hình thức (Thực tập, ....)
 router.get("/api/jobs/getJobsByFilters", api_job.getJobsByFilters); // Tìm việc theo bộ lọc
 router.delete("/api/jobs/delete/:company_id/:job_id", api_job.delete_job); //Xóa Job
+router.get(
+  "/api/jobs/getJobsAppliedByCompanyId/:company_id",
+  api_job.getJobsAppliedByCompanyId
+);
+
+router.get(
+  "/api/jobs/getJobApplyDonedByCompanyId/:company_id",
+  api_job.getJobApplyDonedByCompanyId
+);
+router.get(
+  "/api/jobs/getDataJobApplyDonedByCompanyId/:company_id",
+  api_job.getDataJobApplyDonedByCompanyId
+);
 
 //===================ApplyJobs================
 
@@ -195,6 +216,18 @@ router.get(
   api_applyjob.getApplyJobsByCompanyId
 ); // lấy tất cả applỵob theo id công ty
 
+router.get(
+  "/api/applyJobs/getApplyJobsDoneByIdCompany/:company_id",
+  api_applyjob.getApplyJobsDoneByCompanyId
+);
+router.get(
+  "/api/applyJobs/getApplyJobsFalseByIdCompany/:company_id",
+  api_applyjob.getApplyJobsFalseByCompanyId
+);
+router.get(
+  "/api/applyJobs/getWorkerAppliedByCompanyId/:company_id",
+  api_applyjob.getWorkerAppliedByCompanyId
+);
 
 //=================AppFindJobs Router =====================
 router.post("/follow/:userId/:companyId", appfindjobs.folowCompany);
@@ -204,15 +237,14 @@ router.get("/user/:userId", appfindjobs.getInfoUser);
 router.post("/workers/create/:user_id",
   uploader.fields([
     { name: "worker_avatar", maxCount: 1 },
-  ]) ,appfindjobs.create_Workers);
-  router.post("/workers/update/:user_id",
-    uploader.fields([
-      { name: "worker_avatar", maxCount: 1 },
-    ]) ,appfindjobs.update_Workers);
+  ]), appfindjobs.create_Workers);
+router.post("/workers/update/:user_id",
+  uploader.fields([
+    { name: "worker_avatar", maxCount: 1 },
+  ]), appfindjobs.update_Workers);
 
-    //=================Chat Router =====================
-    router.get('/chat/getMessages/:chatroomId', chat.getMessagesByRoomId);
-    router.get('/chat/getMessages/:senderId/:receiverId', chat.getMessages);
-    router.post('/chat/sendmessage/:senderId/:receiverId', chat.sendMessage)
-
+  //=================Chat Router =====================
+  router.get('/chat/chatroom/:senderId/:receiverId', chat.getChatRoomInfo);
+  router.get('/chat/getMessages/:senderId/:receiverId', chat.getMessages);
+  router.post('/chat/sendmessage/:senderId/:receiverId', chat.sendMessage);
 module.exports = initWebRouter;
