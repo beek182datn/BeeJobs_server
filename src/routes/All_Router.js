@@ -80,15 +80,23 @@ const initWebRouter = (app) => {
   //=================Companies Router =====================
 
   router.get("/Companies/index", Companies.index);
+  router.get("/Companies/lockcompani/:company_id",Companies.LockCompanies);
   router.get(
     "/compamies/active/:company_id",
 
     Companies.acitve
   );
+
+  router.get("/compamies/detail/:Idcompany",Companies.GetInfoCompany);
   //=================Users Router =====================
 
   router.get("/Users/index", User.index);
+  router.post("/Users/addUser",uploader.fields([{ name: "avata_profile", maxCount: 1 }]), User.Add_user);
+  router.get("/Users/editUser/:user_id", User.EditUser);
+  router.post("/Users/editUser/:user_id", uploader.fields([{ name: "avata_profile", maxCount: 1 }]),User.EditUser);
 
+  router.get("/Users/detail/:user_id", User.Detail);
+router.get("/Users/lockuser/:user_id", User.LockUser)
   return app.use("/", router);
 };
 
