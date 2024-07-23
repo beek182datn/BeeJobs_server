@@ -42,6 +42,8 @@ io.on('connection', (socket) => {
   });
 });
 
+app.set('io', io);
+
 // Middleware setup
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

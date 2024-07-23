@@ -244,7 +244,7 @@ router.post("/workers/update/:user_id",
   ]), appfindjobs.update_Workers);
 
   //=================Chat Router =====================
-  router.get('/chat/chatroom/:senderId/:receiverId', chat.getChatRoomInfo);
-  router.get('/chat/getMessages/:senderId/:receiverId', chat.getMessages);
-  router.post('/chat/sendmessage/:senderId/:receiverId', chat.sendMessage);
+  router.get('/api/chat/chatroom/:senderId/:receiverId', chat.getChatRoomInfo);
+  router.get('/api/chat/getMessages/:senderId/:receiverId', chat.getMessages);
+  router.post('/api/chat/sendmessage/:senderId/:receiverId', chat.sendMessage);
 module.exports = initWebRouter;
