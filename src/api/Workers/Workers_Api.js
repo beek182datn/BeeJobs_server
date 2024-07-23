@@ -1,41 +1,54 @@
 const WorkerMD = require('../../model/Workers');
+const fs = require('fs');
+const path = require('path');
 
 exports.create_Workers = async (req, res) => {
-    console.log(JSON.stringify(req.body))
     if (req.method === "POST") {
-        let user_id = req.params.user_id;
-        let worker = new WorkerMD({
-            user_id: user_id,
-            worker_name: req.body.worker_name,
-            worker_avatar: req.body.worker_avatar,
-            phone: req.body.phone,
-            email: req.body.email
-        });
-
         try {
+            let user_id = req.params.user_id;
+            let url_avatar = "http://beejobs.io.vn:14307/uploads/company_logo_outline.jpg"; // Đường dẫn ảnh đại diện mặc định
+
+            // Xử lý file ảnh đại diện của worker nếu có
+            if (req.file) {
+                const avatarFile = req.file;
+                const newPathAvatar = path.join(__dirname, "../public/uploads/", avatarFile.filename);
+                fs.renameSync(avatarFile.path, newPathAvatar); // Di chuyển file đến thư mục public
+                url_avatar = "/uploads/" + avatarFile.filename;
+            }
+
+            // Tạo mới đối tượng worker
+            let worker = new WorkerMD({
+                user_id: user_id,
+                worker_name: req.body.worker_name,
+                worker_avatar: url_avatar,
+                phone: req.body.phone,
+                email: req.body.email
+            });
+
+            // Lưu worker vào cơ sở dữ liệu
             await worker.save();
-            let { user_id, worker_name, worker_avatar, phone, email } = worker; // Destructuring
+
+            // Phản hồi lại client với thông tin worker mới tạo
             return res.status(200).json({
-                dataPost: {
-                    user_id, worker_name, worker_avatar, phone, email
-                },
-                message: "Tạo hồ sơ NLĐ thành công",
-                createdBy: "Sơn"
+                data: worker,
+                message: "Tạo worker thành công",
+                createdBy: "Hệ thống",
             });
         } catch (error) {
             console.error("Error saving worker:", error);
             return res.status(500).json({
                 message: "Failed: " + error.message,
-                createdBy: "Sơn"
+                createdBy: "Hệ thống",
             });
         }
     } else {
         return res.status(405).json({
             message: "Phương thức không được hỗ trợ, hãy sử dụng: POST",
-            createdBy: "Sơn"
+            createdBy: "Hệ thống",
         });
     }
 };
+
 
 exports.edit_Workers = async (req, res) => {
     if (req.method === "PUT") {
@@ -139,9 +152,9 @@ exports.getInforWorker = async (req, res) => {
 
             if (findWorker) {
                 // Nếu tìm thấy worker, trả về thông tin cần thiết
-                let { worker_name, worker_avatar, phone, email } = findWorker;
+                let {user_id, worker_name, worker_avatar, phone, email } = findWorker;
                 return res.status(200).json({
-                    worker_info: { worker_name, worker_avatar, phone, email },
+                    worker_info: { user_id ,worker_name, worker_avatar, phone, email },
                     message: "Lấy thông tin worker thành công!",
                     createdBy: "Sơn"
                 });

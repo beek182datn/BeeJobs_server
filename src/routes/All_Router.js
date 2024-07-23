@@ -60,6 +60,7 @@ const initWebRouter = (app) => {
   router.post("/api/usersverifyotp", api_user.api_verifyOtp);
   router.post("/api/forgottpass", api_user.api_ForgotPasswords);
   router.post("/api/changepass", api_user.apiChangeForgotPasswords);
+  router.post("/api/changepassword/:userId", api_user.api_ChangePassWord);
 
   // ==============auth api Router===========================
   router.get("/api/EditUser", api_user.api_EditUser);
@@ -220,7 +221,17 @@ router.get(
 );
 
 //=================AppFindJobs Router =====================
-router.post("/folow/:userId/:companyId", appfindjobs.folowCompany);
-router.get("/folow/:userId/:companyId", appfindjobs.checkIsFolowing);
+router.post("/follow/:userId/:companyId", appfindjobs.folowCompany);
+router.get("/follow/:userId/:companyId", appfindjobs.checkIsFolowing);
+router.post("/unfollow/:userId/:companyId", appfindjobs.unFollowCompany);
+router.get("/user/:userId", appfindjobs.getInfoUser);
+router.post("/workers/create/:user_id",
+  uploader.fields([
+    { name: "worker_avatar", maxCount: 1 },
+  ]) ,appfindjobs.create_Workers);
+  router.post("/workers/update/:user_id",
+    uploader.fields([
+      { name: "worker_avatar", maxCount: 1 },
+    ]) ,appfindjobs.update_Workers);
 
 module.exports = initWebRouter;
