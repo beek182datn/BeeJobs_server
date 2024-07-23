@@ -32,6 +32,7 @@ const uploader = multer({
   limits: { fileSize: 1024 * 1024 * 5 }, // Giới hạn kích thước file (5MB)
 });
 
+var chat = require('../api/AppFindJobs/Chat');
 var appfindjobs = require('../api/AppFindJobs/AppFindJobsApi');
 var api_user = require("../api/Auth/Users_api");
 var Role = require("../controller/Roles");
@@ -209,5 +210,9 @@ router.post("/workers/create/:user_id",
       { name: "worker_avatar", maxCount: 1 },
     ]) ,appfindjobs.update_Workers);
 
+    //=================Chat Router =====================
+    router.get('/chat/getMessages/:chatroomId', chat.getMessagesByRoomId);
+    router.get('/chat/getMessages/:senderId/:receiverId', chat.getMessages);
+    router.post('/chat/sendmessage/:senderId/:receiverId', chat.sendMessage)
 
 module.exports = initWebRouter;

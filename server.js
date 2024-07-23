@@ -1,5 +1,3 @@
-// Tệp app.js hoặc tệp server chính
-
 var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
@@ -10,15 +8,41 @@ require('./src/middleware/cron');
 const bodyParser = require("body-parser");
 const configViewEngine = require("./src/config/viewEngine");
 const initWebRouter = require("./src/routes/All_Router");
+const http = require('http');
+const socketIo = require('socket.io');
 
 var app = express();
 configViewEngine(app);
 
-// view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'ejs');
+// Create HTTP server
+const server = http.createServer(app);
+const io = socketIo(server);
 
-// Cài đặt middleware
+// Socket.IO configuration
+io.on('connection', (socket) => {
+  console.log('A user connected');
+
+  socket.on('joinRoom', (roomId) => {
+    socket.join(roomId);
+    console.log(`User joined room: ${roomId}`);
+  });
+
+  socket.on('leaveRoom', (roomId) => {
+    socket.leave(roomId);
+    console.log(`User left room: ${roomId}`);
+  });
+
+  socket.on('newMessage', (message) => {
+    io.to(message.chatRoomId).emit('message', message);
+    console.log('New message:', message);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
+  });
+});
+
+// Middleware setup
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(logger("dev"));
@@ -27,17 +51,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-// Xử lý lỗi
+// Error handling
 app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
 
-  // render the error page
   res.status(err.status || 500);
 
   if (req.originalUrl.indexOf("/api") === 0) {
-    // truy cập vào link API
     res.json({
       status: 0,
       msg: err.message,
@@ -46,12 +67,16 @@ app.use(function (err, req, res, next) {
     res.render("error");
   }
 });
+
+// Initialize routes
 initWebRouter(app);
+
+// Start the server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, (err) => {
+server.listen(PORT, (err) => {
   if (err) {
-    console.error("Không thể khởi động server:", err);
+    console.error("Cannot start server:", err);
     return;
   }
-  console.log(">>> Server đang lắng nghe trên cổng " + PORT);
+  console.log(">>> Server listening on port " + PORT);
 });
