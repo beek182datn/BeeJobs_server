@@ -42,13 +42,10 @@ exports.getMessages = async (req, res) => {
         const messages = await Message.find({ chatRoomId: chatroom._id }).populate('senderId', 'name avatar').lean();;
 
         // Gửi thông báo rằng người dùng đã tham gia phòng chat
-        req.app.get('io').to(chatroom._id).emit('newMessage', messages);
-        // req.app.get('io').to(chatroom._id).emit('message', {
-        //     content: `${senderId} đã tham gia phòng chat`,
-        //     senderId: senderId, // Hoặc một giá trị bất kỳ để xác định đây là thông báo hệ thống
-        //     chatRoomId: chatroom._id,
-        //     createdAt: new Date().toString(),
-        // }); 
+        // req.app.get('io').to(chatroom._id).emit('newMessage', messages);
+        req.app.get('io').to(chatroom._id).emit('message', {
+           messages
+        }); 
         res.json(messages);
     } catch (error) {
         res.status(500).json({ message: 'Server Error', error });
