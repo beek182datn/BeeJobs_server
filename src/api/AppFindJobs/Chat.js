@@ -76,9 +76,9 @@ exports.sendMessage = async (req, res) => {
         await message.save();
 
         // Gửi tin nhắn qua Socket.IO
-        req.app.get('io').to(chatroom._id).emit('message', message);
+        req.app.get('io').to(chatroom._id).emit('newMessage', message);
 
-        res.json(message); ``
+        res.json(message);
     } catch (error) {
         res.status(500).json({ message: 'Server Error', error });
     }
