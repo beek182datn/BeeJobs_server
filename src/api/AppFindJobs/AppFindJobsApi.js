@@ -1,8 +1,11 @@
+const { companyModel } = require('../../model/Companies');
 const { FolowerCompany } = require('../../model/FolowerCompany');
 const { userModel } = require('../../model/Users');
 const WorkerMD = require('../../model/Workers');
 const fs = require('fs');
 const path = require('path');
+const moment = require('moment'); 
+const { applyJobModel } = require('../../model/ApplyJobs');
 
 exports.folowCompany = async (req, res) => {
     try {
@@ -63,6 +66,28 @@ exports.unFollowCompany = async (req, res) => {
     } catch (error) {
         console.log(error);
         res.status(500).send({ error: 'Internal Server Error' });
+    }
+}
+
+exports.getFollowedCompanies = async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const data = await FolowerCompany.findOne({ userId });
+
+        if (!data) {
+            return res.status(404).send({ message: "Người dùng không tồn tại hoặc chưa theo dõi công ty nào." });
+        }
+
+        const companyIds = data.companyId;
+
+        // Tìm tất cả các công ty theo companyId
+        const companies = await companyModel.find({ _id: { $in: companyIds },
+            active: true });
+
+        res.status(200).send(companies);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ message: "Đã xảy ra lỗi." });
     }
 }
 
@@ -191,3 +216,40 @@ exports.update_Workers = async (req, res) => {
         });
     }
 };
+
+exports.getJobApplications = async (req, res) => {
+    try {
+        const { userId } = req.params; // Giả sử bạn có userId trong params
+
+        // Lấy thời gian hiện tại
+        const now = moment();
+        
+        // Tính thời gian cho 1 tuần và 30 ngày trước
+        const oneWeekAgo = now.subtract(7, 'days').toDate();
+        const thirtyDaysAgo = now.subtract(30, 'days').toDate();
+
+        // Truy vấn ứng tuyển trong 1 tuần
+        const appliedjobsLastWeek = await applyJobModel.find({
+            worker_id: userId,
+            applied_at: { $gte: oneWeekAgo }
+        });
+
+        // Truy vấn ứng tuyển trong 30 ngày
+        const appliedjobsLast30Days = await applyJobModel.find({
+            worker_id: userId,
+            applied_at: { $gte: thirtyDaysAgo }
+        });
+
+        // Truy vấn tất cả ứng tuyển
+        const allAppliedjobs = await applyJobModel.find({ worker_id: userId });
+
+        res.status(200).send({
+            appliedjobsLastWeek,
+            appliedjobsLast30Days,
+            allAppliedjobs
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ message: "Đã xảy ra lỗi." });
+    }
+}

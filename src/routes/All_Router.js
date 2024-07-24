@@ -246,6 +246,9 @@ router.post("/workers/update/:user_id",
   uploader.fields([
     { name: "worker_avatar", maxCount: 1 },
   ]), appfindjobs.update_Workers);
+  router.get('/api/findcompanys/:userId', appfindjobs.getFollowedCompanies);
+  router.get('/api/appliedjobs/:userId', appfindjobs.getJobApplications);
+
 
   //=================Chat Router =====================
   router.get('/api/chat/chatroom/:senderId/:receiverId', chat.getChatRoomInfo);
