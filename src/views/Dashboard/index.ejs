@@ -6,6 +6,11 @@
       width: 100%;
       height: 500px;
     }
+
+    .span {
+        font-size: 20px;
+    font-weight: bold;
+    }
     </style>
  <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
  <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
@@ -57,12 +62,13 @@
 
             <!-- Row start -->
             <div class="row gutters">
-<span>Biểu đồ ứng tuyển của người lao động</span>
+<span class="span">Biểu đồ ứng tuyển của người lao động năm 2024</span>
 
                 <div id="chartdiv"></div>
 
                 </div>
 <%- include('./BieuDoTinTuyenDung.ejs') %>
+<%- include('./BieuDoTangTruongDoanhNghiep.ejs') %>
               
 
                 </div>

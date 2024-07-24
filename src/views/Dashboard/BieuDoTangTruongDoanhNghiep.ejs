@@ -1,0 +1,148 @@
+<!-- Styles -->
+<style>
+    #chartdivDN {
+        width: 100%;
+        height: 500px;
+    }
+</style>
+
+<!-- Resources -->
+<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+
+<!-- Chart code -->
+<script>
+am5.ready(function() {
+
+    // Create root element
+    var rootDN = am5.Root.new("chartdivDN");
+
+    // Set themes
+    rootDN.setThemes([
+        am5themes_Animated.new(rootDN)
+    ]);
+
+    // Create chart
+    var chartDN = rootDN.container.children.push(am5xy.XYChart.new(rootDN, {
+        panX: true,
+        panY: true,
+        wheelX: "panX",
+        wheelY: "zoomX",
+        pinchZoomX: true,
+        paddingLeft: 0,
+        paddingRight: 1
+    }));
+
+    // Add cursor
+    var cursor = chartDN.set("cursor", am5xy.XYCursor.new(rootDN, {}));
+    cursor.lineY.set("visible", false);
+
+    // Create axes
+    var xRenderer = am5xy.AxisRendererX.new(rootDN, {
+        minGridDistance: 30,
+        minorGridEnabled: true
+    });
+
+    xRenderer.labels.template.setAll({
+        rotation: -90,
+        centerY: am5.p50,
+        centerX: am5.p100,
+        paddingRight: 15
+    });
+
+    xRenderer.grid.template.setAll({
+        location: 1
+    })
+
+    var xAxis = chartDN.xAxes.push(am5xy.CategoryAxis.new(rootDN, {
+        maxDeviation: 0.3,
+        categoryField: "month",
+        renderer: xRenderer,
+        tooltip: am5.Tooltip.new(rootDN, {})
+    }));
+
+    var yRenderer = am5xy.AxisRendererY.new(rootDN, {
+        strokeOpacity: 0.1
+    })
+
+    var yAxis = chartDN.yAxes.push(am5xy.ValueAxis.new(rootDN, {
+        maxDeviation: 0.3,
+        renderer: yRenderer
+    }));
+
+    // Create series
+    var series = chartDN.series.push(am5xy.ColumnSeries.new(rootDN, {
+        name: "Series 1",
+        xAxis: xAxis,
+        yAxis: yAxis,
+        valueYField: "value",
+        sequencedInterpolation: true,
+        categoryXField: "month",
+        tooltip: am5.Tooltip.new(rootDN, {
+            labelText: "{valueY}"
+        })
+    }));
+
+    series.columns.template.setAll({ cornerRadiusTL: 5, cornerRadiusTR: 5, strokeOpacity: 0 });
+    series.columns.template.adapters.add("fill", function(fill, target) {
+        return chartDN.get("colors").getIndex(series.columns.indexOf(target));
+    });
+
+    series.columns.template.adapters.add("stroke", function(stroke, target) {
+        return chartDN.get("colors").getIndex(series.columns.indexOf(target));
+    });
+
+    // Set data
+    var data = [{
+        month: "Tháng 1",
+        value: 2025
+    }, {
+        month: "Tháng 2",
+        value: 1882
+    }, {
+        month: "Tháng 3",
+        value: 1809
+    }, {
+        month: "Tháng 4",
+        value: 1322
+    }, {
+        month: "Tháng 5",
+        value: 1122
+    }, {
+        month: "Tháng 6",
+        value: 1114
+    }, {
+        month: "Tháng 7",
+        value: 984
+    }, {
+        month: "Tháng 8",
+        value: 0
+    }, {
+        month: "Tháng 9",
+        value: 0
+    }, {
+        month: "Tháng 10",
+        value: 0
+    }, {
+        month: "Tháng 11",
+        value: 0
+    }
+    , {
+        month: "Tháng 12",
+        value: 0
+    }];
+
+    xAxis.data.setAll(data);
+    series.data.setAll(data);
+
+    // Make stuff animate on load
+    series.appear(1000);
+    chartDN.appear(1000, 100);
+
+}); // end am5.ready()
+</script>
+
+<!-- HTML -->
+<span class="span">Biểu đồ tăng trưởng doanh nghiệp năm 2024</span>
+<div id="chartdivDN"></div>
