@@ -193,6 +193,11 @@ router.put(
 ); // Thay đổi trạng thái của đơn ứng tuyển
 
 router.get("/api/applyJobs/getAllApplyJobs", api_applyjob.getAll_applyJob); // Lấy tất cả applyjobs  - Admin
+
+router.get(
+  "/api/applyJobs/getApplyJobById/:applyjob_id",
+  api_applyjob.getApplyJobById
+);
 router.get(
   "/api/applyJobs/getApylyJobsByIdWorker/:worker_id",
   api_applyjob.getApplyJobsByIdWorker
@@ -225,13 +230,15 @@ router.post("/follow/:userId/:companyId", appfindjobs.folowCompany);
 router.get("/follow/:userId/:companyId", appfindjobs.checkIsFolowing);
 router.post("/unfollow/:userId/:companyId", appfindjobs.unFollowCompany);
 router.get("/user/:userId", appfindjobs.getInfoUser);
-router.post("/workers/create/:user_id",
-  uploader.fields([
-    { name: "worker_avatar", maxCount: 1 },
-  ]) ,appfindjobs.create_Workers);
-  router.post("/workers/update/:user_id",
-    uploader.fields([
-      { name: "worker_avatar", maxCount: 1 },
-    ]) ,appfindjobs.update_Workers);
+router.post(
+  "/workers/create/:user_id",
+  uploader.fields([{ name: "worker_avatar", maxCount: 1 }]),
+  appfindjobs.create_Workers
+);
+router.post(
+  "/workers/update/:user_id",
+  uploader.fields([{ name: "worker_avatar", maxCount: 1 }]),
+  appfindjobs.update_Workers
+);
 
 module.exports = initWebRouter;
