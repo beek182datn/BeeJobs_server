@@ -319,7 +319,7 @@ exports.api_ChangePassWord = async (req, res, next) => {
     const { newPassword, currentPassword } = req.body;
     const userId = req.params.userId;
     try {
-     
+
       let user = await userMD.userModel.findOne({ _id: userId });
 
       if (!user) {
