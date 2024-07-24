@@ -91,9 +91,9 @@ exports.create_Workers = async (req, res) => {
                 const logoFile = req.files["worker_avatar"][0];
 
                 // Kiểm tra kích thước file (đơn vị: byte)
-                const maxSizeInBytes = 1024 * 1024 * 5; // 2 MB
+                const maxSizeInBytes = 1024 * 1024 * 1.5; // 1.5 MB
                 if (logoFile.size > maxSizeInBytes) {
-                    return res.status(400).json({ message: "File quá lớn. Vui lòng chọn file dưới 5MB." });
+                    return res.status(400).json({ message: "File quá lớn. Vui lòng chọn file dưới 1.5MB." });
                 }
 
                 const newPathAvatar = path.join("./public/uploads/", logoFile.filename);
@@ -153,9 +153,9 @@ exports.update_Workers = async (req, res) => {
                 const logoFile = req.files["worker_avatar"][0];
 
                 // Kiểm tra kích thước file (đơn vị: byte)
-                const maxSizeInBytes = 1024 * 1024 * 5; // 2 MB
+                const maxSizeInBytes = 1024 * 1024 * 1.5; // 1.5 MB
                 if (logoFile.size > maxSizeInBytes) {
-                    return res.status(400).json({ message: "File quá lớn. Vui lòng chọn file dưới 5MB." });
+                    return res.status(400).json({ message: "File quá lớn. Vui lòng chọn file dưới 1.5MB." });
                 }
 
                 const newPathAvatar = path.join("./public/uploads/", logoFile.filename);
