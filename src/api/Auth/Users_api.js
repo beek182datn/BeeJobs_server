@@ -193,7 +193,6 @@ exports.api_verifyOtp = async (req, res, next) => {
       let isValid = await verifyOtp(email, otp, MAIL_TYPE.OTP_FogotPassword);
       if (isValid) {
         const user = await userMD.userModel.findOne({ email: email });
-
         objReturn.status = 200;
         objReturn.id_User = user._id;
         objReturn.msg = "Xác thực thành công";
