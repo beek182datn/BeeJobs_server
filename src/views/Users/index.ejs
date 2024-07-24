@@ -11,6 +11,10 @@
     *************************
     *************************
     *************************-->
+    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#AddNewUser">
+      Thêm người dùng mới
+    </button>
+
   <div class="table-responsive">
     <table class="table m-0">
       <thead>
@@ -32,11 +36,12 @@
           </td>
           <td><%= lstUsers.full_name %></td>
           <td><%= lstUsers.accout_name %></td>
-          <td><%= lstUsers.active %></td>
+          <td><%= lstUsers.email %></td>
           <td>
-            <% if(lstUsers.active){ %>
+            <% if(lstUsers.verify == true ){ %>
             <span class="badge badge-pill badge-success">Đã duyệt</span>
-
+            <% }else if(lstUsers.active == "LOCK" ){ %>
+              <span class="badge badge-pill badge-danger">Người dùng bị khóa</span>
             <% }else { %>
             <span class="badge badge-pill badge-danger">Chưa duyệt</span>
 
@@ -51,12 +56,12 @@
                 aria-haspopup="true"
                 aria-expanded="false"
               >
-                Action
+                Thao tác
               </button>
               <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">Xem chi tiết</a>
-                <a class="dropdown-item" href="#">Sửa thông tin</a>
-                <a class="dropdown-item" href="#">Khóa người dùng </a>
+                <a class="dropdown-item" href="/Users/detail/<%= lstUsers._id %>">Xem chi tiết</a>
+                <a class="dropdown-item" href="/Users/editUser/<%= lstUsers._id %>">Sửa thông tin</a>
+                <a class="dropdown-item" href="/Users/lockuser/<%= lstUsers._id %>">Khóa người dùng </a>
 
                
               </div>
@@ -77,5 +82,108 @@
     *************************-->
 </div>
 <!-- section container end -->
+<!-- Modal add-->
+<div class="modal fade" id="AddNewUser" tabindex="-1" role="dialog"
+aria-labelledby="AddNewUserTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="AddNewUserTitle">Thêm người dùng mới</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="col-md-12 col-sm-12">
+        <form method="post" action="/Users/addUser" enctype="multipart/form-data" >
+          <div class="form-block">
+           
+            <div class="form-block-body">
+              <div class="mb-3 d-flex justify-content-center" style="flex-direction:column;align-items: center;">
+                <label for="avata-user" class="form-label">Avata</label>
+                <div class="avatar-upload">
+                  <input type="file" name="avata_profile" id="avata" class="d-none"  onchange="showImagePreview(this)" />
+                  <label for="avata" class="avatar-placeholder">
+                    <img
+                      src="https://img.freepik.com/premium-vector/abyssinian-cat-head-avata_73950-151.jpg"
+                      alt="Hình ảnh"
+                      id="avata-preview"
+                      style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%;"
+                    />
+                  </label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>UserName</label>
+                <input type="text" class="form-control" id="accout_name" name="accout_name" placeholder="Tên đăng nhập"
+                  required>
+              </div>
+              <div class="form-group">
+                <label>Email</label>
 
+                <input type="email" class="form-control" id="email" name="email" placeholder="Email"
+                  required>
+              </div>
+             
+              <div class="form-group">
+                <label>Họ và tên</label>
+
+                <input type="text" class="form-control" id="full_name" name="full_name"
+                  placeholder="Họ và tên" required>
+              </div>
+              <div class="form-group">
+                <label>Số điện thoại</label>
+
+                <input type="number" class="form-control" id="phone" name="phone"
+                  placeholder="Mobile Number" required>
+              </div>
+              <div class="form-group">
+                <label> Giới tính</label>
+               <div class="col-xl-8 col-lg-8 col-md-8 ">
+                
+												<div class="form-check form-check-inline">
+													<input class="form-check-input" type="radio" name="gender" id="inlineRadio1"
+														value="Nam" checked>
+													<label class="form-check-label" for="inlineRadio1">Nam</label>
+												</div>
+												<div class="form-check form-check-inline">
+													<input class="form-check-input" type="radio" name="gender" id="inlineRadio2"
+														value="Nữ">
+													<label class="form-check-label" for="inlineRadio2">Nữ</label>
+												</div>
+											
+											</div>
+                
+              </div>
+
+             
+            </div>
+          </div>
+       
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+      <button type="submit" class="btn btn-primary">Thêm mới</button>
+    </div>
+  </form>
+  </div>
+</div>
+</div>
+<script>
+  function showImagePreview(input) {
+    const avatarPreview = document.getElementById("avata-preview");
+    const selectedFile = input.files[0];
+    
+    if (selectedFile) {
+      const reader = new FileReader();
+      
+      reader.onload = function(event) {
+        avatarPreview.src = event.target.result;
+      };
+      
+      reader.readAsDataURL(selectedFile);
+    }
+  }
+</script>
 <%- include('../inc/nav_footer.ejs') %> <%- include('../inc/footer.ejs') %>

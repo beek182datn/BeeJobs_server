@@ -19,7 +19,9 @@
           <th>Tên doanh nghiệp</th>
           <th>Địa chỉ</th>
           <th>Ngày tạo</th>
-          <th>Trạng thái</th>
+          <th>Trạng thái duyệt</th>
+          <th>Trạng hoạt động</th>
+
           <th>Thao tác</th>
         </tr>
       </thead>
@@ -36,11 +38,20 @@
           <td>
             <% if(lstCompanies.active){ %>
             <span class="badge badge-pill badge-success">Đã duyệt</span>
-
+           
             <% }else { %>
             <span class="badge badge-pill badge-danger">Chưa duyệt</span>
 
             <% } %>
+          </td>
+          <td>
+            <% if(lstCompanies.status == "LOCK" ){ %>
+              <span class="badge badge-pill badge-danger">Doanh nghiệp bị khóa</span>
+          
+             
+            <% }else { %>
+              <span class="badge badge-pill badge-success">Đang hoạt động</span>
+              <% } %>
           </td>
           <td>
             <div class="btn-group">
@@ -54,10 +65,10 @@
                 Action
               </button>
               <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">Xem chi tiết</a>
-                <a class="dropdown-item" href="#">Khoá doanh nghiệp</a>
+                <a class="dropdown-item" href="/compamies/detail/<%= lstCompanies._id %>">Xem chi tiết</a>
+                <a class="dropdown-item" href="/compamies/lockcompani/<%= lstCompanies._id %>">Khoá doanh nghiệp</a>
                 <% if(!lstCompanies.active){ %>
-                <a class="dropdown-item" href="/compamies/active/<%= lstCompanies._id %>">Duyệt doanh nghiệp</a>
+                <a class="dropdown-item" href="/compamies/detail/<%= lstCompanies._id %>">Duyệt doanh nghiệp</a>
                 <% }%>
               </div>
             </div>

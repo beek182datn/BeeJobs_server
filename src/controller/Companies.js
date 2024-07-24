@@ -9,6 +9,27 @@ exports.index = async (req,res,next) => {
 
 }
 
+exports.GetInfoCompany = async (req, res, next) => {
+    try {
+        const Companies = await CompaniesMD.companyModel.findById(req.params.Idcompany);
+        if(Companies){
+            res.render('../views/Companies/Detail.ejs', {companies: Companies});
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+exports.LockCompanies = async (req, res) => {
+    const Companies = await CompaniesMD.companyModel.findById(req.params.company_id);
+   
+    if(Companies){
+        Companies.status = StatusUser.LOCK;
+      await Companies.save();
+     
+      res.redirect('/Companies/index');
+    }
+};
+
 exports.acitve = async (req,res,next) => {
     const companyId = req.params.company_id;
 
