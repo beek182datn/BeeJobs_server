@@ -64,3 +64,30 @@ exports.getWorkerbyUserID = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+exports.checkUserId = async (req, res) => {
+  try {
+    const user_id = req.params.user_id;
+    const user = await userMD.userModel.findOne({ _id: user_id });
+
+    if (!user) {
+      return res.status(200).json({
+        registered: false,
+        message: "User chưa đăng ký .",
+        createdBy: "Hệ thống",
+      });
+    }
+
+    return res.status(200).json({
+      registered: true,
+      data: user,
+      message: "User đã đăng ký.",
+      createdBy: "Hệ thống",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi: " + error.message,
+      createdBy: "Hệ thống",
+    });
+  }
+};
