@@ -121,6 +121,7 @@ router.get(
   "/api/applyJobs/checkApplyJobs/:worker_id/:job_id",
   api_suportLong.checkApplyJobs
 ); //Api tạm thời. Support Long demo với Imatech
+router.get("/api/getwokerbyUserID/:user_id", api_huysuport.getWorkerbyUserID);
 
 //=======================Companies====================
 router.post(
