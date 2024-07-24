@@ -120,7 +120,12 @@ exports.api_SignUp = async (req, res, next) => {
 
   res.json(objReturn);
 };
+exports.loguot = async (req, res) => {
+  req.cokies.jwt = ""
+  res.redirect('/');
 
+
+};
 exports.api_getInfo = async (req, res, next) => {
   if (req.method == "POST") {
     const tokenAuth = req.body.authorization;
