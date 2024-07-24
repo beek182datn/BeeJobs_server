@@ -41,6 +41,7 @@ exports.api_Login = async (req, res, next) => {
             id_user: objU._id,
             Username: objU.accout_name,
             Veryfy: objU.verify,
+            Active: objU.active,
             Role: null, // Khởi tạo Role ban đầu là null
           };
 

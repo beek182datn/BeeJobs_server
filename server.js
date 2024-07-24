@@ -10,6 +10,7 @@ const configViewEngine = require("./src/config/viewEngine");
 const initWebRouter = require("./src/routes/All_Router");
 const http = require('http');
 const socketIo = require('socket.io');
+const headerUserInfo = require("./src/middleware/headerUserInfo");
 
 var app = express();
 configViewEngine(app);
@@ -52,7 +53,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-
+app.use(headerUserInfo);
 // Error handling
 app.use(function (err, req, res, next) {
   res.locals.message = err.message;

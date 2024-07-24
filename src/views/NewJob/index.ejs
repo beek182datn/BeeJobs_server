@@ -32,15 +32,17 @@
           <td>
             <span class="text-info"><%= stt %></span>
           </td>
-          <td><%= lstJobs.full_name %></td>
-          <td><%= lstJobs.accout_name %></td>
-          <td><%= lstJobs.active %></td>
+          <td><%= lstJobs.title %></td>
+          <td><%= lstJobs.desc %></td>
+          <td><%= lstJobs.companyName %></td>
+          <td><%= lstJobs.deadline %></td>
+
           <td>
-            <% if(lstJobs.active){ %>
-            <span class="badge badge-pill badge-success">Đã duyệt</span>
+            <% if(lstJobs.status == "LOCK"){ %>
+            <span class="badge badge-pill badge-success">Bị khóa</span>
 
             <% }else { %>
-            <span class="badge badge-pill badge-danger">Chưa duyệt</span>
+            <span class="badge badge-pill badge-danger">Hoạt dồng </span>
 
             <% } %>
           </td>
@@ -56,9 +58,9 @@
                 Action
               </button>
               <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">Xem chi tiết</a>
+                <a class="dropdown-item" href="/Jobs/Detail/<%= lstJobs._id %>">Xem chi tiết</a>
                 
-                <a class="dropdown-item" href="#">Khóa/ Cảnh báo về tin tuyển dụng </a>
+                <a class="dropdown-item" href="/Jobs/lockJobs/<%= lstJobs._id %>">Khóa/ Cảnh báo về tin tuyển dụng </a>
 
                
               </div>

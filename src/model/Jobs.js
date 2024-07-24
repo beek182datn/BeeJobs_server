@@ -15,6 +15,7 @@ const jobSchema = new db.mongoose.Schema(
     benefits: { type: String, require: true },
     location: { type: String, require: true },
     deadline: { type: String, require: true },
+    status: { type: String, require: true},
     created_at: { type: Date, require: true },
     updated_at: { type: Date, require: true },
   },

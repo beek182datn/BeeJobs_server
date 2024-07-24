@@ -40,6 +40,7 @@ var Dashboard = require("../controller/Dashboard");
 var Auth = require("../controller/Auth");
 var Companies = require("../controller/Companies");
 var User = require("../controller/Users");
+var Jobs = require("../controller/Jobs");
 var CheckLogin = require("../middleware/LoginCheck");
 var api_worker = require("../api/Workers/Workers_Api");
 var api_company = require("../api/Companies/Companies_Api");
@@ -83,6 +84,13 @@ const initWebRouter = (app) => {
   //=================Dashboard Router =====================
 
   router.get("/Dashboard/index", Dashboard.index);
+
+   //=================Tin tuyển dụng Router =====================
+
+   router.get("/Jobs/index", Jobs.index);
+
+   router.get("/Jobs/Detail/:jobs_id", Jobs.GetInfoJobs);
+   router.get("/Jobs/lockJobs/:jobs_id", Jobs.LockJobs);
 
   //=================Companies Router =====================
 

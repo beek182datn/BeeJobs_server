@@ -44,6 +44,7 @@ const createJWT = (tokenData) =>{
 
 
 const checkJWT = (tokenAuth) => {
+  console.log(tokenAuth)
     const [encodedHeader, encodedPayload, signature] = tokenAuth.split(".");
     const tokenData = `${encodedHeader}.${encodedPayload}`;
     const newSignature = createJWT(tokenData);
