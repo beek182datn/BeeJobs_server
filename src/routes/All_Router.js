@@ -45,6 +45,7 @@ var api_company = require("../api/Companies/Companies_Api");
 var api_job = require("../api/Jobs/Jobs_Api");
 var api_applyjob = require("../api/ApplyJobs/ApplyJobs_Api");
 var api_suportLong = require("../api/Api_SuportLong/Api_SuportLong"); //Dùng tạm thời để support Long demo với Imatech
+var api_huysuport = require("../api/Api_HuySuport/Api_HuySuport"); //Dùng tạm thời để thêm các starts check
 const router = express.Router();
 
 /**
@@ -59,6 +60,7 @@ const initWebRouter = (app) => {
   router.post("/api/users", api_user.api_getInfo);
   router.post("/api/usersverifyotp", api_user.api_verifyOtp);
   router.post("/api/forgottpass", api_user.api_ForgotPasswords);
+  router.post("/api/forgottpass2", api_huysuport.Huy_api_ForgotPasswords); // Huy demo
   router.post("/api/changepass", api_user.apiChangeForgotPasswords);
   router.post("/api/changepassword/:userId", api_user.api_ChangePassWord);
 
