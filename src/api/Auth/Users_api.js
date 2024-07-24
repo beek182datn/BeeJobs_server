@@ -193,7 +193,6 @@ exports.api_verifyOtp = async (req, res, next) => {
       let isValid = await verifyOtp(email, otp, MAIL_TYPE.OTP_FogotPassword);
       if (isValid) {
         const user = await userMD.userModel.findOne({ email: email });
-
         objReturn.status = 200;
         objReturn.id_User = user._id;
         objReturn.msg = "Xác thực thành công";
@@ -234,6 +233,7 @@ exports.apiChangeForgotPasswords = async (req, res) => {
   if (req.method == "POST") {
     try {
       const { IdUser, newPass } = req.body;
+      console.log(req.body);
       const user = await userMD.userModel.findOne({ _id: IdUser });
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(newPass, salt);
@@ -318,7 +318,7 @@ exports.api_ChangePassWord = async (req, res, next) => {
     const { newPassword, currentPassword } = req.body;
     const userId = req.params.userId;
     try {
-      // Tìm người dùng theo email
+
       let user = await userMD.userModel.findOne({ _id: userId });
 
       if (!user) {
