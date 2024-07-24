@@ -79,47 +79,47 @@ const initWebRouter = (app) => {
   router.post("/", Auth.SignIn);
 
   // ==============Role Router===========================
-  router.post("/api/role/roleCrate", Role.CreateRole);
+  router.post("/api/role/roleCrate", CheckLogin.ycLogin,Role.CreateRole);
 
   //=================Dashboard Router =====================
 
-  router.get("/Dashboard/index", Dashboard.index);
+  router.get("/Dashboard/index", CheckLogin.ycLogin,Dashboard.index);
 
    //=================Tin tuyển dụng Router =====================
 
-   router.get("/Jobs/index", Jobs.index);
+   router.get("/Jobs/index",CheckLogin.ycLogin, Jobs.index);
 
-   router.get("/Jobs/Detail/:jobs_id", Jobs.GetInfoJobs);
-   router.get("/Jobs/lockJobs/:jobs_id", Jobs.LockJobs);
+   router.get("/Jobs/Detail/:jobs_id", CheckLogin.ycLogin,Jobs.GetInfoJobs);
+   router.get("/Jobs/lockJobs/:jobs_id", CheckLogin.ycLogin,Jobs.LockJobs);
 
   //=================Companies Router =====================
 
-  router.get("/Companies/index", Companies.index);
-  router.get("/Companies/lockcompani/:company_id", Companies.LockCompanies);
+  router.get("/Companies/index", CheckLogin.ycLogin,Companies.index);
+  router.get("/Companies/lockcompani/:company_id", CheckLogin.ycLogin,Companies.LockCompanies);
   router.get(
-    "/compamies/active/:company_id",
+    "/compamies/active/:company_id",CheckLogin.ycLogin,
 
     Companies.acitve
   );
 
-  router.get("/compamies/detail/:Idcompany", Companies.GetInfoCompany);
+  router.get("/compamies/detail/:Idcompany", CheckLogin.ycLogin,Companies.GetInfoCompany);
   //=================Users Router =====================
 
-  router.get("/Users/index", User.index);
+  router.get("/Users/index", CheckLogin.ycLogin,User.index);
   router.post(
     "/Users/addUser",
     uploader.fields([{ name: "avata_profile", maxCount: 1 }]),
     User.Add_user
   );
-  router.get("/Users/editUser/:user_id", User.EditUser);
+  router.get("/Users/editUser/:user_id", CheckLogin.ycLogin,User.EditUser);
   router.post(
     "/Users/editUser/:user_id",
     uploader.fields([{ name: "avata_profile", maxCount: 1 }]),
     User.EditUser
   );
 
-  router.get("/Users/detail/:user_id", User.Detail);
-  router.get("/Users/lockuser/:user_id", User.LockUser);
+  router.get("/Users/detail/:user_id", CheckLogin.ycLogin,User.Detail);
+  router.get("/Users/lockuser/:user_id", CheckLogin.ycLogin,User.LockUser);
   return app.use("/", router);
 };
 
