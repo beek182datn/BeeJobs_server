@@ -18,7 +18,7 @@
 		<meta property="og:type" content="Website">
 		<meta property="og:site_name" content="Bootstrap Gallery">
 		<link rel="shortcut icon" href="/img/favicon.svg" />
-		<title>Best Admin Dashboards</title>
+		<title>Beejobs - admin</title>
 
 		<!--
 			**********************
@@ -205,9 +205,11 @@
 								</li>
 								<li class="dropdown">
 									<a href="#" id="userSettings" class="user-settings" data-toggle="dropdown" aria-haspopup="true">
+										<% if (userInfo) { %>
 										<span class="avatar">ER<span class="status online"></span></span>
-										<span class="user-name">Emily Russell</span>
+										<span class="user-name"><%= userInfo.full_name %></span>
 										<i class="icon-chevron-small-down downarrow"></i>
+										<% } %>
 									</a>
 									<div class="dropdown-menu lg dropdown-menu-right" aria-labelledby="userSettings">
 										<div class="admin-settings">
@@ -234,7 +236,7 @@
 												</li>
 											</ul>
 											<div class="actions">
-												<a href="login.html" class="btn btn-primary">Logout</a>
+												<a href="/logout" class="btn btn-primary">Logout</a>
 											</div>
 										</div>
 									</div>

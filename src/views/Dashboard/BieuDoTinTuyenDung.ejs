@@ -1,0 +1,156 @@
+<style>
+    #chartdivDNTD {
+      width: 100%;
+      height: 500px;
+    }
+  </style>
+  
+  <span class="span">Biểu đồ tuyển dụng doanh nghiệp năm 2024</span>
+  
+  <div id="chartdivDNTD"></div>
+  
+  <script>
+    var dataTD = [{
+      month: "Tháng 1",
+      TinTuyen: 23,
+      UngTuyen: 18
+    }, {
+      month: "Tháng 2",
+      TinTuyen: 26,
+      UngTuyen: 22
+    }, {
+      month: "Tháng 3",
+      TinTuyen: 30,
+      UngTuyen: 23
+    }, {
+      month: "Tháng 4",
+      TinTuyen: 29,
+      UngTuyen: 25
+    }, {
+      month: "Tháng 5",
+      TinTuyen: 24,
+      UngTuyen: 22
+    }, {
+      month: "Tháng 6",
+      TinTuyen: 80,
+      UngTuyen: 50
+    }, {
+      month: "Tháng 7",
+      TinTuyen: 60,
+      UngTuyen: 40
+    }];
+  
+    am5.ready(function() {
+      // Create root element
+      var rootTD = am5.Root.new("chartdivDNTD");
+      
+      // Set themes
+      rootTD.setThemes([
+        am5themes_Animated.new(rootTD)
+      ]);
+      
+      // Create chart
+      var chartTD = rootTD.container.children.push(am5xy.XYChart.new(rootTD, {
+        panX: false,
+        panY: false,
+        wheelX: "panX",
+        wheelY: "zoomX",
+        paddingLeft: 0,
+        layout: rootTD.verticalLayout
+      }));
+      
+      // Create axes
+      var yAxisTD = chartTD.yAxes.push(am5xy.CategoryAxis.new(rootTD, {
+        categoryField: "month",
+        renderer: am5xy.AxisRendererY.new(rootTD, {
+          inversed: true,
+          cellStartLocation: 0.1,
+          cellEndLocation: 0.9,
+          minorGridEnabled: true
+        })
+      }));
+      
+      yAxisTD.data.setAll(dataTD);
+      
+      var xAxisTD = chartTD.xAxes.push(am5xy.ValueAxis.new(rootTD, {
+        renderer: am5xy.AxisRendererX.new(rootTD, {
+          strokeOpacity: 0.1,
+          minGridDistance: 50
+        }),
+        min: 0
+      }));
+      
+      // Add series
+      function createSeriesTD(field, name) {
+        var seriesTD = chartTD.series.push(am5xy.ColumnSeries.new(rootTD, {
+          name: name,
+          xAxis: xAxisTD,
+          yAxis: yAxisTD,
+          valueXField: field,
+          categoryYField: "month",
+          sequencedInterpolation: true,
+          tooltip: am5.Tooltip.new(rootTD, {
+            pointerOrientation: "horizontal",
+            labelText: "[bold]{name}[/]\n{categoryY}: {valueX}"
+          })
+        }));
+      
+        seriesTD.columns.template.setAll({
+          height: am5.p100,
+          strokeOpacity: 0
+        });
+      
+        seriesTD.bullets.push(function () {
+          return am5.Bullet.new(rootTD, {
+            locationX: 1,
+            locationY: 0.5,
+            sprite: am5.Label.new(rootTD, {
+              centerY: am5.p50,
+              text: "{valueX}",
+              populateText: true
+            })
+          });
+        });
+      
+        seriesTD.bullets.push(function () {
+          return am5.Bullet.new(rootTD, {
+            locationX: 1,
+            locationY: 0.5,
+            sprite: am5.Label.new(rootTD, {
+              centerX: am5.p100,
+              centerY: am5.p50,
+              text: "{name}",
+              fill: am5.color(0xffffff),
+              populateText: true
+            })
+          });
+        });
+      
+        seriesTD.data.setAll(dataTD);
+        seriesTD.appear();
+      
+        return seriesTD;
+      }
+      
+      createSeriesTD("UngTuyen", "Số Hồ Sơ Ứng tuyển");
+      createSeriesTD("TinTuyen", "Tin đăng tuyển");
+      
+      // Add legend
+      var legendTD = chartTD.children.push(am5.Legend.new(rootTD, {
+        centerX: am5.p50,
+        x: am5.p50
+      }));
+      
+      legendTD.data.setAll(chartTD.series.values);
+      
+      // Add cursor
+      var cursorTD = chartTD.set("cursor", am5xy.XYCursor.new(rootTD, {
+        behavior: "zoomY"
+      }));
+      cursorTD.lineY.set("forceHidden", true);
+      cursorTD.lineX.set("forceHidden", true);
+      
+      // Make stuff animate on load
+      chartTD.appear(1000, 100);
+    }); // end am5.ready()
+  </script>

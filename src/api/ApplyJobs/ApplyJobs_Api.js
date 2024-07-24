@@ -111,6 +111,39 @@ exports.getAll_applyJob = async (req, res) => {
   }
 };
 
+exports.getApplyJobById = async (req, res) => {
+  if (req.method !== "GET") {
+    return res.status(405).json({
+      message: "Phương thức không được hỗ trợ, hãy sử dụng: GET!",
+      createdBy: "Hệ thống",
+    });
+  }
+
+  try {
+    const { applyjob_id } = req.params;
+
+    const applyJob = await applyJobModel.findById(applyjob_id);
+
+    if (!applyJob) {
+      return res.status(404).json({
+        message: "Không tìm thấy đơn ứng tuyển!",
+        createdBy: "Hệ thống",
+      });
+    }
+
+    return res.status(200).json({
+      data: applyJob,
+      message: "Lấy thông tin đơn ứng tuyển thành công!",
+      createdBy: "Hệ thống",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi: " + error.message,
+      createdBy: "Hệ thống",
+    });
+  }
+};
+
 exports.getApplyJobsByIdWorker = async (req, res) => {
   if (req.method !== "GET") {
     return res.status(405).json({

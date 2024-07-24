@@ -1,4 +1,32 @@
-
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var menuItems = document.querySelectorAll('#unifyMenu > li > a');
+    
+    menuItems.forEach(function(item) {
+        item.addEventListener('click', function(e) {
+            // Xóa class 'selected' từ tất cả các mục
+            menuItems.forEach(function(menuItem) {
+                menuItem.parentElement.classList.remove('selected');
+            });
+            
+            // Thêm class 'selected' vào mục được click
+            this.parentElement.classList.add('selected');
+            
+            // Lưu trạng thái được chọn vào localStorage
+            localStorage.setItem('selectedMenuItem', this.getAttribute('href'));
+        });
+    });
+    
+    // Khôi phục trạng thái được chọn khi trang được tải
+    var selectedMenuItem = localStorage.getItem('selectedMenuItem');
+    if (selectedMenuItem) {
+        var selectedItem = document.querySelector('a[href="' + selectedMenuItem + '"]');
+        if (selectedItem) {
+            selectedItem.parentElement.classList.add('selected');
+        }
+    }
+});
+</script>
 </div>
 <!-- END: .app-main -->
 </div>

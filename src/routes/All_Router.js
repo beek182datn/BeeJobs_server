@@ -32,14 +32,15 @@ const uploader = multer({
   limits: { fileSize: 1024 * 1024 * 5 }, // Giới hạn kích thước file (5MB)
 });
 
-var chat = require('../api/AppFindJobs/Chat');
-var appfindjobs = require('../api/AppFindJobs/AppFindJobsApi');
+var chat = require("../api/AppFindJobs/Chat");
+var appfindjobs = require("../api/AppFindJobs/AppFindJobsApi");
 var api_user = require("../api/Auth/Users_api");
 var Role = require("../controller/Roles");
 var Dashboard = require("../controller/Dashboard");
 var Auth = require("../controller/Auth");
 var Companies = require("../controller/Companies");
 var User = require("../controller/Users");
+var Jobs = require("../controller/Jobs");
 var CheckLogin = require("../middleware/LoginCheck");
 var api_worker = require("../api/Workers/Workers_Api");
 var api_company = require("../api/Companies/Companies_Api");
@@ -62,6 +63,10 @@ const initWebRouter = (app) => {
   router.post("/api/usersverifyotp", api_user.api_verifyOtp);
   router.post("/api/forgottpass", api_user.api_ForgotPasswords);
   router.post("/api/forgottpass2", api_huysuport.Huy_api_ForgotPasswords); // Huy demo
+  router.get(
+    "/api/user/checkuser/:user_id",
+    api_huysuport.checkUserId
+  );// Huy demo
   router.post("/api/changepass", api_user.apiChangeForgotPasswords);
   router.post("/api/changepassword/:userId", api_user.api_ChangePassWord);
 
@@ -72,41 +77,59 @@ const initWebRouter = (app) => {
   //=================Auth Router ===============================
   router.get("/", Auth.SignIn);
   router.post("/", Auth.SignIn);
+  router.get("/logout", Auth.loguot);
 
   // ==============Role Router===========================
-  router.post("/api/role/roleCrate", Role.CreateRole);
+  router.post("/api/role/roleCrate", CheckLogin.ycLogin,Role.CreateRole);
 
   //=================Dashboard Router =====================
 
-  router.get("/Dashboard/index", Dashboard.index);
+  router.get("/Dashboard/index", CheckLogin.ycLogin,Dashboard.index);
+
+   //=================Tin tuyển dụng Router =====================
+
+   router.get("/Jobs/index",CheckLogin.ycLogin, Jobs.index);
+
+   router.get("/Jobs/Detail/:jobs_id", CheckLogin.ycLogin,Jobs.GetInfoJobs);
+   router.get("/Jobs/lockJobs/:jobs_id", CheckLogin.ycLogin,Jobs.LockJobs);
 
   //=================Companies Router =====================
 
-  router.get("/Companies/index", Companies.index);
-  router.get("/Companies/lockcompani/:company_id", Companies.LockCompanies);
+  router.get("/Companies/index", CheckLogin.ycLogin,Companies.index);
+  router.get("/Companies/lockcompani/:company_id", CheckLogin.ycLogin,Companies.LockCompanies);
   router.get(
-    "/compamies/active/:company_id",
+    "/compamies/active/:company_id",CheckLogin.ycLogin,
 
     Companies.acitve
   );
 
-  router.get("/compamies/detail/:Idcompany", Companies.GetInfoCompany);
+  router.get("/compamies/detail/:Idcompany", CheckLogin.ycLogin,Companies.GetInfoCompany);
   //=================Users Router =====================
 
-  router.get("/Users/index", User.index);
-  router.post("/Users/addUser", uploader.fields([{ name: "avata_profile", maxCount: 1 }]), User.Add_user);
-  router.get("/Users/editUser/:user_id", User.EditUser);
-  router.post("/Users/editUser/:user_id", uploader.fields([{ name: "avata_profile", maxCount: 1 }]), User.EditUser);
+  router.get("/Users/index", CheckLogin.ycLogin,User.index);
+  router.post(
+    "/Users/addUser",
+    uploader.fields([{ name: "avata_profile", maxCount: 1 }]),
+    User.Add_user
+  );
+  router.get("/Users/editUser/:user_id", CheckLogin.ycLogin,User.EditUser);
+  router.post(
+    "/Users/editUser/:user_id",
+    uploader.fields([{ name: "avata_profile", maxCount: 1 }]),
+    User.EditUser
+  );
 
-  router.get("/Users/detail/:user_id", User.Detail);
-  router.get("/Users/lockuser/:user_id", User.LockUser)
+  router.get("/Users/detail/:user_id", CheckLogin.ycLogin,User.Detail);
+  router.get("/Users/lockuser/:user_id", CheckLogin.ycLogin,User.LockUser);
   return app.use("/", router);
 };
 
 //==================Worker=========================
-router.post("/api/workers/create/:user_id",uploader.fields(
-  { name: "worker_avatar", maxCount: 1 },
-), api_worker.create_Workers); //Thêm hồ sơ ứng tuyển của NLĐ
+router.post(
+  "/api/workers/create/:user_id",
+  uploader.fields({ name: "worker_avatar", maxCount: 1 }),
+  api_worker.create_Workers
+); //Thêm hồ sơ ứng tuyển của NLĐ
 router.put("/api/workers/edit/:user_id/:worker_id", api_worker.edit_Workers); //Sửa hồ sơ ứng tuyển
 router.get(
   "/api/workers/getListWorkerByIdUser/:user_id",
@@ -121,6 +144,7 @@ router.get(
   "/api/applyJobs/checkApplyJobs/:worker_id/:job_id",
   api_suportLong.checkApplyJobs
 ); //Api tạm thời. Support Long demo với Imatech
+router.get("/api/getwokerbyUserID/:user_id", api_huysuport.getWorkerbyUserID);
 
 //=======================Companies====================
 router.post(
@@ -206,6 +230,11 @@ router.put(
 ); // Thay đổi trạng thái của đơn ứng tuyển
 
 router.get("/api/applyJobs/getAllApplyJobs", api_applyjob.getAll_applyJob); // Lấy tất cả applyjobs  - Admin
+
+router.get(
+  "/api/applyJobs/getApplyJobById/:applyjob_id",
+  api_applyjob.getApplyJobById
+);
 router.get(
   "/api/applyJobs/getApylyJobsByIdWorker/:worker_id",
   api_applyjob.getApplyJobsByIdWorker
@@ -249,9 +278,8 @@ router.post("/workers/update/:user_id",
   router.get('/api/findcompanys/:userId', appfindjobs.getFollowedCompanies);
   router.get('/api/appliedjobs/:userId', appfindjobs.getJobApplications);
 
-
-  //=================Chat Router =====================
-  router.get('/api/chat/chatroom/:senderId/:receiverId', chat.getChatRoomInfo);
-  router.get('/api/chat/getMessages/:senderId/:receiverId', chat.getMessages);
-  router.post('/api/chat/sendmessage/:senderId/:receiverId', chat.sendMessage);
+//=================Chat Router =====================
+router.get("/api/chat/chatroom/:senderId/:receiverId", chat.getChatRoomInfo);
+router.get("/api/chat/getMessages/:senderId/:receiverId", chat.getMessages);
+router.post("/api/chat/sendmessage/:senderId/:receiverId", chat.sendMessage);
 module.exports = initWebRouter;
