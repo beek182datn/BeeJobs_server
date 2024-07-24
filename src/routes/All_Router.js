@@ -229,6 +229,11 @@ router.put(
 ); // Thay đổi trạng thái của đơn ứng tuyển
 
 router.get("/api/applyJobs/getAllApplyJobs", api_applyjob.getAll_applyJob); // Lấy tất cả applyjobs  - Admin
+
+router.get(
+  "/api/applyJobs/getApplyJobById/:applyjob_id",
+  api_applyjob.getApplyJobById
+);
 router.get(
   "/api/applyJobs/getApylyJobsByIdWorker/:worker_id",
   api_applyjob.getApplyJobsByIdWorker
