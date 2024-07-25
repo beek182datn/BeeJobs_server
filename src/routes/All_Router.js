@@ -77,7 +77,7 @@ const initWebRouter = (app) => {
   //=================Auth Router ===============================
   router.get("/", Auth.SignIn);
   router.post("/", Auth.SignIn);
-  router.get("/logout", Auth.loguot);
+  router.get("/logout", Auth.logout);
 
   // ==============Role Router===========================
   router.post("/api/role/roleCrate", CheckLogin.ycLogin,Role.CreateRole);
