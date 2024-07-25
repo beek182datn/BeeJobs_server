@@ -1,5 +1,6 @@
 const { Message } = require("../../model/Messages");
 const { ChatRoom } = require("../../model/ChatRooms");
+const WorkerMD = require("../../model/Workers");
 
 exports.getChatroomByCompanyId = async (req, res) => {
   const { companyId } = req.params;
@@ -27,20 +28,41 @@ exports.getChatroomByUserId = async (req, res) => {
     // Lấy danh sách các phòng chat có chứa userId
     const chatRooms = await ChatRoom.find({ userIds: userId });
 
-    // Xử lý dữ liệu phòng chat để thêm trường myID và otherID
-    const formattedChatRooms = chatRooms.map((chatRoom) => {
-      const { userIds, _id } = chatRoom;
+    // Xử lý dữ liệu phòng chat để thêm trường myID, otherID, thông tin worker và tin nhắn cuối cùng
+    const formattedChatRooms = await Promise.all(
+      chatRooms.map(async (chatRoom) => {
+        const { userIds, _id } = chatRoom;
+        const myID = userId;
+        const otherID = userIds.find((id) => id !== userId) || null;
 
-      const myID = userId;
-      const otherID = userIds.find((id) => id !== userId) || null;
+        let workerDetails = {};
+        let lastMessage = null;
+        if (otherID) {
+          // Lấy thông tin worker dựa trên otherID
+          workerDetails = await WorkerMD.findOne({ user_id: otherID }).select(
+            "worker_name worker_avatar"
+          );
+        }
 
-      return {
-        _id,
-        myID,
-        otherID,
-        userIds,
-      };
-    });
+        // Lấy tin nhắn cuối cùng trong phòng chat
+        const messages = await Message.find({ chatRoomId: _id })
+          .sort({ createdAt: -1 })
+          .limit(1);
+        if (messages.length > 0) {
+          lastMessage = messages[0];
+        }
+
+        return {
+          _id,
+          myID,
+          otherID,
+          worker_name: workerDetails.worker_name || null,
+          worker_avatar: workerDetails.worker_avatar || null,
+          userIds,
+          lastMessage: lastMessage.content, // Thêm tin nhắn cuối cùng vào kết quả trả về
+        };
+      })
+    );
 
     res.status(200).json({
       data: formattedChatRooms,
@@ -93,6 +115,8 @@ exports.sendMessage = async (req, res) => {
     });
 
     await newMessage.save();
+
+    req.app.get("io").to(chatRoomId).emit("message", newMessage);
 
     res.status(201).json({
       data: newMessage,
