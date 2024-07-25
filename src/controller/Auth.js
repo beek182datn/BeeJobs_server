@@ -120,11 +120,11 @@ exports.api_SignUp = async (req, res, next) => {
 
   res.json(objReturn);
 };
-exports.loguot = async (req, res) => {
-  req.cokies.jwt = ""
+exports.logout = async (req, res) => {
+  // Xóa cookie jwt
+  res.clearCookie('jwt');
+  // Chuyển hướng về trang chủ
   res.redirect('/');
-
-
 };
 exports.api_getInfo = async (req, res, next) => {
   if (req.method == "POST") {
