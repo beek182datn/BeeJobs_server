@@ -88,7 +88,7 @@ exports.getMessageByChatroomId = async (req, res) => {
       });
     }
 
-    const messages = await Message.find({ chatRoomId }).sort({ createdAt: 1 });
+    const messages = await Message.find({ chatRoomId });
 
     const messagesWithWorkerInfo = await Promise.all(
       messages.map(async (message) => {
