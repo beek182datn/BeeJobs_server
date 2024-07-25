@@ -48,6 +48,7 @@ var api_job = require("../api/Jobs/Jobs_Api");
 var api_applyjob = require("../api/ApplyJobs/ApplyJobs_Api");
 var api_suportLong = require("../api/Api_SuportLong/Api_SuportLong"); //Dùng tạm thời để support Long demo với Imatech
 var api_huysuport = require("../api/Api_HuySuport/Api_HuySuport"); //Dùng tạm thời để thêm các starts check
+var api_getChat = require("../api/Get_Chat_Api/GetChat_Api");
 const router = express.Router();
 
 /**
@@ -63,10 +64,7 @@ const initWebRouter = (app) => {
   router.post("/api/usersverifyotp", api_user.api_verifyOtp);
   router.post("/api/forgottpass", api_user.api_ForgotPasswords);
   router.post("/api/forgottpass2", api_huysuport.Huy_api_ForgotPasswords); // Huy demo
-  router.get(
-    "/api/user/checkuser/:user_id",
-    api_huysuport.checkUserId
-  );// Huy demo
+  router.get("/api/user/checkuser/:user_id", api_huysuport.checkUserId); // Huy demo
   router.post("/api/changepass", api_user.apiChangeForgotPasswords);
   router.post("/api/changepassword/:userId", api_user.api_ChangePassWord);
 
@@ -80,47 +78,56 @@ const initWebRouter = (app) => {
   router.get("/logout", Auth.logout);
 
   // ==============Role Router===========================
-  router.post("/api/role/roleCrate", CheckLogin.ycLogin,Role.CreateRole);
+  router.post("/api/role/roleCrate", CheckLogin.ycLogin, Role.CreateRole);
 
   //=================Dashboard Router =====================
 
-  router.get("/Dashboard/index", CheckLogin.ycLogin,Dashboard.index);
+  router.get("/Dashboard/index", CheckLogin.ycLogin, Dashboard.index);
 
-   //=================Tin tuyển dụng Router =====================
+  //=================Tin tuyển dụng Router =====================
 
-   router.get("/Jobs/index",CheckLogin.ycLogin, Jobs.index);
+  router.get("/Jobs/index", CheckLogin.ycLogin, Jobs.index);
 
-   router.get("/Jobs/Detail/:jobs_id", CheckLogin.ycLogin,Jobs.GetInfoJobs);
-   router.get("/Jobs/lockJobs/:jobs_id", CheckLogin.ycLogin,Jobs.LockJobs);
+  router.get("/Jobs/Detail/:jobs_id", CheckLogin.ycLogin, Jobs.GetInfoJobs);
+  router.get("/Jobs/lockJobs/:jobs_id", CheckLogin.ycLogin, Jobs.LockJobs);
 
   //=================Companies Router =====================
 
-  router.get("/Companies/index", CheckLogin.ycLogin,Companies.index);
-  router.get("/Companies/lockcompani/:company_id", CheckLogin.ycLogin,Companies.LockCompanies);
+  router.get("/Companies/index", CheckLogin.ycLogin, Companies.index);
   router.get(
-    "/compamies/active/:company_id",CheckLogin.ycLogin,
+    "/Companies/lockcompani/:company_id",
+    CheckLogin.ycLogin,
+    Companies.LockCompanies
+  );
+  router.get(
+    "/compamies/active/:company_id",
+    CheckLogin.ycLogin,
 
     Companies.acitve
   );
 
-  router.get("/compamies/detail/:Idcompany", CheckLogin.ycLogin,Companies.GetInfoCompany);
+  router.get(
+    "/compamies/detail/:Idcompany",
+    CheckLogin.ycLogin,
+    Companies.GetInfoCompany
+  );
   //=================Users Router =====================
 
-  router.get("/Users/index", CheckLogin.ycLogin,User.index);
+  router.get("/Users/index", CheckLogin.ycLogin, User.index);
   router.post(
     "/Users/addUser",
     uploader.fields([{ name: "avata_profile", maxCount: 1 }]),
     User.Add_user
   );
-  router.get("/Users/editUser/:user_id", CheckLogin.ycLogin,User.EditUser);
+  router.get("/Users/editUser/:user_id", CheckLogin.ycLogin, User.EditUser);
   router.post(
     "/Users/editUser/:user_id",
     uploader.fields([{ name: "avata_profile", maxCount: 1 }]),
     User.EditUser
   );
 
-  router.get("/Users/detail/:user_id", CheckLogin.ycLogin,User.Detail);
-  router.get("/Users/lockuser/:user_id", CheckLogin.ycLogin,User.LockUser);
+  router.get("/Users/detail/:user_id", CheckLogin.ycLogin, User.Detail);
+  router.get("/Users/lockuser/:user_id", CheckLogin.ycLogin, User.LockUser);
   return app.use("/", router);
 };
 
@@ -267,19 +274,46 @@ router.post("/follow/:userId/:companyId", appfindjobs.folowCompany);
 router.get("/follow/:userId/:companyId", appfindjobs.checkIsFolowing);
 router.post("/unfollow/:userId/:companyId", appfindjobs.unFollowCompany);
 router.get("/user/:userId", appfindjobs.getInfoUser);
-router.post("/workers/create/:user_id",
-  uploader.fields([
-    { name: "worker_avatar", maxCount: 1 },
-  ]), appfindjobs.create_Workers);
-router.post("/workers/update/:user_id",
-  uploader.fields([
-    { name: "worker_avatar", maxCount: 1 },
-  ]), appfindjobs.update_Workers);
-  router.get('/api/findcompanys/:userId', appfindjobs.getFollowedCompanies);
-  router.get('/api/appliedjobs/:userId', appfindjobs.getJobApplications);
+router.post(
+  "/workers/create/:user_id",
+  uploader.fields([{ name: "worker_avatar", maxCount: 1 }]),
+  appfindjobs.create_Workers
+);
+router.post(
+  "/workers/update/:user_id",
+  uploader.fields([{ name: "worker_avatar", maxCount: 1 }]),
+  appfindjobs.update_Workers
+);
+router.get("/api/findcompanys/:userId", appfindjobs.getFollowedCompanies);
+router.get("/api/appliedjobs/:userId", appfindjobs.getJobApplications);
 
 //=================Chat Router =====================
 router.get("/api/chat/chatroom/:senderId/:receiverId", chat.getChatRoomInfo);
 router.get("/api/chat/getMessages/:senderId/:receiverId", chat.getMessages);
 router.post("/api/chat/sendmessage/:senderId/:receiverId", chat.sendMessage);
+
+//================ Get Chat By Đông ===================
+router.get(
+  "/api/chat/getChatroomByCompanyId/:companyId",
+  api_getChat.getChatroomByCompanyId
+);
+router.get(
+  "/api/chat/getChatroomByUserId/:userId",
+  api_getChat.getChatroomByUserId
+);
+router.get(
+  "/api/chat/getMessageByChatroomId/:chatRoomId",
+  api_getChat.getMessageByChatroomId
+);
+router.post("/api/chat/sendMessage", api_getChat.sendMessage);
+router.delete(
+  "/api/chat/deleteMessage/:messageId/:userId",
+  api_getChat.deleteMessage
+);
+
+router.delete(
+  "/api/chat/deleteMessagesInChatroom/:chatRoomId",
+  api_getChat.deleteMessagesInChatroom
+);
+
 module.exports = initWebRouter;
