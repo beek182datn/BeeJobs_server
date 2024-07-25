@@ -76,7 +76,7 @@ exports.sendMessage = async (req, res) => {
         await message.save();
 
         // Gửi tin nhắn qua Socket.IO
-        // req.app.get('io').to(chatroom._id).emit('newMessage', message);
+        req.app.get('io').to(chatroom._id).emit('message', message);
 
         res.json(message);
     } catch (error) {
