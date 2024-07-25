@@ -24,11 +24,27 @@ exports.getChatroomByUserId = async (req, res) => {
   const { userId } = req.params;
 
   try {
+    // Lấy danh sách các phòng chat có chứa userId
     const chatRooms = await ChatRoom.find({ userIds: userId });
 
+    // Xử lý dữ liệu phòng chat để thêm trường myID và otherID
+    const formattedChatRooms = chatRooms.map((chatRoom) => {
+      const { userIds, _id } = chatRoom;
+
+      const myID = userId;
+      const otherID = userIds.find((id) => id !== userId) || null;
+
+      return {
+        _id,
+        myID,
+        otherID,
+        userIds,
+      };
+    });
+
     res.status(200).json({
-      data: chatRooms,
-      message: chatRooms.length
+      data: formattedChatRooms,
+      message: formattedChatRooms.length
         ? "Lấy danh sách phòng chat thành công!"
         : "Không tìm thấy phòng chat nào cho người dùng này.",
     });
