@@ -81,11 +81,32 @@ exports.getMessageByChatroomId = async (req, res) => {
   const { chatRoomId } = req.params;
 
   try {
+    const chatRoom = await ChatRoom.findById(chatRoomId);
+    if (!chatRoom) {
+      return res.status(404).json({
+        message: "Phòng chát không tồn tại",
+      });
+    }
+
     const messages = await Message.find({ chatRoomId }).sort({ createdAt: 1 });
 
+    const messagesWithWorkerInfo = await Promise.all(
+      messages.map(async (message) => {
+        const worker = await WorkerMD.findOne({
+          user_id: message.senderId,
+        }).select("worker_name worker_avatar");
+
+        return {
+          ...message._doc,
+          worker_name: worker ? worker.worker_name : null,
+          worker_avatar: worker ? worker.worker_avatar : null,
+        };
+      })
+    );
+
     res.status(200).json({
-      data: messages,
-      message: messages.length
+      data: messagesWithWorkerInfo,
+      message: messagesWithWorkerInfo.length
         ? "Lấy danh sách tin nhắn thành công!"
         : "Không có tin nhắn nào trong phòng chat này.",
     });
