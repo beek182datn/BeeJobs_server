@@ -46,7 +46,7 @@ exports.getMessages = async (req, res) => {
             //     chatroom = new ChatRoom({ userIds: [receiverId, senderId] });
             //     await chatroom.save();
             // } catch (saveError) {
-            //     console.error("Error saving chatroom:"+' - '+ receiverId+' - '+senderId, saveError);
+            //     console.error("Error saving chatroom:" + ' - ' + receiverId + ' - ' + senderId, saveError);
             //     return res.status(500).json({ message: "Error saving chatroom", error: saveError });
             // }
             res.json([]);
@@ -79,8 +79,13 @@ exports.sendMessage = async (req, res) => {
         });
 
         if (!chatroom) {
-            const newchatroom = new ChatRoom({ userIds: [receiverId, senderId] });
-            await newchatroom.save();
+            try {
+                chatroom = new ChatRoom({ userIds: [receiverId, senderId] });
+                await chatroom.save();
+            } catch (saveError) {
+                console.error("Error saving chatroom:" + ' - ' + receiverId + ' - ' + senderId, saveError);
+                return res.status(500).json({ message: "Error saving chatroom", error: saveError });
+            }
         }
 
         const message = new Message({
