@@ -38,7 +38,7 @@ exports.getMessages = async (req, res) => {
             chatroom = new ChatRoom({ userIds: [receiverId, senderId] });
             await chatroom.save();
         }
-
+        console.log('chatroomid', JSON.stringify(chatroom._id));
         const messages = await Message.find({ chatRoomId: chatroom._id }).populate('senderId', 'name avatar').lean();;
 
         // Gửi thông báo rằng người dùng đã tham gia phòng chat
