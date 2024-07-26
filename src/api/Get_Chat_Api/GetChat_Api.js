@@ -1,7 +1,8 @@
 const { Message } = require("../../model/Messages");
 const { ChatRoom } = require("../../model/ChatRooms");
 const WorkerMD = require("../../model/Workers");
-
+const { companyModel } = require("../../model/Companies");
+const { userModel } = require("../../model/Users");
 exports.getChatroomByCompanyId = async (req, res) => {
   const { companyId } = req.params;
 
@@ -13,6 +14,47 @@ exports.getChatroomByCompanyId = async (req, res) => {
       message: chatRooms.length
         ? "Lấy danh sách phòng chat thành công!"
         : "Không tìm thấy phòng chat nào cho người dùng này.",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Lỗi: " + error.message,
+    });
+  }
+};
+
+exports.createChatRoom = async (req, res) => {
+  const { companyID, userID } = req.body;
+
+  try {
+    // Kiểm tra sự tồn tại của company và worker
+    const company = await companyModel.findById(companyID);
+    const worker = await userModel.findById(userID);
+
+    if (!company || !worker) {
+      return res
+        .status(400)
+        .json({ message: "Doanh nghiệp hoặc người dùng không tồn tại" });
+    }
+
+    // Kiểm tra xem phòng chat giữa hai ID đã tồn tại chưa
+    const existingChatRoom = await ChatRoom.findOne({
+      userIds: { $all: [companyID, userID], $size: 2 },
+    });
+
+    if (existingChatRoom) {
+      return res.status(200).json({
+        data: existingChatRoom,
+        message: "Phòng chat đã tồn tại!",
+      });
+    }
+
+    // Tạo phòng chat mới
+    const newChatRoom = new ChatRoom({ userIds: [companyID, userID] });
+    await newChatRoom.save();
+
+    res.status(201).json({
+      data: newChatRoom,
+      message: "Phòng chat mới đã được tạo thành công!",
     });
   } catch (error) {
     res.status(500).json({
@@ -35,6 +77,15 @@ exports.getChatroomByUserId = async (req, res) => {
         const myID = userId;
         const otherID = userIds.find((id) => id !== userId) || null;
 
+        // Kiểm tra xem phòng chat có chứa ít nhất một tin nhắn không
+        const messages = await Message.find({ chatRoomId: _id })
+          .sort({ createdAt: -1 })
+          .limit(1);
+
+        if (messages.length === 0) {
+          return null; // Bỏ qua phòng chat không có tin nhắn
+        }
+
         let workerDetails = {};
         let lastMessage = null;
         if (otherID) {
@@ -44,10 +95,6 @@ exports.getChatroomByUserId = async (req, res) => {
           );
         }
 
-        // Lấy tin nhắn cuối cùng trong phòng chat
-        const messages = await Message.find({ chatRoomId: _id })
-          .sort({ createdAt: -1 })
-          .limit(1);
         if (messages.length > 0) {
           lastMessage = messages[0];
         }
@@ -59,14 +106,19 @@ exports.getChatroomByUserId = async (req, res) => {
           worker_name: workerDetails.worker_name || null,
           worker_avatar: workerDetails.worker_avatar || null,
           userIds,
-          lastMessage: lastMessage.content, // Thêm tin nhắn cuối cùng vào kết quả trả về
+          lastMessage: lastMessage ? lastMessage.content : null, // Thêm tin nhắn cuối cùng vào kết quả trả về
         };
       })
     );
 
+    // Loại bỏ các phần tử null (các phòng chat không có tin nhắn)
+    const filteredChatRooms = formattedChatRooms.filter(
+      (chatRoom) => chatRoom !== null
+    );
+
     res.status(200).json({
-      data: formattedChatRooms,
-      message: formattedChatRooms.length
+      data: filteredChatRooms,
+      message: filteredChatRooms.length
         ? "Lấy danh sách phòng chat thành công!"
         : "Không tìm thấy phòng chat nào cho người dùng này.",
     });
