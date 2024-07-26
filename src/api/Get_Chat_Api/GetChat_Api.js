@@ -3,6 +3,7 @@ const { ChatRoom } = require("../../model/ChatRooms");
 const WorkerMD = require("../../model/Workers");
 const { companyModel } = require("../../model/Companies");
 const { userModel } = require("../../model/Users");
+
 exports.getChatroomByCompanyId = async (req, res) => {
   const { companyId } = req.params;
 
@@ -28,9 +29,9 @@ exports.createChatRoom = async (req, res) => {
   try {
     // Kiểm tra sự tồn tại của company và worker
     const company = await companyModel.findById(companyID);
-    const worker = await userModel.findById(userID);
+    const user = await userModel.findById(userID);
 
-    if (!company || !worker) {
+    if (!company || !user) {
       return res
         .status(400)
         .json({ message: "Doanh nghiệp hoặc người dùng không tồn tại" });
@@ -57,6 +58,7 @@ exports.createChatRoom = async (req, res) => {
       message: "Phòng chat mới đã được tạo thành công!",
     });
   } catch (error) {
+    console.error("Error in createChatRoom:", error.message); // Thêm logging để xem chi tiết lỗi
     res.status(500).json({
       message: "Lỗi: " + error.message,
     });
