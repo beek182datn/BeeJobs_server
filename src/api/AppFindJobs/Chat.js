@@ -106,3 +106,27 @@ exports.sendMessage = async (req, res) => {
         res.status(500).json({ message: "Server Error", error });
     }
 };
+
+exports.checkChatRoom = async (req, res) => {
+    const { senderId, receiverId } = req.params;
+
+    try {
+        let chatroom = await ChatRoom.findOne({
+            userIds: { $all: [receiverId, senderId] },
+        });
+
+        if (!chatroom) {
+            try {
+                chatroom = new ChatRoom({ userIds: [receiverId, senderId] });
+                await chatroom.save();
+            } catch (saveError) {
+                console.error("Error saving chatroom:" + ' - ' + receiverId + ' - ' + senderId, saveError);
+                return res.status(500).json({ message: "Error saving chatroom", error: saveError });
+            }
+        }
+
+        res.json(chatroom);
+    } catch (error) {
+        res.status(500).json({ message: "Server Error", error });
+    }
+};
