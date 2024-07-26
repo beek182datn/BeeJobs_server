@@ -1,7 +1,6 @@
 var db = require("../config/db");
 const chatRoom = new db.mongoose.Schema(
     {
-        _id: { type: db.mongoose.Schema.Types.ObjectId},
         userIds: { type: [String], default: [] },
     },
     {
