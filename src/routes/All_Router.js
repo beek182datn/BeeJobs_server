@@ -310,10 +310,10 @@ router.delete(
   "/api/chat/deleteMessage/:messageId/:userId",
   api_getChat.deleteMessage
 );
-
 router.delete(
   "/api/chat/deleteMessagesInChatroom/:chatRoomId",
   api_getChat.deleteMessagesInChatroom
 );
+router.post("/api/chat/createChatRoom", api_getChat.createChatRoom);
 
 module.exports = initWebRouter;
