@@ -34,7 +34,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('newMessage', (message) => {
-    io.to(message.chatRoomId).emit('message', message);
+    // io.to(message.chatRoomId).emit('message', message);
     console.log('New message:', message);
   });
 
