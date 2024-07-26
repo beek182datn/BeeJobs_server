@@ -50,9 +50,10 @@ exports.getMessages = async (req, res) => {
             //     return res.status(500).json({ message: "Error saving chatroom", error: saveError });
             // }
             res.json([]);
+            return;
         }
 
-        const messages = await Message.find({ chatRoomId: chatroom._id }).populate('senderId', 'name avatar').lean();;
+        const messages = await Message.find({ chatRoomId: chatroom._id }).populate('senderId', 'name avatar').lean();
 
         // Gửi thông báo rằng người dùng đã tham gia phòng chat
         req.app
