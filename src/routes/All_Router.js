@@ -152,7 +152,10 @@ router.get(
   api_suportLong.checkApplyJobs
 ); //Api tạm thời. Support Long demo với Imatech
 router.get("/api/getwokerbyUserID/:user_id", api_huysuport.getWorkerbyUserID);
-
+router.get(
+  "/api/chat/getChatroomByUserIdForWorker/:userId",
+  api_huysuport.getChatroomByUserIdForWorker
+);
 //=======================Companies====================
 router.post(
   "/api/companies/create/:user_id",
