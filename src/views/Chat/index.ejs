@@ -1,143 +1,242 @@
 <%- include('../inc/header.ejs') %>
 <%- include('../inc/nav_header.ejs') %>
 
+<!-- BEGIN .main-heading -->
+<header class="custom-header">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-6 col-sm-12">
+        <div class="page-title">
+          <h3>Chat</h3>
+          <h6 class="sub-heading">Welcome</h6>
+        </div>
+      </div>
+      <div class="col-md-6 col-sm-12"></div>
+    </div>
+  </div>
+</header>
+<!-- END: .main-heading -->
 
-			<!-- BEGIN .main-heading -->
-            <header class="custom-header">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-6 col-sm-12">
-                            <div class="page-title">
-                                <h3>Chat App</h3>
-                                <h6 class="sub-heading">Welcome to Kingfisher Admin Template</h6>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-sm-12"></div>
-                    </div>
+<!-- BEGIN .main-content -->
+<div class="main-content">
+
+  <!-- Row start -->
+  <div class="row gutters">
+    <div class="col-sm-12">
+      <div class="card m-0">
+        <!-- Row start -->
+        <div class="row no-gutters">
+          <div class="col-md-4 col-sm-2 col-3">
+            <button class="btn btn-primary" data-toggle="modal" data-target="#createChatModal">Tạo chat mới</button>
+
+            <!-- Modal for creating a new chat -->
+            <div class="modal fade" id="createChatModal" tabindex="-1" role="dialog" aria-labelledby="createChatModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="createChatModalLabel">Tạo chat mới</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <form id="createChatForm">
+                      <div class="form-group">
+                        <label for="searchUser">Tìm kiếm người dùng</label>
+                        <input type="text" class="form-control" id="searchUser" placeholder="Gõ tên hoặc email">
+                        <div id="searchResults" class="list-group mt-2"></div>
+                      </div>
+                      <input type="hidden" id="selectedUserId">
+                      <button type="submit" class="btn btn-primary">Tạo Chat</button>
+                    </form>
+                  </div>
                 </div>
-            </header>
-            <!-- END: .main-heading -->
-
-            <!-- BEGIN .main-content -->
-            <div class="main-content">
-
-                <!-- Row start -->
-                <div class="row gutters">
-                    <div class="col-sm-12">
-                        <div class="card m-0">
-                            <!-- Row start -->
-                            <div class="row no-gutters">
-                                <div class="col-md-4 col-sm-2 col-3">
-                                    <div class="users-container">
-                                        <div class="search-box">
-                                            <div class="input-group">
-                                                <input class="form-control" placeholder="Search" />
-                                                <div class="input-group-btn">
-                                                    <button type="button" class="btn btn-info">
-                                                        <i class="icon-magnifying-glass"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <ul class="users">
-                                            
-                                          
-                                            <li class="person active-user" data-chat="person2">
-                                                <div class="user">
-                                                    <img src="img/user2.png" alt="Low Price Admin Templates" />
-                                                    <span class="status away"></span>
-                                                </div>
-                                                <p class="name-time">
-                                                    <span class="name">Emily Russell</span>
-                                                    <span class="time">12/5/2023</span>
-                                                </p>
-                                            </li>
-                                         
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="col-xl-8 col-lg-8 col-md-8 col-sm-10 col-9">
-                                    <div class="selected-user">
-                                        <span>To: <span class="name">Emily Russell</span></span>
-                                    </div>
-                                    <div class="chat-container">
-                                        <ul class="chat-box chatContainerScroll">
-                                            <li class='chat-left'>
-                                                <div class='chat-avatar'>
-                                                    <img src="/img/user3.png" alt="Low Price Admin Templates" />
-                                                    <div class='chat-name'>Russell</div>
-                                                </div>
-                                                <div class='chat-text'>Hello, I'm Russell.</br>How can I help you today?</div>
-                                                <div class='chat-hour'>08:55 <span class='icon-done_all'></span></div>
-                                            </li>
-                                            <li class='chat-right'>
-                                                <div class='chat-hour'>08:56 <span class='icon-done_all'></span></div>
-                                                <div class='chat-text'>Hi, Russell<br />
-                                                    I need more information about Developer Plan.</div>
-                                                <div class='chat-avatar'>
-                                                    <img src="img/user1.png" alt="Low Price Admin Templates" />
-                                                    <div class='chat-name'>You</div>
-                                                </div>
-                                            </li>
-                                            <li class='chat-left'>
-                                                <div class='chat-avatar'>
-                                                    <img src="img/user3.png" alt="Low Price Admin Templates" />
-                                                    <div class='chat-name'>Russell</div>
-                                                </div>
-                                                <div class='chat-text'>Are we meeting today?<br />Project has been already finished and I
-                                                    have results to show you.</div>
-                                                <div class='chat-hour'>08:57 <span class='icon-done_all'></span></div>
-                                            </li>
-                                            <li class='chat-right'>
-                                                <div class='chat-hour'>08:59 <span class='icon-done_all'></span></div>
-                                                <div class='chat-text'>Well I am not sure.<br />I have results to show you.</div>
-                                                <div class='chat-avatar'>
-                                                    <img src="img/user1.png" alt="Low Price Admin Templates" />
-                                                    <div class='chat-name'>You</div>
-                                                </div>
-                                            </li>
-                                            <li class='chat-left'>
-                                                <div class='chat-avatar'>
-                                                    <img src="img/user3.png" alt="Low Price Admin Templates" />
-                                                    <div class='chat-name'>Russell</div>
-                                                </div>
-                                                <div class='chat-text'>The rest of the team is not here yet.<br />Maybe in an hour or so?
-                                                </div>
-                                                <div class='chat-hour'>08:57 <span class='icon-done_all'></span></div>
-                                            </li>
-                                            <li class='chat-right'>
-                                                <div class='chat-hour'>08:59 <span class='icon-done_all'></span></div>
-                                                <div class='chat-text'>Have you faced any problems at the last phase of the project?</div>
-                                                <div class='chat-avatar'>
-                                                    <img src="img/user1.png" alt="Low Price Admin Templates" />
-                                                    <div class='chat-name'>You</div>
-                                                </div>
-                                            </li>
-                                            <li class='chat-left'>
-                                                <div class='chat-avatar'>
-                                                    <img src="img/user3.png" alt="Low Price Admin Templates" />
-                                                    <div class='chat-name'>Russell</div>
-                                                </div>
-                                                <div class='chat-text'>Actually everything was fine.<br />I'm very excited to show this to
-                                                    our team.</div>
-                                                <div class='chat-hour'>07:00 <span class='icon-done_all'></span></div>
-                                            </li>
-                                        </ul>
-                                        <div class="form-group mt-3 mb-0">
-                                            <textarea class="form-control" rows="1" placeholder="Type your message here..."></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Row end -->
-                        </div>
-                    </div>
-                </div>
-                <!-- Row end -->
-
+              </div>
             </div>
-            <!-- END: .main-content -->
+            <div class="users-container">
+              <div class="search-box">
+                <div class="input-group">
+                  <input class="form-control" placeholder="Search" />
+                  <div class="input-group-btn">
+                    <button type="button" class="btn btn-info">
+                      <i class="icon-magnifying-glass"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <ul class="users">
+                <% chatRooms.forEach(chatRoom => { %>
+                  <li class="person" data-chat-room-id="<%= chatRoom._id %>" data-chat-nameuserchat="<%= chatRoom.otherUserName %>" data-chat-user-role="<%=chatRoom.otherUserRole%>" >
+                    <div class="user">
+                      <img src="<%= chatRoom && chatRoom.otherUserAvatar ? ("http://beejobs.io.vn:14307" + chatRoom.otherUserAvatar) : "https://img.freepik.com/premium-vector/abyssinian-cat-head-avata_73950-151.jpg" %>" alt="User" />
+                      <span class="status away"></span>
+                    </div>
+                    <p class="name-time">
+                      <span class="name"><%= chatRoom.otherUserName %></span>
+                      <span class="time">12/5/2023</span>
+                    </p>
+                  </li>
+                <%   }) %>
+              </ul>
+            </div>
+          </div>
+          <div class="col-xl-8 col-lg-8 col-md-8 col-sm-10 col-9">
+            <div class="selected-user">
+              <span id="chatWith">Chọn phòng chat để bắt đầu chat</span>
+            </div>
+            <div class="chat-container">
+              <ul class="chat-box chatContainerScroll" id="chatBox">
+                <li id="noChatSelected" class="text-center">Không có phòng chat</li>
+              </ul>
+              <div class="form-group mt-3 mb-0">
+                <textarea class="form-control" id="chatMessage" rows="1" placeholder="Gỡ tin nhắn của bạn vào đây..."></textarea>
+                <button id="sendMessage" class="btn btn-primary mt-2">Send</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Row end -->
+      </div>
+    </div>
+  </div>
+  <!-- Row end -->
 
+</div>
+<!-- END: .main-content -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+  $(document).ready(function() {
+    // Load all users when the modal is shown
+    $('#createChatModal').on('show.bs.modal', function() {
+      $.ajax({
+        url: '/allUsers',
+        method: 'GET',
+        success: function(data) {
+          $('#searchResults').empty();
+          data.users.forEach(user => {
+            $('#searchResults').append(`<a href="#" class="list-group-item list-group-item-action" data-user-id="${user._id}">${user.full_name} (${user.email})</a>`);
+          });
+        },
+        error: function(err) {
+          alert('Error: ' + err.responseJSON.message);
+        }
+      });
+    });
+
+    // Search user event
+    $('#searchUser').on('input', function() {
+      const query = $(this).val().toLowerCase();
+      $('#searchResults a').each(function() {
+        const userText = $(this).text().toLowerCase();
+        $(this).toggle(userText.includes(query));
+      });
+    });
+
+    // Select user event
+    $('#searchResults').on('click', 'a', function(e) {
+      e.preventDefault();
+      const userId = $(this).data('user-id');
+      $('#selectedUserId').val(userId);
+      $('#searchUser').val($(this).text());
+      $('#searchResults').empty();
+    });
+
+    // Create chat event
+    $('#createChatForm').on('submit', function(e) {
+      e.preventDefault();
+      const userID = $('#selectedUserId').val();
+
+      $.ajax({
+        url: '/createChatRoom',
+        method: 'POST',
+        data: { userID: userID },
+        success: function(data) {
+          alert(data.message);
+          $('#createChatModal').modal('hide');
+          // Optionally, reload the chat rooms or add the new chat room to the list
+          location.reload();
+        },
+        error: function(err) {
+          alert('Error: ' + err.responseJSON.message);
+        }
+      });
+    });
+
+    // Load chat messages when a chat room is selected
+    $('.users').on('click', '.person', function() {
+      const chatRoomId = $(this).data('chat-room-id');
+      const chatNameUser = $(this).data('chat-nameuserchat');
+    const chatUserRole = $(this).data('chat-user-role');
+      $('#chatWith').html(`Chat with ${chatNameUser} <button type="button" class="btn btn-success btn-sm">${chatUserRole}</button>`);
+
+      $('#noChatSelected').hide();
+      $('.users .person').removeClass('active-user'); // Remove active class from all users
+      $(this).addClass('active-user'); // Add active class to the selected user
+
+      $.ajax({
+        url: `/chatrooms/${chatRoomId}/messages`,
+        method: 'GET',
+        success: function(data) {
+          $('#chatBox').empty();
+          if (data.messages.length > 0) {
+            data.messages.forEach(message => {
+              const align = message.senderId === '<%= adminID %>' ? 'chat-right' : 'chat-left';
+              $('#chatBox').append(`
+                <li class='${align}'>
+                  <div class='chat-avatar'>
+                    <img src="${message.senderAvatar}" alt="User" />
+                    <div class='chat-name'>${message.senderName}</div>
+                  </div>
+                  <div class='chat-text'>${message.content}</div>
+                  <div class='chat-hour'>${new Date(message.createdAt).toLocaleTimeString()} <span class='icon-done_all'></span></div>
+                </li>
+              `);
+            });
+          } else {
+            $('#chatBox').append(`<li class="text-center">No messages yet</li>`);
+          }
+        },
+        error: function(err) {
+          alert('Error: ' + err.responseJSON.message);
+        }
+      });
+    });
+
+    // Send message
+    $('#sendMessage').on('click', function() {
+      const activeChat = $('.person.active-user');
+      const chatRoomId = activeChat.data('chat-room-id');
+      const message = $('#chatMessage').val();
+
+      if (chatRoomId && message) {
+        $.ajax({
+          url: `/chatrooms/${chatRoomId}/messages`,
+          method: 'POST',
+          data: { content: message },
+          success: function(data) {
+            const align = 'chat-right';
+            $('#chatBox').append(`
+              <li class='${align}'>
+                <div class='chat-avatar'>
+                  <img src="${data.message.senderAvatar}" alt="User" />
+                  <div class='chat-name'>You</div>
+                </div>
+                <div class='chat-text'>${data.message.content}</div>
+                <div class='chat-hour'>${new Date(data.message.createdAt).toLocaleTimeString()} <span class='icon-done_all'></span></div>
+              </li>
+            `);
+            $('#chatMessage').val('');
+          },
+          error: function(err) {
+            alert('Error: ' + err.responseJSON.message);
+          }
+        });
+      } else {
+        alert('Hãy chọn phòng chat để chat.');
+      }
+    });
+  });
+</script>
 <%- include('../inc/nav_footer.ejs') %>
-
 <%- include('../inc/footer.ejs') %>

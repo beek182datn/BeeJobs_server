@@ -82,7 +82,9 @@
 
   <script>
     function showImagePreview(input) {
-      const avatarPreview = document.getElementById("avata-preview");
+      console.log("Run");
+      const avatarPreview = document.getElementById("avatar-preview");
+      console.log(avatarPreview);
       const selectedFile = input.files[0];
       
       if (selectedFile) {
