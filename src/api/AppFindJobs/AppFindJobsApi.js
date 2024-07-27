@@ -7,6 +7,7 @@ const path = require('path');
 const moment = require('moment'); 
 const { applyJobModel } = require('../../model/ApplyJobs');
 const { JobFollows } = require('../../model/JobFollow');
+const { jobModel } = require('../../model/Jobs');
 
 exports.folowCompany = async (req, res) => {
     try {
@@ -314,5 +315,29 @@ exports.checkIsFolowingJob = async (req, res) => {
     } catch (error) {
         console.log(error);
         res.status(500).send({ error: 'Internal Server Error' });
+    }
+}
+
+exports.getFollowedJobs = async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const data = await JobFollows.findOne({ userId });
+
+        if (!data) {
+            return res.status(404).send({ message: "Người dùng không tồn tại hoặc chưa theo dõi tin tuyển dụng nào." });
+        }
+
+        const jobsId = data.jobsId;
+
+        // Tìm tất cả các công ty theo companyId
+        const jobs = await jobModel.find({ _id: { $in: jobsId },
+            // status: true 
+        }
+        );
+
+        res.status(200).send(jobs);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ message: "Đã xảy ra lỗi." });
     }
 }
