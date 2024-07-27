@@ -12,6 +12,7 @@ const jobSchema = new db.mongoose.Schema(
     number_of_recruitments: { type: String, require: true },
     requirements: { type: String, require: true },
     experience: { type: String, require: true },
+    working_time: { type: String, require: true },
     salary: { type: String, require: true },
     benefits: { type: String, require: true },
     location: { type: String, require: true },
