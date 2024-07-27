@@ -39,9 +39,11 @@ var Role = require("../controller/Roles");
 var Dashboard = require("../controller/Dashboard");
 var Auth = require("../controller/Auth");
 var Companies = require("../controller/Companies");
+var Chat = require("../controller/Chat");
 var User = require("../controller/Users");
 var Jobs = require("../controller/Jobs");
 var CheckLogin = require("../middleware/LoginCheck");
+const chatController = require('../controller/Chat');
 var api_worker = require("../api/Workers/Workers_Api");
 var api_company = require("../api/Companies/Companies_Api");
 var api_job = require("../api/Jobs/Jobs_Api");
@@ -111,6 +113,26 @@ const initWebRouter = (app) => {
     CheckLogin.ycLogin,
     Companies.GetInfoCompany
   );
+  //=================Chat Router =====================
+
+// Route để lấy các phòng chat của admin
+router.get('/chatrooms', chatController.getChatroomsByAdminId);
+
+// Route để tạo phòng chat mới
+router.post('/createChatRoom', chatController.createChatRoom);
+
+// Route để tìm kiếm người dùng
+router.get('/searchUsers', chatController.searchUsers);
+
+// Route để lấy tất cả người dùng
+router.get('/allUsers', chatController.getAllUsers);
+
+// Route để lấy danh sách tin nhắn trong phòng chat
+router.get('/chatrooms/:chatRoomId/messages', chatController.getMessagesByChatRoomId);
+
+// Route để gửi tin nhắn mới
+router.post('/chatrooms/:chatRoomId/messages', chatController.sendMessage);
+
   //=================Users Router =====================
 
   router.get("/Users/index", CheckLogin.ycLogin, User.index);
@@ -152,7 +174,10 @@ router.get(
   api_suportLong.checkApplyJobs
 ); //Api tạm thời. Support Long demo với Imatech
 router.get("/api/getwokerbyUserID/:user_id", api_huysuport.getWorkerbyUserID);
-
+router.get(
+  "/api/chat/getChatroomByUserIdForWorker/:userId",
+  api_huysuport.getChatroomByUserIdForWorker
+);
 //=======================Companies====================
 router.post(
   "/api/companies/create/:user_id",
@@ -286,11 +311,16 @@ router.post(
 );
 router.get("/api/findcompanys/:userId", appfindjobs.getFollowedCompanies);
 router.get("/api/appliedjobs/:userId", appfindjobs.getJobApplications);
+router.get("/followjob/:userId/:jobId", appfindjobs.folowJob);
+router.get("/checkfollowjob/:userId/:jobId", appfindjobs.checkIsFolowingJob);
+router.get("/unfollowjob/:userId/:jobId", appfindjobs.unFollowjob);
+router.get("/api/findjobs/:userId", appfindjobs.getFollowedJobs);
 
 //=================Chat Router =====================
 router.get("/api/chat/chatroom/:senderId/:receiverId", chat.getChatRoomInfo);
 router.get("/api/chat/getMessages/:senderId/:receiverId", chat.getMessages);
 router.post("/api/chat/sendmessage/:senderId/:receiverId", chat.sendMessage);
+router.get("/api/chat/checkchatroom/:senderId/:receiverId", chat.checkChatRoom);
 
 //================ Get Chat By Đông ===================
 router.get(

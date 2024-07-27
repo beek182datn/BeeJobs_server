@@ -4,8 +4,10 @@ const { userModel } = require('../../model/Users');
 const WorkerMD = require('../../model/Workers');
 const fs = require('fs');
 const path = require('path');
-const moment = require('moment'); 
+const moment = require('moment');
 const { applyJobModel } = require('../../model/ApplyJobs');
+const { JobFollows } = require('../../model/JobFollow');
+const { jobModel } = require('../../model/Jobs');
 
 exports.folowCompany = async (req, res) => {
     try {
@@ -81,8 +83,10 @@ exports.getFollowedCompanies = async (req, res) => {
         const companyIds = data.companyId;
 
         // Tìm tất cả các công ty theo companyId
-        const companies = await companyModel.find({ _id: { $in: companyIds },
-            active: true });
+        const companies = await companyModel.find({
+            _id: { $in: companyIds },
+            active: true
+        });
 
         res.status(200).send(companies);
     } catch (error) {
@@ -223,7 +227,7 @@ exports.getJobApplications = async (req, res) => {
 
         // Lấy thời gian hiện tại
         const now = moment();
-        
+
         // Tính thời gian cho 1 tuần và 30 ngày trước
         const oneWeekAgo = now.subtract(7, 'days').toDate();
         const thirtyDaysAgo = now.subtract(30, 'days').toDate();
@@ -251,5 +255,108 @@ exports.getJobApplications = async (req, res) => {
     } catch (error) {
         console.log(error);
         res.status(500).send({ message: "Đã xảy ra lỗi." });
+    }
+}
+
+exports.folowJob = async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const jobId = req.params.jobId;
+        let data = await JobFollows.findOne({ userId });
+        if (!data) {
+            // Nếu người dùng không tồn tại, tạo mới
+            data = new JobFollows({
+                userId,
+                jobsId: [jobId]
+            });
+        } else {
+            // Nếu người dùng đã tồn tại, thêm companyId vào mảng companyId
+            if (!data.jobsId.includes(jobId)) {
+                data.jobsId.push(jobId);
+            }
+        }
+        await data.save();
+        res.status(200).send(data);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+exports.unFollowjob = async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const jobId = req.params.jobId;
+        let data = await JobFollows.findOne({ userId });
+
+        if (data) {
+            // Nếu người dùng tồn tại, loại bỏ companyId khỏi mảng companyId
+            data.jobsId = data.jobsId.filter(id => id !== jobId);
+            await data.save();
+            res.status(200).send(data);
+        } else {
+            // Nếu người dùng không tồn tại, trả về lỗi
+            res.status(404).send({ error: 'User not found' });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ error: 'Internal Server Error' });
+    }
+}
+
+exports.checkIsFolowingJob = async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const jobId = req.params.jobId;
+        const data = await JobFollows.findOne({ userId });
+
+        if (data && data.jobsId.includes(jobId)) {
+            res.status(200).send({ isFollowing: true });
+        } else {
+            res.status(200).send({ isFollowing: false });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ error: 'Internal Server Error' });
+    }
+}
+
+exports.getFollowedJobs = async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const data = await JobFollows.findOne({ userId });
+
+        if (!data) {
+            return res.status(404).send({ message: "Người dùng không tồn tại hoặc chưa theo dõi tin tuyển dụng nào." });
+        }
+
+        const jobsId = data.jobsId;
+
+        // Tìm tất cả các công ty theo companyId
+        const jobs = await jobModel.find({
+            _id: { $in: jobsId },
+            // status: true 
+        }
+        );
+
+        const jobsWithCompanyLogo = await Promise.all(
+            jobs.map(async (job) => {
+                const company = await companyModel.findById(job.company_id);
+                return {
+                    ...job.toObject(),
+                    company_logo: company ? company.company_logo : null,
+                };
+            })
+        );
+
+        return res.status(200).json({
+            data: jobsWithCompanyLogo,
+            message: "Danh sách các công việc",
+            createdBy: "Hệ thống",
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: "Lỗi: " + error.message,
+            createdBy: "Hệ thống",
+        });
     }
 }
