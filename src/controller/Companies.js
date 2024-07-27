@@ -1,5 +1,6 @@
 var CompaniesMD = require("../model/Companies");
 const msg = " ";
+var StatusUser = require("../../src/config/Constans");
 
 exports.index = async (req, res, next) => {
   let lstCompanies = await CompaniesMD.companyModel.find();
