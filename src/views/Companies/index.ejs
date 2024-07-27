@@ -48,7 +48,10 @@
             <% if(lstCompanies.status == "LOCK" ){ %>
               <span class="badge badge-pill badge-danger">Doanh nghiệp bị khóa</span>
           
-             
+              <%}else if(lstCompanies.status == "INACTIVE" ){ %>
+                <span class="badge badge-pill badge-danger">Doanh nghiệp chưa kích hoạt</span>
+            
+               
             <% }else { %>
               <span class="badge badge-pill badge-success">Đang hoạt động</span>
               <% } %>
