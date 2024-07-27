@@ -39,7 +39,7 @@ exports.acitve = async (req, res, next) => {
     // Tìm và update trạng thái của công ty
     const company = await CompaniesMD.companyModel.findByIdAndUpdate(
       companyId,
-      { status: StatusUser.Acivate }
+      { status: StatusUser.ACTIVE }
     );
 
     if (!company) {
