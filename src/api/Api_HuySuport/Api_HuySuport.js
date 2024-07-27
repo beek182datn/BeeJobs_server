@@ -2,6 +2,9 @@ var userMD = require("../../model/Users");
 var roleMD = require("../../model/Roles");
 const WorkerMD = require('../../model/Workers');
 var userRoleMD = require("../../model/Users_Roles");
+const { Message } = require("../../model/Messages");
+const { ChatRoom } = require("../../model/ChatRooms");
+const { companyModel } = require("../../model/Companies");
 const _ = require("lodash");
 var bcrypt = require("bcrypt");
 var { jwtMiddleware, createJWT, checkJWT } = require("../../middleware/JWT");
@@ -88,6 +91,71 @@ exports.checkUserId = async (req, res) => {
     return res.status(500).json({
       message: "Lỗi: " + error.message,
       createdBy: "Hệ thống",
+    });
+  }
+};
+exports.getChatroomByUserIdForWorker = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    // Lấy danh sách các phòng chat có chứa userId
+    const chatRooms = await ChatRoom.find({ userIds: userId });
+
+    // Xử lý dữ liệu phòng chat để thêm trường myID, otherID, thông tin doanh nghiệp và tin nhắn cuối cùng
+    const formattedChatRooms = await Promise.all(
+      chatRooms.map(async (chatRoom) => {
+        const { userIds, _id } = chatRoom;
+        const myID = userId;
+        const otherID = userIds.find((id) => id !== userId) || null;
+
+        // Kiểm tra xem phòng chat có chứa ít nhất một tin nhắn không
+        const messages = await Message.find({ chatRoomId: _id })
+          .sort({ createdAt: -1 })
+          .limit(1);
+
+        if (messages.length === 0) {
+          return null; // Bỏ qua phòng chat không có tin nhắn
+        }
+
+        let companyDetails = {};
+        let lastMessage = null;
+        if (otherID) {
+          // Lấy thông tin doanh nghiệp dựa trên otherID
+          companyDetails = await companyModel.findOne({ _id: otherID }).select(
+            'company_name company_logo'
+          );
+        }
+
+        if (messages.length > 0) {
+          lastMessage = messages[0];
+        }
+
+        return {
+          _id,
+          myID,
+          otherID,
+          company_name: companyDetails ? companyDetails.company_name : null,
+          company_logo: companyDetails ? companyDetails.company_logo : null,
+          userIds,
+          lastMessage: lastMessage ? lastMessage.content : null, // Thêm tin nhắn cuối cùng vào kết quả trả về
+        };
+      })
+    );
+
+    // Loại bỏ các phần tử null (các phòng chat không có tin nhắn)
+    const filteredChatRooms = formattedChatRooms.filter(
+      (chatRoom) => chatRoom !== null
+    );
+
+    res.status(200).json({
+      data: filteredChatRooms,
+      message: filteredChatRooms.length
+        ? 'Lấy danh sách phòng chat thành công!'
+        : 'Không tìm thấy phòng chat nào cho người dùng này.',
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Lỗi: ' + error.message,
     });
   }
 };
