@@ -39,6 +39,7 @@ var Role = require("../controller/Roles");
 var Dashboard = require("../controller/Dashboard");
 var Auth = require("../controller/Auth");
 var Companies = require("../controller/Companies");
+var Chat = require("../controller/Chat");
 var User = require("../controller/Users");
 var Jobs = require("../controller/Jobs");
 var CheckLogin = require("../middleware/LoginCheck");
@@ -111,6 +112,10 @@ const initWebRouter = (app) => {
     CheckLogin.ycLogin,
     Companies.GetInfoCompany
   );
+  //=================Chat Router =====================
+
+  router.get("/Chat/index", CheckLogin.ycLogin, Chat.index);
+ 
   //=================Users Router =====================
 
   router.get("/Users/index", CheckLogin.ycLogin, User.index);
