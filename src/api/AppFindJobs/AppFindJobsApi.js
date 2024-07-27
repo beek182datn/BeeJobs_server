@@ -88,6 +88,14 @@ exports.getFollowedCompanies = async (req, res) => {
             active: true
         });
 
+        if(!companies){
+            return res.status(500).json({
+                data: [],
+                message: "Không có dữ liệu: " + [],
+                createdBy: "Hệ thống",
+            });
+        }
+
         res.status(200).send(companies);
     } catch (error) {
         console.log(error);
@@ -337,6 +345,14 @@ exports.getFollowedJobs = async (req, res) => {
             // status: true 
         }
         );
+
+        if(!jobs){
+            return res.status(500).json({
+                data: [],
+                message: "Không có dữ liệu: " + [],
+                createdBy: "Hệ thống",
+            });
+        }
 
         const jobsWithCompanyLogo = await Promise.all(
             jobs.map(async (job) => {
