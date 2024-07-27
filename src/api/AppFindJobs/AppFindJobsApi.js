@@ -6,6 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const moment = require('moment'); 
 const { applyJobModel } = require('../../model/ApplyJobs');
+const { JobFollows } = require('../../model/JobFollow');
 
 exports.folowCompany = async (req, res) => {
     try {
@@ -251,5 +252,67 @@ exports.getJobApplications = async (req, res) => {
     } catch (error) {
         console.log(error);
         res.status(500).send({ message: "Đã xảy ra lỗi." });
+    }
+}
+
+exports.folowJob = async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const jobId = req.params.jobId;
+        let data = await JobFollows.findOne({ userId });
+        if (!data) {
+            // Nếu người dùng không tồn tại, tạo mới
+            data = new JobFollows({
+                userId,
+                jobsId: [jobId]
+            });
+        } else {
+            // Nếu người dùng đã tồn tại, thêm companyId vào mảng companyId
+            if (!data.jobsId.includes(jobId)) {
+                data.jobsId.push(jobId);
+            }
+        }
+        await data.save();
+        res.status(200).send(data);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+exports.unFollowjob = async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const jobId = req.params.jobId;
+        let data = await JobFollows.findOne({ userId });
+
+        if (data) {
+            // Nếu người dùng tồn tại, loại bỏ companyId khỏi mảng companyId
+            data.jobsId = data.jobsId.filter(id => id !== jobId);
+            await data.save();
+            res.status(200).send(data);
+        } else {
+            // Nếu người dùng không tồn tại, trả về lỗi
+            res.status(404).send({ error: 'User not found' });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ error: 'Internal Server Error' });
+    }
+}
+
+exports.checkIsFolowingJob = async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const jobId = req.params.jobId;
+        const data = await JobFollows.findOne({ userId });
+
+        if (data && data.jobsId.includes(jobId)) {
+            res.status(200).send({ isFollowing: true });
+        } else {
+            res.status(200).send({ isFollowing: false });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ error: 'Internal Server Error' });
     }
 }
