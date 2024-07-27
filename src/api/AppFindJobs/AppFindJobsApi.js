@@ -4,7 +4,7 @@ const { userModel } = require('../../model/Users');
 const WorkerMD = require('../../model/Workers');
 const fs = require('fs');
 const path = require('path');
-const moment = require('moment'); 
+const moment = require('moment');
 const { applyJobModel } = require('../../model/ApplyJobs');
 const { JobFollows } = require('../../model/JobFollow');
 const { jobModel } = require('../../model/Jobs');
@@ -83,8 +83,10 @@ exports.getFollowedCompanies = async (req, res) => {
         const companyIds = data.companyId;
 
         // Tìm tất cả các công ty theo companyId
-        const companies = await companyModel.find({ _id: { $in: companyIds },
-            active: true });
+        const companies = await companyModel.find({
+            _id: { $in: companyIds },
+            active: true
+        });
 
         res.status(200).send(companies);
     } catch (error) {
@@ -225,7 +227,7 @@ exports.getJobApplications = async (req, res) => {
 
         // Lấy thời gian hiện tại
         const now = moment();
-        
+
         // Tính thời gian cho 1 tuần và 30 ngày trước
         const oneWeekAgo = now.subtract(7, 'days').toDate();
         const thirtyDaysAgo = now.subtract(30, 'days').toDate();
@@ -330,14 +332,31 @@ exports.getFollowedJobs = async (req, res) => {
         const jobsId = data.jobsId;
 
         // Tìm tất cả các công ty theo companyId
-        const jobs = await jobModel.find({ _id: { $in: jobsId },
+        const jobs = await jobModel.find({
+            _id: { $in: jobsId },
             // status: true 
         }
         );
 
-        res.status(200).send(jobs);
+        const jobsWithCompanyLogo = await Promise.all(
+            jobs.map(async (job) => {
+                const company = await companyModel.findById(job.company_id);
+                return {
+                    ...job.toObject(),
+                    company_logo: company ? company.company_logo : null,
+                };
+            })
+        );
+
+        return res.status(200).json({
+            data: jobsWithCompanyLogo,
+            message: "Danh sách các công việc",
+            createdBy: "Hệ thống",
+        });
     } catch (error) {
-        console.log(error);
-        res.status(500).send({ message: "Đã xảy ra lỗi." });
+        return res.status(500).json({
+            message: "Lỗi: " + error.message,
+            createdBy: "Hệ thống",
+        });
     }
 }
