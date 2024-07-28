@@ -77,7 +77,11 @@ exports.getFollowedCompanies = async (req, res) => {
         const data = await FolowerCompany.findOne({ userId });
 
         if (!data) {
-            return res.status(404).send({ message: "Người dùng không tồn tại hoặc chưa theo dõi công ty nào." });
+            return res.status(200).json({
+                data: [],
+                message: "Không có dữ liệu: " + [],
+                createdBy: "Hệ thống",
+            });
         }
 
         const companyIds = data.companyId;
@@ -334,7 +338,11 @@ exports.getFollowedJobs = async (req, res) => {
         const data = await JobFollows.findOne({ userId });
 
         if (!data) {
-            return res.status(404).send({ message: "Người dùng không tồn tại hoặc chưa theo dõi tin tuyển dụng nào." });
+            return res.status(200).json({
+                data: [],
+                message: "Không có dữ liệu: " + [],
+                createdBy: "Hệ thống",
+            });
         }
 
         const jobsId = data.jobsId;
@@ -342,12 +350,12 @@ exports.getFollowedJobs = async (req, res) => {
         // Tìm tất cả các công ty theo companyId
         const jobs = await jobModel.find({
             _id: { $in: jobsId },
-            // status: true 
+            status: 'ACTIVE' 
         }
         );
 
         if(!jobs){
-            return res.status(500).json({
+            return res.status(200).json({
                 data: [],
                 message: "Không có dữ liệu: " + [],
                 createdBy: "Hệ thống",
