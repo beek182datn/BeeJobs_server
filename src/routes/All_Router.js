@@ -43,6 +43,7 @@ var Chat = require("../controller/Chat");
 var User = require("../controller/Users");
 var Jobs = require("../controller/Jobs");
 var CheckLogin = require("../middleware/LoginCheck");
+const chatController = require('../controller/Chat');
 var api_worker = require("../api/Workers/Workers_Api");
 var api_company = require("../api/Companies/Companies_Api");
 var api_job = require("../api/Jobs/Jobs_Api");
@@ -114,8 +115,24 @@ const initWebRouter = (app) => {
   );
   //=================Chat Router =====================
 
-  router.get("/Chat/index", CheckLogin.ycLogin, Chat.index);
- 
+// Route để lấy các phòng chat của admin
+router.get('/chatrooms', chatController.getChatroomsByAdminId);
+
+// Route để tạo phòng chat mới
+router.post('/createChatRoom', chatController.createChatRoom);
+
+// Route để tìm kiếm người dùng
+router.get('/searchUsers', chatController.searchUsers);
+
+// Route để lấy tất cả người dùng
+router.get('/allUsers', chatController.getAllUsers);
+
+// Route để lấy danh sách tin nhắn trong phòng chat
+router.get('/chatrooms/:chatRoomId/messages', chatController.getMessagesByChatRoomId);
+
+// Route để gửi tin nhắn mới
+router.post('/chatrooms/:chatRoomId/messages', chatController.sendMessage);
+
   //=================Users Router =====================
 
   router.get("/Users/index", CheckLogin.ycLogin, User.index);

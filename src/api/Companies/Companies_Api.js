@@ -48,7 +48,7 @@ exports.create_company = async (req, res) => {
         company_certification: url_certificate,
         company_logo: url_logo,
         taxcode: req.body.taxcode,
-        active: req.body.active,
+        status: "INACTIVE",
         updated_at: new Date(),
         created_at: new Date(),
       });
@@ -131,7 +131,7 @@ exports.edit_company = async (req, res) => {
       company_website: req.body.company_website,
       company_certification: url_certificate,
       taxcode: req.body.taxcode,
-      active: req.body.active,
+      status: req.body.status,
       updated_at: new Date(),
     };
 
@@ -227,7 +227,7 @@ exports.edit_company_logo = async (req, res) => {
       company_scale,
       company_certification,
       taxcode,
-      active,
+      status,
       updated_at,
       created_at,
     } = checkEdit;
@@ -242,7 +242,7 @@ exports.edit_company_logo = async (req, res) => {
         company_scale,
         company_certification,
         taxcode,
-        active,
+        status,
         updated_at,
         created_at,
       },
