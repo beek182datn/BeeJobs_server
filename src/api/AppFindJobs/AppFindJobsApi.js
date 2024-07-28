@@ -400,10 +400,10 @@ exports.getApplyJobsByIdWorker = async (req, res) => {
         const workerApplications = await applyJobModel.find({ worker_id });
 
         if (!workerApplications || workerApplications.length === 0) {
-            return res.status(404).json({
+            return res.status(200).json({
                 data: [],
                 message: "Không tìm thấy đơn ứng tuyển của người lao động này!",
-                createdBy: "Hệ thống",
+                createdBy: "Long",
             });
         }
 
