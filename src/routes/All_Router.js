@@ -315,8 +315,7 @@ router.get("/followjob/:userId/:jobId", appfindjobs.folowJob);
 router.get("/checkfollowjob/:userId/:jobId", appfindjobs.checkIsFolowingJob);
 router.get("/unfollowjob/:userId/:jobId", appfindjobs.unFollowjob);
 router.get("/api/findjobs/:userId", appfindjobs.getFollowedJobs);
-router.get("/api/applyJobs/getapylyjobsbyIdworker/:worker_id", appfindjobs.getApplyJobsByIdWorker
-); 
+router.get("/api/getapylyjobsbyIdworker/:worker_id", appfindjobs.getApplyJobsByIdWorker); 
 
 //=================Chat Router =====================
 router.get("/api/chat/chatroom/:senderId/:receiverId", chat.getChatRoomInfo);
