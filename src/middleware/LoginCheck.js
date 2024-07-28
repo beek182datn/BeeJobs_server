@@ -1,6 +1,8 @@
 exports.ycLogin= (req,res,next)=>{
     if(req.cookies.jwt){
-        next();
+if(req.cookies.role == 'ADMIN'){
+        next();}
+        else {res.send("<meta><h1>Bạn không có quyền truy cập</h1></meta>")};
     }
     else {
         return res.redirect('/');

@@ -22,15 +22,21 @@ exports.SignIn = async (req, res, next) => {
 
 
           let objUserRole = await userRoleMD.UserRoleModel.findOne({
-            IdUser: objU._id,
+            id_User: objU._id,
           });
           if (objUserRole) {
             let objRole = await roleMD.RoleModel.findOne({
-              _id: objUserRole.IdRole,
+              _id: objUserRole.id_Role
             });
             console.log(objRole);
 
             req.Role = objRole.Code;
+            res.cookie("role", req.Role, {
+              httpOnly: true, // Chỉ trình duyệt có thể truy cập cookie này
+              // secure: true, // Chỉ gửi cookie qua HTTPS
+              maxAge: 3600000, // Thời gian sống của cookie (1 giờ)
+              sameSite: "strict", // Chống CSRF
+            });
           }
 
           req.user = objU;
