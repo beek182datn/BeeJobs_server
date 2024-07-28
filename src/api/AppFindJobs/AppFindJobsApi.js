@@ -85,7 +85,7 @@ exports.getFollowedCompanies = async (req, res) => {
         // Tìm tất cả các công ty theo companyId
         const companies = await companyModel.find({
             _id: { $in: companyIds },
-            active: true
+            status: 'ACTIVE'
         });
 
         if(!companies){
