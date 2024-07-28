@@ -92,7 +92,7 @@ exports.getFollowedCompanies = async (req, res) => {
             status: 'ACTIVE'
         });
 
-        if(!companies){
+        if (!companies) {
             return res.status(500).json({
                 data: [],
                 message: "Không có dữ liệu: " + [],
@@ -350,11 +350,11 @@ exports.getFollowedJobs = async (req, res) => {
         // Tìm tất cả các công ty theo companyId
         const jobs = await jobModel.find({
             _id: { $in: jobsId },
-            status: 'ACTIVE' 
+            status: 'ACTIVE'
         }
         );
 
-        if(!jobs){
+        if (!jobs) {
             return res.status(200).json({
                 data: [],
                 message: "Không có dữ liệu: " + [],
@@ -384,3 +384,39 @@ exports.getFollowedJobs = async (req, res) => {
         });
     }
 }
+
+exports.getApplyJobsByIdWorker = async (req, res) => {
+    if (req.method !== "GET") {
+        return res.status(405).json({
+            message: "Phương thức không được hỗ trợ, hãy sử dụng: GET!",
+            createdBy: "Hệ thống",
+        });
+    }
+
+    try {
+        const worker_id = req.params.worker_id;
+
+        // Kiểm tra sự tồn tại của người lao động
+        const workerApplications = await applyJobModel.find({ worker_id });
+
+        if (!workerApplications || workerApplications.length === 0) {
+            return res.status(404).json({
+                data: [],
+                message: "Không tìm thấy đơn ứng tuyển của người lao động này!",
+                createdBy: "Hệ thống",
+            });
+        }
+
+        return res.status(200).json({
+            data: workerApplications,
+            message: "Lấy danh sách đơn ứng tuyển thành công!",
+            createdBy: "Hệ thống",
+        });
+    } catch (error) {
+        return res.status(500).json({
+            data: [],
+            message: "Lỗi: " + error.message,
+            createdBy: "Hệ thống",
+        });
+    }
+};
