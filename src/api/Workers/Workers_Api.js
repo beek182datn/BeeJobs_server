@@ -22,7 +22,7 @@ exports.create_Workers = async (req, res) => {
                 worker_name: req.body.worker_name,
                 worker_avatar: url_avatar,
                 phone: req.body.phone,
-                email: req.body.email
+                email: req.body.email,
             });
             // Lưu worker vào cơ sở dữ liệu
             await worker.save();

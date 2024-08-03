@@ -148,7 +148,9 @@ exports.create_Workers = async (req, res) => {
                 worker_name: req.body.worker_name,
                 worker_avatar: url_avatar,
                 phone: req.body.phone,
-                email: req.body.email
+                email: req.body.email,
+                major: req.body.major,
+                experience: req.body.experience
             });
 
             // Lưu worker vào cơ sở dữ liệu
@@ -208,6 +210,9 @@ exports.update_Workers = async (req, res) => {
             worker.worker_name = req.body.worker_name || worker.worker_name;
             worker.phone = req.body.phone || worker.phone;
             worker.email = req.body.email || worker.email;
+            worker.major = req.body.major || worker.major;
+            worker.experience = req.body.experience || worker.experience;
+            
 
             // Lưu các thay đổi vào cơ sở dữ liệu
             await worker.save();

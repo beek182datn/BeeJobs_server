@@ -7,6 +7,8 @@ const workerSchema = new db.mongoose.Schema(
     worker_avatar: { type: String, required: true },
     phone: { type: String, required: true },
     email: { type: String, required: true },
+    experience: { type: String, required: false },
+    major: { type: String, required: false },
 }, {
     collection: 'Workers'
 });

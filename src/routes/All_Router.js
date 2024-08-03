@@ -299,13 +299,11 @@ router.post("/follow/:userId/:companyId", appfindjobs.folowCompany);
 router.get("/follow/:userId/:companyId", appfindjobs.checkIsFolowing);
 router.post("/unfollow/:userId/:companyId", appfindjobs.unFollowCompany);
 router.get("/user/:userId", appfindjobs.getInfoUser);
-router.post(
-  "/workers/create/:user_id",
+router.post("/workers/create/:user_id",
   uploader.fields([{ name: "worker_avatar", maxCount: 1 }]),
   appfindjobs.create_Workers
 );
-router.post(
-  "/workers/update/:user_id",
+router.post("/workers/update/:user_id",
   uploader.fields([{ name: "worker_avatar", maxCount: 1 }]),
   appfindjobs.update_Workers
 );
