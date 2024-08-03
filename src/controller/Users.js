@@ -5,16 +5,44 @@ var bcrypt = require("bcrypt");
 var fs = require("fs");
 const path = require("path");
 const { StatusUser } = require("../config/Constans");
+const NotificationHelper = require("../helper/NotificationHelper");
 
 
+exports.index = async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const search = req.query.search || '';
 
-exports.index = async (req,res,next) => {
-    let lstUsers = await UsersMD.userModel.find();
-   
-    res.render('../views/Users/index.ejs',{list: lstUsers})
+    const skip = (page - 1) * limit;
 
+    const query = search
+      ? { $or: [
+          { username: { $regex: search, $options: 'i' } },
+          { email: { $regex: search, $options: 'i' } }
+        ]}
+      : {};
 
-}
+    const totalUsers = await UsersMD.userModel.countDocuments(query);
+    const totalPages = Math.ceil(totalUsers / limit);
+
+    const lstUsers = await UsersMD.userModel
+      .find(query)
+      .skip(skip)
+      .limit(limit)
+      .lean();
+
+    res.render('../views/Users/index.ejs', {
+      list: lstUsers,
+      currentPage: page,
+      totalPages: totalPages,
+      limit: limit,
+      search: search
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 
 exports.Add_user = async (req, res, next) => {
@@ -46,7 +74,7 @@ exports.Add_user = async (req, res, next) => {
 
         console.log(req.body);
         try {
-         debugger
+        
     
      
             let IMGAvata = "";
@@ -63,6 +91,13 @@ exports.Add_user = async (req, res, next) => {
             const objUMD = _.assign(objU, req.body);
             objUMD.avata = IMGAvata;
             await objUMD.save();
+
+            await NotificationHelper.createNotification(
+              res.locals.userInfo._id,
+              res.locals.userInfo._id,// Giả sử bạn đã có middleware xác thực
+              'Đã có người dùng được tạo mới',
+              'Thông báo'
+            );
            return res.redirect('/Users/index');
           
         } catch (error) {

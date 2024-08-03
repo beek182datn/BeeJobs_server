@@ -1,16 +1,19 @@
-<%- include('../inc/header.ejs') %> <%- include('../inc/nav_header.ejs') %>
+<%- include('../inc/header.ejs') %> 
+<%- include('../inc/nav_header.ejs') %>
 
 <!-- section container start -->
 <div class="section-container">
   <p class="section-title">Danh sách doanh nghiệp</p>
 
-  <!--*************************
-    *************************
-    *************************
-    Basic Table start
-    *************************
-    *************************
-    *************************-->
+  <form action="" method="GET" class="mb-3">
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="Tìm kiếm doanh nghiệp..." name="search" value="<%= search %>">
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="submit">Tìm kiếm</button>
+      </div>
+    </div>
+  </form>
+
   <div class="table-responsive">
     <table class="table m-0">
       <thead>
@@ -20,31 +23,23 @@
           <th>Địa chỉ</th>
           <th>Ngày tạo</th>
           <th>Trạng thái hoạt động</th>
-
           <th>Thao tác</th>
         </tr>
       </thead>
       <tbody>
-        <% var stt = 1; list.forEach((lstCompanies) => { %>
-
+        <% list.forEach((lstCompanies, index) => { %>
         <tr>
           <td>
-            <span class="text-info"><%= stt %></span>
+            <span class="text-info"><%= (currentPage - 1) * limit + index + 1 %></span>
           </td>
           <td><%= lstCompanies.company_name %></td>
           <td><%= lstCompanies.company_address %></td>
           <td><%= lstCompanies.created_at %></td>
           <td>
             <% if(lstCompanies.status == "LOCK" ){ %>
-            <span class="badge badge-pill badge-danger"
-              >Doanh nghiệp bị khóa</span
-            >
-
+            <span class="badge badge-pill badge-danger">Doanh nghiệp bị khóa</span>
             <%}else if(lstCompanies.status == "INACTIVE" ){ %>
-            <span class="badge badge-pill badge-danger"
-              >Doanh nghiệp chưa kích hoạt</span
-            >
-
+            <span class="badge badge-pill badge-danger">Doanh nghiệp chưa kích hoạt</span>
             <% }else { %>
             <span class="badge badge-pill badge-success">Đang hoạt động</span>
             <% } %>
@@ -61,40 +56,57 @@
                 Action
               </button>
               <div class="dropdown-menu">
-                <a
-                  class="dropdown-item"
-                  href="/compamies/detail/<%= lstCompanies._id %>"
-                  >Xem chi tiết</a
-                >
-                <a
-                  class="dropdown-item"
-                  href="/compamies/lockcompani/<%= lstCompanies._id %>"
-                  >Khoá doanh nghiệp</a
-                >
+                <a class="dropdown-item" href="/compamies/detail/<%= lstCompanies._id %>">Xem chi tiết</a>
+                <a class="dropdown-item" href="/compamies/lockcompani/<%= lstCompanies._id %>">Khoá doanh nghiệp</a>
                 <% if(!lstCompanies.active){ %>
-                <a
-                  class="dropdown-item"
-                  href="/compamies/detail/<%= lstCompanies._id %>"
-                  >Duyệt doanh nghiệp</a
-                >
+                <a class="dropdown-item" href="/compamies/detail/<%= lstCompanies._id %>">Duyệt doanh nghiệp</a>
                 <% }%>
               </div>
             </div>
           </td>
         </tr>
-
-        <% stt++; }); %>
+        <% }); %>
       </tbody>
     </table>
   </div>
-  <!--*************************
-    *************************
-    *************************
-    Basic Table end
-    *************************
-    *************************
-    *************************-->
+
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+      <% if (currentPage > 1) { %>
+        <li class="page-item">
+          <a class="page-link" href="?page=1&limit=<%= limit %>&search=<%= search %>" aria-label="First">
+            <span aria-hidden="true">&laquo;&laquo;</span>
+          </a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page=<%= currentPage - 1 %>&limit=<%= limit %>&search=<%= search %>" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+      <% } %>
+
+      <% for(let i = 1; i <= totalPages; i++) { %>
+        <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+          <a class="page-link" href="?page=<%= i %>&limit=<%= limit %>&search=<%= search %>"><%= i %></a>
+        </li>
+      <% } %>
+
+      <% if (currentPage < totalPages) { %>
+        <li class="page-item">
+          <a class="page-link" href="?page=<%= currentPage + 1 %>&limit=<%= limit %>&search=<%= search %>" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page=<%= totalPages %>&limit=<%= limit %>&search=<%= search %>" aria-label="Last">
+            <span aria-hidden="true">&raquo;&raquo;</span>
+          </a>
+        </li>
+      <% } %>
+    </ul>
+  </nav>
 </div>
 <!-- section container end -->
 
-<%- include('../inc/nav_footer.ejs') %> <%- include('../inc/footer.ejs') %>
+<%- include('../inc/nav_footer.ejs') %> 
+<%- include('../inc/footer.ejs') %>

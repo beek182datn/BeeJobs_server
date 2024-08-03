@@ -1,19 +1,22 @@
-<%- include('../inc/header.ejs') %> <%- include('../inc/nav_header.ejs') %>
+<%- include('../inc/header.ejs') %> 
+<%- include('../inc/nav_header.ejs') %>
 
 <!-- section container start -->
 <div class="section-container">
   <p class="section-title">Danh sách người dùng</p>
 
-  <!--*************************
-    *************************
-    *************************
-    Basic Table start
-    *************************
-    *************************
-    *************************-->
-    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#AddNewUser">
-      Thêm người dùng mới
-    </button>
+  <button type="button" class="btn btn-danger mb-3" data-toggle="modal" data-target="#AddNewUser">
+    Thêm người dùng mới
+  </button>
+
+  <form action="" method="GET" class="mb-3">
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="Tìm kiếm..." name="search" value="<%= search %>">
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="submit">Tìm kiếm</button>
+      </div>
+    </div>
+  </form>
 
   <div class="table-responsive">
     <table class="table m-0">
@@ -28,11 +31,10 @@
         </tr>
       </thead>
       <tbody>
-        <% var stt = 1; list.forEach((lstUsers) => { %>
-
+        <% list.forEach((lstUsers, index) => { %>
         <tr>
           <td>
-            <span class="text-info"><%= stt %></span>
+            <span class="text-info"><%= (currentPage - 1) * limit + index + 1 %></span>
           </td>
           <td><%= lstUsers.full_name %></td>
           <td><%= lstUsers.accout_name %></td>
@@ -44,7 +46,6 @@
               <span class="badge badge-pill badge-danger">Người dùng bị khóa</span>
             <% }else { %>
             <span class="badge badge-pill badge-danger">Chưa duyệt</span>
-
             <% } %>
           </td>
           <td>
@@ -62,26 +63,53 @@
                 <a class="dropdown-item" href="/Users/detail/<%= lstUsers._id %>">Xem chi tiết</a>
                 <a class="dropdown-item" href="/Users/editUser/<%= lstUsers._id %>">Sửa thông tin</a>
                 <a class="dropdown-item" href="/Users/lockuser/<%= lstUsers._id %>">Khóa người dùng </a>
-
-               
               </div>
             </div>
           </td>
         </tr>
-
-        <% stt++; }); %>
+        <% }); %>
       </tbody>
     </table>
   </div>
-  <!--*************************
-    *************************
-    *************************
-    Basic Table end
-    *************************
-    *************************
-    *************************-->
+
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+      <% if (currentPage > 1) { %>
+        <li class="page-item">
+          <a class="page-link" href="?page=1&limit=<%= limit %>&search=<%= search %>" aria-label="First">
+            <span aria-hidden="true">&laquo;&laquo;</span>
+          </a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page=<%= currentPage - 1 %>&limit=<%= limit %>&search=<%= search %>" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+      <% } %>
+
+      <% for(let i = 1; i <= totalPages; i++) { %>
+        <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+          <a class="page-link" href="?page=<%= i %>&limit=<%= limit %>&search=<%= search %>"><%= i %></a>
+        </li>
+      <% } %>
+
+      <% if (currentPage < totalPages) { %>
+        <li class="page-item">
+          <a class="page-link" href="?page=<%= currentPage + 1 %>&limit=<%= limit %>&search=<%= search %>" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page=<%= totalPages %>&limit=<%= limit %>&search=<%= search %>" aria-label="Last">
+            <span aria-hidden="true">&raquo;&raquo;</span>
+          </a>
+        </li>
+      <% } %>
+    </ul>
+  </nav>
 </div>
 <!-- section container end -->
+
 <!-- Modal add-->
 <div class="modal fade" id="AddNewUser" tabindex="-1" role="dialog"
 aria-labelledby="AddNewUserTitle" aria-hidden="true">
@@ -186,4 +214,5 @@ aria-labelledby="AddNewUserTitle" aria-hidden="true">
     }
   }
 </script>
-<%- include('../inc/nav_footer.ejs') %> <%- include('../inc/footer.ejs') %>
+<%- include('../inc/nav_footer.ejs') %> 
+<%- include('../inc/footer.ejs') %>

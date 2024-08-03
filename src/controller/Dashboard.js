@@ -68,7 +68,7 @@ exports.index = async (req, res, next) => {
         const applicationsCountRaw = await ApplyJobs.applyJobModel.aggregate([
             {
                 $match: {
-                    created_at: {
+                    applied_at: {
                         $gte: new Date(`${currentYear}-01-01`),
                         $lte: new Date(`${currentYear}-12-31`)
                     }
@@ -76,7 +76,7 @@ exports.index = async (req, res, next) => {
             },
             {
                 $group: {
-                    _id: { $month: "$created_at" },
+                    _id: { $month: "$applied_at" },
                     applyCount: { $sum: 1 }
                 }
             },
