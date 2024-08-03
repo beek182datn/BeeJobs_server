@@ -3,9 +3,36 @@ const msg = " ";
 var StatusUser = require("../../src/config/Constans");
 
 exports.index = async (req, res, next) => {
-  let lstCompanies = await CompaniesMD.companyModel.find();
-  console.log(lstCompanies);
-  res.render("../views/Companies/index.ejs", { list: lstCompanies });
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const search = req.query.search || '';
+
+    const skip = (page - 1) * limit;
+
+    const query = search
+      ? { company_name: { $regex: search, $options: 'i' } }
+      : {};
+
+    const totalCompanies = await CompaniesMD.companyModel.countDocuments(query);
+    const totalPages = Math.ceil(totalCompanies / limit);
+
+    const lstCompanies = await CompaniesMD.companyModel
+      .find(query)
+      .skip(skip)
+      .limit(limit)
+      .lean();
+
+    res.render("../views/Companies/index.ejs", {
+      list: lstCompanies,
+      currentPage: page,
+      totalPages: totalPages,
+      limit: limit,
+      search: search
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 exports.GetInfoCompany = async (req, res, next) => {

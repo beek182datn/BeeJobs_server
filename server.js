@@ -11,14 +11,15 @@ const initWebRouter = require("./src/routes/All_Router");
 const http = require('http');
 const socketIo = require('socket.io');
 const headerUserInfo = require("./src/middleware/headerUserInfo");
-
+const GetNotifi = require("./src/middleware/GetNotifi");
+const NotificationHelper = require("./src/helper/NotificationHelper");
 var app = express();
 configViewEngine(app);
 
 // Create HTTP server
 const server = http.createServer(app);
 const io = socketIo(server);
-
+NotificationHelper.setIo(io);
 // Socket.IO configuration
 io.on('connection', (socket) => {
   console.log('A user connected');
@@ -54,6 +55,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(headerUserInfo);
+app.use(GetNotifi)
 // Error handling
 app.use(function (err, req, res, next) {
   res.locals.message = err.message;

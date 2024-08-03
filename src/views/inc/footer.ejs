@@ -60,7 +60,39 @@
 
 <!-- Common JS -->
 <script src="/js/common.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const socket = io();
+    
+    // Xác thực người dùng với WebSocket
+    socket.emit('authenticate', '<%= userInfo._id %>');
 
+    socket.on('newNotification', (notification) => {
+      // Cập nhật số lượng thông báo chưa đọc
+      const unreadCountElement = document.getElementById('unreadNotificationCount');
+      let currentCount = parseInt(unreadCountElement.textContent) || 0;
+      unreadCountElement.textContent = currentCount + 1;
+      unreadCountElement.style.display = 'inline';
+
+      // Thêm thông báo mới vào danh sách
+      const notificationList = document.getElementById('notificationList');
+      const newNotificationHtml = `
+        <a class="dropdown-item" href="#">
+          ${notification.message}
+          <small class="text-muted">${new Date(notification.createdAt).toLocaleString()}</small>
+        </a>
+      `;
+      notificationList.innerHTML = newNotificationHtml + notificationList.innerHTML;
+
+      // Xóa thông báo "Không có thông báo mới" nếu có
+      const noNotificationItem = notificationList.querySelector('a.dropdown-item:last-child');
+      if (noNotificationItem && noNotificationItem.textContent === 'Không có thông báo mới') {
+        noNotificationItem.remove();
+      }
+    });
+  });
+</script>
 <script>
     //Datepicker
     $(function () {

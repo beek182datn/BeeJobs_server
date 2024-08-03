@@ -135,39 +135,31 @@
 							<!-- Header actions start -->
 							<ul class="header-actions">
 								<li class="dropdown">
+									<% if (locals.unreadNotificationsCount > 0) { %>
 									<a href="#" id="notifications" data-toggle="dropdown" aria-haspopup="true">
 										<i class="icon-notifications_none"></i>
-										<span class="count-label">7</span>
+										<span class="count-label"><%= unreadNotificationsCount %></span>
 									</a>
 									<div class="dropdown-menu dropdown-menu-right lg" aria-labelledby="notifications">
 										<ul class="imp-notify">
+											<% if (locals.unreadNotifications && locals.unreadNotifications.length > 0) { %>
+												<% locals.unreadNotifications.forEach(notification => { %>
 											<li>
-												<div class="icon">W</div>
+												<div class="icon">M</div>
 												<div class="details">
-													<h6 class="username">Wilson</h6>
-													<p class="desc">The best Dashboard design I have seen ever.</p>
-													<p class="time">6:30 PM</p>
+													<h6 class="username">Thông báo!!!</h6>
+													<p class="desc"> <%= notification.message %></p>
+													<p class="time"><%= notification.createdAt.toLocaleString() %></p>
 												</div>
 											</li>
-											<li>
-												<div class="icon green">J</div>
-												<div class="details">
-													<h6 class="username">John Smith</h6>
-													<p class="desc">Jhonny sent you a message. Read now!</p>
-													<p class="time">7:20 PM</p>
-												</div>
-											</li>
-											<li>
-												<div class="icon red">R</div>
-												<div class="details">
-													<h6 class="username">Zustin Mezzell</h6>
-													<p class="desc">Stella, Added you as a Friend. Accept it!</p>
-													<p class="time">3:45 PM</p>
-												</div>
-											</li>
+											<% }) %>
+											<% } else { %>
+												<a class="dropdown-item" href="#">Không có thông báo mới</a>
+												<% } %>
 										</ul>
 									</div>
 								</li>
+								<% } %>
 								<li>
 									<a href="#" id="todos" data-toggle="dropdown" aria-haspopup="true">
 										<i class="icon-person_outline"></i>
