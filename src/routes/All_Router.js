@@ -51,6 +51,7 @@ var api_applyjob = require("../api/ApplyJobs/ApplyJobs_Api");
 var api_suportLong = require("../api/Api_SuportLong/Api_SuportLong"); //Dùng tạm thời để support Long demo với Imatech
 var api_huysuport = require("../api/Api_HuySuport/Api_HuySuport"); //Dùng tạm thời để thêm các starts check
 var api_getChat = require("../api/Get_Chat_Api/GetChat_Api");
+const notification_api = require('../api/Notifi/notifi');
 const router = express.Router();
 
 /**
@@ -344,5 +345,15 @@ router.delete(
   api_getChat.deleteMessagesInChatroom
 );
 router.post("/api/chat/createChatRoom", api_getChat.createChatRoom);
+
+
+
+
+
+//=================Noti================================================================
+router.post('/create', notification_api.createNotification);
+router.get('/unread/:userId', notification_api.getUnreadNotifications);
+router.get('/all/:userId', notification_api.getAllNotifications);
+router.put('/markAsRead/:notificationId', notification_api.markAsRead);
 
 module.exports = initWebRouter;
