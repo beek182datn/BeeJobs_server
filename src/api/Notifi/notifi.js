@@ -1,4 +1,5 @@
-const NotificationModel = require('../model/Notification');
+const { log } = require('winston');
+const NotificationModel = require('../../model/Notification');
 
 let io;
 
@@ -36,6 +37,7 @@ exports.createNotification = async (req, res) => {
 
 exports.getUnreadNotifications = async (req, res) => {
   try {
+    console.log("zo")
     const { userId } = req.params;
     const unreadNotifications = await NotificationModel.find({ userId, isRead: false })
       .sort({ createdAt: -1 });

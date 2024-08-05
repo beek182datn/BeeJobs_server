@@ -352,7 +352,7 @@ router.post("/api/chat/createChatRoom", api_getChat.createChatRoom);
 
 //=================Noti================================================================
 router.post('/create', notification_api.createNotification);
-router.get('/unread/:userId', notification_api.getUnreadNotifications);
+router.get('/api/unread/:userId', notification_api.getUnreadNotifications);
 router.get('/all/:userId', notification_api.getAllNotifications);
 router.put('/markAsRead/:notificationId', notification_api.markAsRead);
 
