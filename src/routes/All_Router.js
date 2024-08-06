@@ -222,10 +222,10 @@ router.get(
   api_company.checkCompanyByUserId
 );
 
-router//=================Jobs===================
+//=================Jobs===================
 
-.router
-  .post("/api/jobs/create/:company_id", api_job.createJob); // Tạo Job mới
+
+router.post("/api/jobs/create/:company_id", api_job.createJob); // Tạo Job mới
 router.put("/api/jobs/edit/:company_id/:job_id", api_job.editJob); // Cập nhật Job
 router.get("/api/jobs/getListJobs", api_job.getListJobs); // Lấy danh sách tất cả công việc
 router.get("/api/jobs/getJobById/:job_id", api_job.getJobById); // Lấy công việc theo id
