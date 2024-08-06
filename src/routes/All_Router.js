@@ -43,7 +43,7 @@ var Chat = require("../controller/Chat");
 var User = require("../controller/Users");
 var Jobs = require("../controller/Jobs");
 var CheckLogin = require("../middleware/LoginCheck");
-const chatController = require('../controller/Chat');
+const chatController = require("../controller/Chat");
 var api_worker = require("../api/Workers/Workers_Api");
 var api_company = require("../api/Companies/Companies_Api");
 var api_job = require("../api/Jobs/Jobs_Api");
@@ -51,7 +51,7 @@ var api_applyjob = require("../api/ApplyJobs/ApplyJobs_Api");
 var api_suportLong = require("../api/Api_SuportLong/Api_SuportLong"); //Dùng tạm thời để support Long demo với Imatech
 var api_huysuport = require("../api/Api_HuySuport/Api_HuySuport"); //Dùng tạm thời để thêm các starts check
 var api_getChat = require("../api/Get_Chat_Api/GetChat_Api");
-const notification_api = require('../api/Notifi/notifi');
+const notification_api = require("../api/Notifi/notifi");
 const router = express.Router();
 
 /**
@@ -116,23 +116,26 @@ const initWebRouter = (app) => {
   );
   //=================Chat Router =====================
 
-// Route để lấy các phòng chat của admin
-router.get('/chatrooms', chatController.getChatroomsByAdminId);
+  // Route để lấy các phòng chat của admin
+  router.get("/chatrooms", chatController.getChatroomsByAdminId);
 
-// Route để tạo phòng chat mới
-router.post('/createChatRoom', chatController.createChatRoom);
+  // Route để tạo phòng chat mới
+  router.post("/createChatRoom", chatController.createChatRoom);
 
-// Route để tìm kiếm người dùng
-router.get('/searchUsers', chatController.searchUsers);
+  // Route để tìm kiếm người dùng
+  router.get("/searchUsers", chatController.searchUsers);
 
-// Route để lấy tất cả người dùng
-router.get('/allUsers', chatController.getAllUsers);
+  // Route để lấy tất cả người dùng
+  router.get("/allUsers", chatController.getAllUsers);
 
-// Route để lấy danh sách tin nhắn trong phòng chat
-router.get('/chatrooms/:chatRoomId/messages', chatController.getMessagesByChatRoomId);
+  // Route để lấy danh sách tin nhắn trong phòng chat
+  router.get(
+    "/chatrooms/:chatRoomId/messages",
+    chatController.getMessagesByChatRoomId
+  );
 
-// Route để gửi tin nhắn mới
-router.post('/chatrooms/:chatRoomId/messages', chatController.sendMessage);
+  // Route để gửi tin nhắn mới
+  router.post("/chatrooms/:chatRoomId/messages", chatController.sendMessage);
 
   //=================Users Router =====================
 
@@ -219,9 +222,10 @@ router.get(
   api_company.checkCompanyByUserId
 );
 
-//=================Jobs===================
+router//=================Jobs===================
 
-router.post("/api/jobs/create/:company_id", api_job.createJob); // Tạo Job mới
+.router
+  .post("/api/jobs/create/:company_id", api_job.createJob); // Tạo Job mới
 router.put("/api/jobs/edit/:company_id/:job_id", api_job.editJob); // Cập nhật Job
 router.get("/api/jobs/getListJobs", api_job.getListJobs); // Lấy danh sách tất cả công việc
 router.get("/api/jobs/getJobById/:job_id", api_job.getJobById); // Lấy công việc theo id
@@ -300,11 +304,13 @@ router.post("/follow/:userId/:companyId", appfindjobs.folowCompany);
 router.get("/follow/:userId/:companyId", appfindjobs.checkIsFolowing);
 router.post("/unfollow/:userId/:companyId", appfindjobs.unFollowCompany);
 router.get("/user/:userId", appfindjobs.getInfoUser);
-router.post("/workers/create/:user_id",
+router.post(
+  "/workers/create/:user_id",
   uploader.fields([{ name: "worker_avatar", maxCount: 1 }]),
   appfindjobs.create_Workers
 );
-router.post("/workers/update/:user_id",
+router.post(
+  "/workers/update/:user_id",
   uploader.fields([{ name: "worker_avatar", maxCount: 1 }]),
   appfindjobs.update_Workers
 );
@@ -314,7 +320,10 @@ router.get("/followjob/:userId/:jobId", appfindjobs.folowJob);
 router.get("/checkfollowjob/:userId/:jobId", appfindjobs.checkIsFolowingJob);
 router.get("/unfollowjob/:userId/:jobId", appfindjobs.unFollowjob);
 router.get("/api/findjobs/:userId", appfindjobs.getFollowedJobs);
-router.get("/api/getapylyjobsbyIdworker/:worker_id", appfindjobs.getApplyJobsByIdWorker); 
+router.get(
+  "/api/getapylyjobsbyIdworker/:worker_id",
+  appfindjobs.getApplyJobsByIdWorker
+);
 
 //=================Chat Router =====================
 router.get("/api/chat/chatroom/:senderId/:receiverId", chat.getChatRoomInfo);
@@ -346,14 +355,10 @@ router.delete(
 );
 router.post("/api/chat/createChatRoom", api_getChat.createChatRoom);
 
-
-
-
-
 //=================Noti================================================================
-router.post('/create', notification_api.createNotification);
-router.get('/api/unread/:userId', notification_api.getUnreadNotifications);
-router.get('/all/:userId', notification_api.getAllNotifications);
-router.put('/markAsRead/:notificationId', notification_api.markAsRead);
+router.post("/create", notification_api.createNotification);
+router.get("/api/unread/:userId", notification_api.getUnreadNotifications);
+router.get("/all/:userId", notification_api.getAllNotifications);
+router.put("/markAsRead/:notificationId", notification_api.markAsRead);
 
 module.exports = initWebRouter;

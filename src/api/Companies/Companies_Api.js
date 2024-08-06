@@ -43,11 +43,14 @@ exports.create_company = async (req, res) => {
         company_name: req.body.company_name,
         company_address: req.body.company_address,
         company_desc: req.body.company_desc,
+        phone_number: req.body.phone_number,
         company_scale: req.body.company_scale,
         company_website: req.body.company_website,
         company_certification: url_certificate,
         company_logo: url_logo,
         taxcode: req.body.taxcode,
+        premium: false,
+        currency: 0,
         status: "INACTIVE",
         updated_at: new Date(),
         created_at: new Date(),
@@ -126,6 +129,7 @@ exports.edit_company = async (req, res) => {
       company_name: req.body.company_name,
       company_address: req.body.company_address,
       company_desc: req.body.company_desc,
+      phone_number: req.body.phone_number,
       company_logo: url_logo,
       company_scale: req.body.company_scale,
       company_website: req.body.company_website,
@@ -222,6 +226,7 @@ exports.edit_company_logo = async (req, res) => {
       company_name,
       company_address,
       company_desc,
+      phone_number,
       company_logo,
       company_website,
       company_scale,
@@ -237,6 +242,7 @@ exports.edit_company_logo = async (req, res) => {
         company_name,
         company_address,
         company_desc,
+        phone_number,
         company_logo,
         company_website,
         company_scale,
@@ -247,6 +253,92 @@ exports.edit_company_logo = async (req, res) => {
         created_at,
       },
       message: "Cập nhật thông tin logo công ty thành công!",
+      createdBy: "Hệ thống",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi: " + error.message,
+      createdBy: "Hệ thống",
+    });
+  }
+};
+
+exports.top_up_account = async (req, res) => {
+  if (req.method !== "POST") {
+    return res.status(405).json({
+      message: "Phương thức không được hỗ trợ, hãy sử dụng: POST",
+      createdBy: "Hệ thống",
+    });
+  }
+
+  try {
+    const { company_id } = req.params;
+    const { amount } = req.body;
+
+    if (!amount || isNaN(amount) || amount <= 0) {
+      return res.status(400).json({
+        message: "Số tiền nạp không hợp lệ",
+        createdBy: "Hệ thống",
+      });
+    }
+
+    // Kiểm tra sự tồn tại của công ty
+    const company = await companyModel.findById(company_id);
+    if (!company) {
+      return res.status(404).json({
+        message: "Thông tin công ty không tồn tại",
+        createdBy: "Hệ thống",
+      });
+    }
+
+    // Cập nhật số dư tài khoản
+    company.currency += amount;
+    company.updated_at = new Date();
+
+    await company.save();
+
+    return res.status(200).json({
+      data: company,
+      message: "Nạp tiền vào tài khoản thành công",
+      createdBy: "Hệ thống",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi: " + error.message,
+      createdBy: "Hệ thống",
+    });
+  }
+};
+
+exports.upgrade_to_premium = async (req, res) => {
+  if (req.method !== "POST") {
+    return res.status(405).json({
+      message: "Phương thức không được hỗ trợ, hãy sử dụng: POST",
+      createdBy: "Hệ thống",
+    });
+  }
+
+  try {
+    const { company_id } = req.params;
+
+    // Kiểm tra sự tồn tại của công ty
+    const company = await companyModel.findById(company_id);
+    if (!company) {
+      return res.status(404).json({
+        message: "Thông tin công ty không tồn tại",
+        createdBy: "Hệ thống",
+      });
+    }
+
+    // Cập nhật trạng thái premium
+    company.premium = true;
+    company.updated_at = new Date();
+
+    await company.save();
+
+    return res.status(200).json({
+      data: company,
+      message: "Nâng cấp tài khoản thành công",
       createdBy: "Hệ thống",
     });
   } catch (error) {
