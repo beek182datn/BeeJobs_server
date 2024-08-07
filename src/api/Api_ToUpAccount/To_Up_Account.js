@@ -21,6 +21,7 @@ exports.createPayment = async (req, res) => {
     res.json({
       client_secret: paymentIntent.client_secret,
       paymentIntentId: paymentIntent.id,
+      status: paymentIntent.status,
     });
   } catch (error) {
     console.error("Error creating payment intent:", error);
