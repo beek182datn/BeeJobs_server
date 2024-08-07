@@ -223,15 +223,6 @@ router.get(
   api_company.checkCompanyByUserId
 );
 
-router.post(
-  "/api/companies/top_up_account/:company_id",
-  api_company.top_up_account
-);
-router.post(
-  "/api/companies/upgrade_to_premium/:company_id",
-  api_company.upgrade_to_premium
-);
-
 //=================Jobs===================
 
 router.post("/api/jobs/create/:company_id", api_job.createJob); // Tạo Job mới
