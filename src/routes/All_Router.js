@@ -52,6 +52,7 @@ var api_suportLong = require("../api/Api_SuportLong/Api_SuportLong"); //Dùng t�
 var api_huysuport = require("../api/Api_HuySuport/Api_HuySuport"); //Dùng tạm thời để thêm các starts check
 var api_getChat = require("../api/Get_Chat_Api/GetChat_Api");
 const notification_api = require("../api/Notifi/notifi");
+var api_toUpAccount = require("../api/Api_ToUpAccount/To_Up_Account");
 const router = express.Router();
 
 /**
@@ -222,10 +223,18 @@ router.get(
   api_company.checkCompanyByUserId
 );
 
-router//=================Jobs===================
+router.post(
+  "/api/companies/top_up_account/:company_id",
+  api_company.top_up_account
+);
+router.post(
+  "/api/companies/upgrade_to_premium/:company_id",
+  api_company.upgrade_to_premium
+);
 
-.router
-  .post("/api/jobs/create/:company_id", api_job.createJob); // Tạo Job mới
+//=================Jobs===================
+
+router.post("/api/jobs/create/:company_id", api_job.createJob); // Tạo Job mới
 router.put("/api/jobs/edit/:company_id/:job_id", api_job.editJob); // Cập nhật Job
 router.get("/api/jobs/getListJobs", api_job.getListJobs); // Lấy danh sách tất cả công việc
 router.get("/api/jobs/getJobById/:job_id", api_job.getJobById); // Lấy công việc theo id
@@ -360,5 +369,9 @@ router.post("/create", notification_api.createNotification);
 router.get("/api/unread/:userId", notification_api.getUnreadNotifications);
 router.get("/all/:userId", notification_api.getAllNotifications);
 router.put("/markAsRead/:notificationId", notification_api.markAsRead);
+
+//============== Payment ===============================
+router.post("/api/payment/createPayment", api_toUpAccount.createPayment);
+router.post("/api/payment/confirmPayment", api_toUpAccount.confirmPayment);
 
 module.exports = initWebRouter;
