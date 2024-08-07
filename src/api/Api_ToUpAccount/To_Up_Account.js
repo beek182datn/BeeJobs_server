@@ -3,10 +3,10 @@ const { stripe } = require("../../config/stripe");
 const { historyTransModel } = require("../../model/History_Trans");
 
 exports.createPayment = async (req, res) => {
-  const { amount, currency } = req.body;
-
+  console.log("createPayment API called");
+  const { amount, company_id } = req.body;
   // Kiểm tra dữ liệu đầu vào
-  if (!amount || !currency) {
+  if (!amount || !company_id) {
     return res.status(400).send("Missing amount or currency");
   }
 
@@ -14,7 +14,8 @@ exports.createPayment = async (req, res) => {
     // Tạo PaymentIntent với Stripe
     const paymentIntent = await stripe.paymentIntents.create({
       amount: amount,
-      currency: currency,
+      currency: "USD",
+      metadata: { company_id },
     });
 
     // Trả về client_secret
@@ -30,10 +31,10 @@ exports.createPayment = async (req, res) => {
 };
 
 exports.confirmPayment = async (req, res) => {
-  const { paymentIntentId, companyId, amount, currency } = req.body;
+  const { paymentIntentId, companyId, amount } = req.body;
 
   // Kiểm tra dữ liệu đầu vào
-  if (!paymentIntentId || !companyId || !amount || !currency) {
+  if (!paymentIntentId || !companyId || !amount) {
     return res.status(400).send("Missing required fields");
   }
 
@@ -41,26 +42,20 @@ exports.confirmPayment = async (req, res) => {
     // Xác thực PaymentIntent
     const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
 
-    // Kiểm tra trạng thái thanh toán
-    if (paymentIntent.status === "succeeded") {
-      // Lưu thông tin giao dịch vào cơ sở dữ liệu
-      const transaction = new historyTransModel({
-        company_id: companyId,
-        amount: amount,
-        currency: currency,
-        status: paymentIntent.status,
-        transaction_date: new Date(),
-      });
+    // Lưu thông tin giao dịch vào cơ sở dữ liệu
+    const transaction = new historyTransModel({
+      company_id: companyId,
+      amount: amount,
+      currency: "USD",
+      status: paymentIntent.status,
+      transaction_date: new Date(),
+    });
 
-      await transaction.save();
-      console.log("Transaction saved successfully");
+    await transaction.save();
+    console.log("Transaction saved successfully");
 
-      // Trả về thông tin thanh toán thành công
-      res.json({ message: "Payment confirmed and transaction saved" });
-    } else {
-      // Thanh toán không thành công
-      res.status(400).send("Payment not successful");
-    }
+    // Trả về thông tin thanh toán thành công
+    res.json({ message: "Payment confirmed and transaction saved" });
   } catch (error) {
     console.error("Error confirming payment:", error);
     res.status(500).send("Internal Server Error");
