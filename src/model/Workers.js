@@ -9,6 +9,7 @@ const workerSchema = new db.mongoose.Schema(
     email: { type: String, required: true },
     experience: { type: String, required: false },
     major: { type: String, required: false },
+    address: { type: String, required: false },
 }, {
     collection: 'Workers'
 });
