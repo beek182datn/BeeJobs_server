@@ -29,7 +29,7 @@ const fileFilter = (req, file, cb) => {
 const uploader = multer({
   storage: storage,
   fileFilter: fileFilter,
-  limits: { fileSize: 1024 * 1024 * 5 }, // Giới hạn kích thước file (5MB)
+  limits: { fileSize: 1024 * 1024 * 30 }, // Giới hạn kích thước file (5MB)
 });
 
 var chat = require("../api/AppFindJobs/Chat");
@@ -221,6 +221,12 @@ router.delete(
 router.get(
   "/api/companies/checkCompany/:user_id",
   api_company.checkCompanyByUserId
+);
+
+router.post("/api/companies/top_up_account", api_company.top_up_account);
+router.post(
+  "/api/companies/upgrade_to_premium",
+  api_company.upgrade_to_premium
 );
 
 //=================Jobs===================

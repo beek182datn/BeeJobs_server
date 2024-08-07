@@ -42,12 +42,14 @@ exports.confirmPayment = async (req, res) => {
     // Xác thực PaymentIntent
     const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
 
+    const transactionStatus = `+ ${amount} USD`;
+
     // Lưu thông tin giao dịch vào cơ sở dữ liệu
     const transaction = new historyTransModel({
       company_id: companyId,
       amount: amount,
       currency: "USD",
-      status: paymentIntent.status,
+      status: transactionStatus,
       transaction_date: new Date(),
     });
 
@@ -55,7 +57,10 @@ exports.confirmPayment = async (req, res) => {
     console.log("Transaction saved successfully");
 
     // Trả về thông tin thanh toán thành công
-    res.json({ message: "Payment confirmed and transaction saved" });
+    res.json({
+      data: transaction,
+      message: "Payment confirmed and transaction saved",
+    });
   } catch (error) {
     console.error("Error confirming payment:", error);
     res.status(500).send("Internal Server Error");
