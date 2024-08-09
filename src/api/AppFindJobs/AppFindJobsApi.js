@@ -214,7 +214,7 @@ exports.update_Workers = async (req, res) => {
             worker.major = req.body.major || worker.major;
             worker.experience = req.body.experience || worker.experience;
             worker.address = req.body.address || worker.address;
-            
+
 
             // Lưu các thay đổi vào cơ sở dữ liệu
             await worker.save();
@@ -422,6 +422,52 @@ exports.getApplyJobsByIdWorker = async (req, res) => {
     } catch (error) {
         return res.status(500).json({
             data: [],
+            message: "Lỗi: " + error.message,
+            createdBy: "Hệ thống",
+        });
+    }
+};
+
+exports.getJobById = async (req, res) => {
+    if (req.method !== "GET") {
+        return res.status(405).json({
+            message: "Phương thức không được hỗ trợ, hãy sử dụng: GET!",
+            createdBy: "Hệ thống",
+        });
+    }
+
+    try {
+        const job_id = req.params.job_id;
+
+        const job = await jobModel.findById(job_id);
+        if (!job) {
+            return res.status(404).json({
+                data: null,
+                message: "Thông tin công việc không tồn tại!",
+                createdBy: "Hệ thống",
+            });
+        }
+
+        const company_id = job.company_id;
+        const company = await companyModel.findById(company_id);
+        if (!company) {
+            return res.status(404).json({
+                message: "Thông tin công ty không tồn tại!",
+                createdBy: "Hệ thống",
+            });
+        }
+        const jobWithCompanyLogo = {
+            ...job.toObject(),
+            company_logo: company.company_logo, // Thêm company_logo vào dữ liệu công việc
+        };
+
+        return res.status(200).json({
+            data: jobWithCompanyLogo,
+            message: "Thông tin công việc",
+            createdBy: "Hệ thống",
+        });
+    } catch (error) {
+        return res.status(500).json({
             message: "Lỗi: " + error.message,
             createdBy: "Hệ thống",
         });

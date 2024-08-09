@@ -333,6 +333,7 @@ router.get(
   "/api/getapylyjobsbyIdworker/:worker_id",
   appfindjobs.getApplyJobsByIdWorker
 );
+router.get("/jobs/getJobById/:job_id", appfindjobs.getJobById);
 
 //=================Chat Router =====================
 router.get("/api/chat/chatroom/:senderId/:receiverId", chat.getChatRoomInfo);
