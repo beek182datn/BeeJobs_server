@@ -150,7 +150,8 @@ exports.create_Workers = async (req, res) => {
                 phone: req.body.phone,
                 email: req.body.email,
                 major: req.body.major,
-                experience: req.body.experience
+                experience: req.body.experience,
+                address: req.body.address
             });
 
             // Lưu worker vào cơ sở dữ liệu
@@ -212,7 +213,8 @@ exports.update_Workers = async (req, res) => {
             worker.email = req.body.email || worker.email;
             worker.major = req.body.major || worker.major;
             worker.experience = req.body.experience || worker.experience;
-            
+            worker.address = req.body.address || worker.address;
+
 
             // Lưu các thay đổi vào cơ sở dữ liệu
             await worker.save();
@@ -238,14 +240,48 @@ exports.update_Workers = async (req, res) => {
     }
 };
 
+// exports.getJobApplications = async (req, res) => {
+//     try {
+//         const { userId } = req.params; // Giả sử bạn có userId trong params
+
+//         // Lấy thời gian hiện tại
+//         const now = moment();
+
+//         // Tính thời gian cho 1 tuần và 30 ngày trước
+//         const oneWeekAgo = now.subtract(7, 'days').toDate();
+//         const thirtyDaysAgo = now.subtract(30, 'days').toDate();
+
+//         // Truy vấn ứng tuyển trong 1 tuần
+//         const appliedjobsLastWeek = await applyJobModel.find({
+//             worker_id: userId,
+//             applied_at: { $gte: oneWeekAgo }
+//         });
+
+//         // Truy vấn ứng tuyển trong 30 ngày
+//         const appliedjobsLast30Days = await applyJobModel.find({
+//             worker_id: userId,
+//             applied_at: { $gte: thirtyDaysAgo }
+//         });
+
+//         // Truy vấn tất cả ứng tuyển
+//         const allAppliedjobs = await applyJobModel.find({ worker_id: userId });
+
+//         res.status(200).send({
+//             appliedjobsLastWeek,
+//             appliedjobsLast30Days,
+//             allAppliedjobs
+//         });
+//     } catch (error) {
+//         console.log(error);
+//         res.status(500).send({ message: "Đã xảy ra lỗi." });
+//     }
+// }
+
 exports.getJobApplications = async (req, res) => {
     try {
-        const { userId } = req.params; // Giả sử bạn có userId trong params
+        const { userId } = req.params;
 
-        // Lấy thời gian hiện tại
         const now = moment();
-
-        // Tính thời gian cho 1 tuần và 30 ngày trước
         const oneWeekAgo = now.subtract(7, 'days').toDate();
         const thirtyDaysAgo = now.subtract(30, 'days').toDate();
 
@@ -253,27 +289,33 @@ exports.getJobApplications = async (req, res) => {
         const appliedjobsLastWeek = await applyJobModel.find({
             worker_id: userId,
             applied_at: { $gte: oneWeekAgo }
-        });
+        }).populate('worker_id').populate('job_id'); // Giả sử job_id là một reference trong model
 
         // Truy vấn ứng tuyển trong 30 ngày
         const appliedjobsLast30Days = await applyJobModel.find({
             worker_id: userId,
             applied_at: { $gte: thirtyDaysAgo }
-        });
+        }).populate('worker_id').populate('job_id');
 
         // Truy vấn tất cả ứng tuyển
-        const allAppliedjobs = await applyJobModel.find({ worker_id: userId });
+        const allAppliedjobs = await applyJobModel.find({ worker_id: userId }).populate('job_id');
+
+        // Lọc các công việc đã ứng tuyển còn tồn tại trong bảng job
+        const validAppliedJobsLastWeek = appliedjobsLastWeek.filter(job => job.job_id);
+        const validAppliedJobsLast30Days = appliedjobsLast30Days.filter(job => job.job_id);
+        const validAllAppliedJobs = allAppliedjobs.filter(job => job.job_id);
 
         res.status(200).send({
-            appliedjobsLastWeek,
-            appliedjobsLast30Days,
-            allAppliedjobs
+            appliedjobsLastWeek: validAppliedJobsLastWeek,
+            appliedjobsLast30Days: validAppliedJobsLast30Days,
+            allAppliedjobs: validAllAppliedJobs
         });
     } catch (error) {
         console.log(error);
         res.status(500).send({ message: "Đã xảy ra lỗi." });
     }
 }
+
 
 exports.folowJob = async (req, res) => {
     try {
@@ -420,6 +462,52 @@ exports.getApplyJobsByIdWorker = async (req, res) => {
     } catch (error) {
         return res.status(500).json({
             data: [],
+            message: "Lỗi: " + error.message,
+            createdBy: "Hệ thống",
+        });
+    }
+};
+
+exports.getJobById = async (req, res) => {
+    if (req.method !== "GET") {
+        return res.status(405).json({
+            message: "Phương thức không được hỗ trợ, hãy sử dụng: GET!",
+            createdBy: "Hệ thống",
+        });
+    }
+
+    try {
+        const job_id = req.params.job_id;
+
+        const job = await jobModel.findById(job_id);
+        if (!job) {
+            return res.status(404).json({
+                data: null,
+                message: "Thông tin công việc không tồn tại!",
+                createdBy: "Hệ thống",
+            });
+        }
+
+        const company_id = job.company_id;
+        const company = await companyModel.findById(company_id);
+        if (!company) {
+            return res.status(404).json({
+                message: "Thông tin công ty không tồn tại!",
+                createdBy: "Hệ thống",
+            });
+        }
+        const jobWithCompanyLogo = {
+            ...job.toObject(),
+            company_logo: company.company_logo, // Thêm company_logo vào dữ liệu công việc
+        };
+
+        return res.status(200).json({
+            data: jobWithCompanyLogo,
+            message: "Thông tin công việc",
+            createdBy: "Hệ thống",
+        });
+    } catch (error) {
+        return res.status(500).json({
             message: "Lỗi: " + error.message,
             createdBy: "Hệ thống",
         });
