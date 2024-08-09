@@ -231,6 +231,10 @@ router.post(
   "/api/companies/upgrade_to_premium/:company_id",
   api_company.upgrade_to_premium
 );
+router.post(
+  "/api/companies/cancle_to_premium/:company_id",
+  api_company.cancle_to_premium
+);
 
 //=================Jobs===================
 
