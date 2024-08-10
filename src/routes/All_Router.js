@@ -378,5 +378,17 @@ router.put("/markAsRead/:notificationId", notification_api.markAsRead);
 //============== Payment ===============================
 router.post("/api/payment/createPayment", api_toUpAccount.createPayment);
 router.post("/api/payment/confirmPayment", api_toUpAccount.confirmPayment);
+router.get(
+  "/api/payment/getTransactionHistoryByCompanyId/:companyId",
+  api_toUpAccount.getTransactionHistoryByCompanyId
+);
+router.post(
+  "/api/payment/confirmPaymentSubtract",
+  api_toUpAccount.confirmPaymentSubtract
+);
+router.delete(
+  "/api/payment/deleteTransactionHistoryByCompanyId/:companyId",
+  api_toUpAccount.deleteTransactionHistoryByCompanyId
+);
 
 module.exports = initWebRouter;
