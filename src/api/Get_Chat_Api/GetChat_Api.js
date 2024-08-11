@@ -27,15 +27,15 @@ exports.createChatRoom = async (req, res) => {
   const { companyID, userID } = req.body;
 
   try {
-    // Kiểm tra sự tồn tại của company và worker
-    const company = await companyModel.findById(companyID);
-    const user = await userModel.findById(userID);
+    // // Kiểm tra sự tồn tại của company và worker
+    // const company = await companyModel.findById(companyID);
+    // const user = await userModel.findById(userID);
 
-    if (!company || !user) {
-      return res
-        .status(400)
-        .json({ message: "Doanh nghiệp hoặc người dùng không tồn tại" });
-    }
+    // if (!company || !user) {
+    //   return res
+    //     .status(400)
+    //     .json({ message: "Doanh nghiệp hoặc người dùng không tồn tại" });
+    // }
 
     // Kiểm tra xem phòng chat giữa hai ID đã tồn tại chưa
     const existingChatRoom = await ChatRoom.findOne({
