@@ -748,19 +748,26 @@ exports.getDataJobsAppliedByCompanyId = async (req, res) => {
   try {
     const { company_id } = req.params;
 
-    // Tìm tất cả các công việc của công ty có company_id và tìm các công việc đã có đơn ứng tuyển
+    // Tìm tất cả các công việc của công ty có company_id
+    const jobs = await jobModel.find({ company_id: company_id });
+
+    if (!jobs || jobs.length === 0) {
+      return res.status(404).json({
+        message: "Không tìm thấy công việc nào cho công ty này!",
+        createdBy: "Hệ thống",
+      });
+    }
+
+    // Lấy danh sách job_id từ các công việc
+    const jobIds = jobs.map((job) => job._id);
+
+    // Tìm các công việc đã có đơn ứng tuyển
     const jobsWithApplications = await applyJobModel.aggregate([
-      {
-        $match: { company_id: db.mongoose.Types.ObjectId(company_id) },
-      },
-      {
-        $group: {
-          _id: "$job_id",
-        },
-      },
+      { $match: { job_id: { $in: jobIds } } },
+      { $group: { _id: "$job_id" } },
       {
         $lookup: {
-          from: "jobs", // Tên của collection chứa các công việc
+          from: "Jobs",
           localField: "_id",
           foreignField: "_id",
           as: "jobDetails",
@@ -768,14 +775,6 @@ exports.getDataJobsAppliedByCompanyId = async (req, res) => {
       },
       { $unwind: "$jobDetails" },
     ]);
-
-    if (!jobsWithApplications || jobsWithApplications.length === 0) {
-      return res.status(404).json({
-        message:
-          "Không tìm thấy công việc nào có đơn ứng tuyển cho công ty này!",
-        createdBy: "Hệ thống",
-      });
-    }
 
     return res.status(200).json({
       data: jobsWithApplications.map((job) => job.jobDetails) || [],
