@@ -737,6 +737,58 @@ exports.getJobsAppliedByCompanyId = async (req, res) => {
   }
 };
 
+exports.getDataJobsAppliedByCompanyId = async (req, res) => {
+  if (req.method !== "GET") {
+    return res.status(405).json({
+      message: "Phương thức không được hỗ trợ, hãy sử dụng: GET!",
+      createdBy: "Hệ thống",
+    });
+  }
+
+  try {
+    const { company_id } = req.params;
+
+    // Tìm tất cả các công việc của công ty có company_id
+    const jobs = await jobModel.find({ company_id: company_id });
+
+    if (!jobs || jobs.length === 0) {
+      return res.status(404).json({
+        message: "Không tìm thấy công việc nào cho công ty này!",
+        createdBy: "Hệ thống",
+      });
+    }
+
+    // Lấy danh sách job_id từ các công việc
+    const jobIds = jobs.map((job) => job._id);
+
+    // Tìm các công việc đã có đơn ứng tuyển
+    const jobsWithApplications = await applyJobModel.aggregate([
+      { $match: { job_id: { $in: jobIds } } },
+      { $group: { _id: "$job_id" } },
+      {
+        $lookup: {
+          from: "jobs", // Tên của collection chứa các công việc
+          localField: "_id",
+          foreignField: "_id",
+          as: "jobDetails",
+        },
+      },
+      { $unwind: "$jobDetails" },
+    ]);
+
+    return res.status(200).json({
+      data: [] || jobsWithApplications.map((job) => job.jobDetails),
+      message: "Lấy thông tin công việc đã có đơn ứng tuyển thành công!",
+      createdBy: "Hệ thống",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi: " + error.message,
+      createdBy: "Hệ thống",
+    });
+  }
+};
+
 exports.getJobApplyDonedByCompanyId = async (req, res) => {
   if (req.method !== "GET") {
     return res.status(405).json({

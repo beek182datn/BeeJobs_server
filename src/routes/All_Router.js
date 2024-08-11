@@ -256,6 +256,10 @@ router.get(
   "/api/jobs/getJobsAppliedByCompanyId/:company_id",
   api_job.getJobsAppliedByCompanyId
 );
+router.get(
+  "/api/jobs/getDataJobsAppliedByCompanyId/:company_id",
+  api_job.getDataJobsAppliedByCompanyId
+);
 
 router.get(
   "/api/jobs/getJobApplyDonedByCompanyId/:company_id",
