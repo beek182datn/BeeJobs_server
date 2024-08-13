@@ -269,6 +269,7 @@ router.get(
   "/api/jobs/getDataJobApplyDonedByCompanyId/:company_id",
   api_job.getDataJobApplyDonedByCompanyId
 );
+router.get("/api/jobs/searchWorkersByJob/:job_id", api_job.searchWorkersByJob);
 
 //===================ApplyJobs================
 

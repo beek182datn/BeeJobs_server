@@ -1,6 +1,7 @@
 const { jobModel } = require("../../model/Jobs");
 const { companyModel } = require("../../model/Companies");
 const { applyJobModel } = require("../../model/ApplyJobs");
+const WorkerMD = require("../../model/Workers");
 
 exports.createJob = async (req, res) => {
   if (req.method !== "POST") {
@@ -891,6 +892,45 @@ exports.getDataJobApplyDonedByCompanyId = async (req, res) => {
       data: jobsWithAcceptedApplications,
       message:
         "Lấy danh sách công việc đã có đơn ứng tuyển với trạng thái 'Phù hợp' thành công!",
+      createdBy: "Hệ thống",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi: " + error.message,
+      createdBy: "Hệ thống",
+    });
+  }
+};
+
+exports.searchWorkersByJob = async (req, res) => {
+  if (req.method !== "GET") {
+    return res.status(405).json({
+      message: "Phương thức không được hỗ trợ, hãy sử dụng: GET!",
+      createdBy: "Hệ thống",
+    });
+  }
+
+  try {
+    const { job_id } = req.params;
+
+    // Tìm công việc theo job_id
+    const job = await jobModel.findById(job_id);
+
+    if (!job) {
+      return res.status(404).json({
+        message: "Không tìm thấy công việc!",
+        createdBy: "Hệ thống",
+      });
+    }
+
+    // Tìm các ứng viên phù hợp với chuyên ngành và kinh nghiệm
+    const matchingWorkers = await WorkerMD.find({
+      major: { $regex: job.majors, $options: "i" },
+    });
+
+    return res.status(200).json({
+      data: matchingWorkers || [],
+      message: "Tìm kiếm ứng viên thành công!",
       createdBy: "Hệ thống",
     });
   } catch (error) {
