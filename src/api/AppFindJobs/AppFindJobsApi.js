@@ -279,7 +279,7 @@ exports.update_Workers = async (req, res) => {
 
 exports.getJobApplications = async (req, res) => {
     try {
-        const { userId } = req.params;
+        const { workerId } = req.params;
 
         const now = moment();
         const oneWeekAgo = now.subtract(7, 'days').toDate();
@@ -287,7 +287,7 @@ exports.getJobApplications = async (req, res) => {
 
         // Truy vấn ứng tuyển trong 1 tuần, sắp xếp theo thời gian giảm dần
         const appliedjobsLastWeek = await applyJobModel.find({
-            worker_id: userId,
+            worker_id: workerId,
             applied_at: { $gte: oneWeekAgo }
         })
         .populate('worker_id')
@@ -296,7 +296,7 @@ exports.getJobApplications = async (req, res) => {
 
         // Truy vấn ứng tuyển trong 30 ngày, sắp xếp theo thời gian giảm dần
         const appliedjobsLast30Days = await applyJobModel.find({
-            worker_id: userId,
+            worker_id: workerId,
             applied_at: { $gte: thirtyDaysAgo }
         })
         .populate('worker_id')
@@ -304,7 +304,7 @@ exports.getJobApplications = async (req, res) => {
         .sort({ applied_at: -1 }); // Sắp xếp theo thời gian giảm dần
 
         // Truy vấn tất cả ứng tuyển, sắp xếp theo thời gian giảm dần
-        const allAppliedjobs = await applyJobModel.find({ worker_id: userId })
+        const allAppliedjobs = await applyJobModel.find({ worker_id: workerId })
             .populate('job_id')
             .sort({ applied_at: -1 }); // Sắp xếp theo thời gian giảm dần
 

@@ -333,7 +333,7 @@ router.post(
   appfindjobs.update_Workers
 );
 router.get("/api/findcompanys/:userId", appfindjobs.getFollowedCompanies);
-router.get("/api/appliedjobs/:userId", appfindjobs.getJobApplications);
+router.get("/api/appliedjobs/:workerId", appfindjobs.getJobApplications);
 router.get("/followjob/:userId/:jobId", appfindjobs.folowJob);
 router.get("/checkfollowjob/:userId/:jobId", appfindjobs.checkIsFolowingJob);
 router.get("/unfollowjob/:userId/:jobId", appfindjobs.unFollowjob);
