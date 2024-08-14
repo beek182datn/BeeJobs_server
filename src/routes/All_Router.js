@@ -231,6 +231,10 @@ router.post(
   "/api/companies/upgrade_to_premium/:company_id",
   api_company.upgrade_to_premium
 );
+router.post(
+  "/api/companies/cancle_to_premium/:company_id",
+  api_company.cancle_to_premium
+);
 
 //=================Jobs===================
 
@@ -252,6 +256,10 @@ router.get(
   "/api/jobs/getJobsAppliedByCompanyId/:company_id",
   api_job.getJobsAppliedByCompanyId
 );
+router.get(
+  "/api/jobs/getDataJobsAppliedByCompanyId/:company_id",
+  api_job.getDataJobsAppliedByCompanyId
+);
 
 router.get(
   "/api/jobs/getJobApplyDonedByCompanyId/:company_id",
@@ -261,6 +269,7 @@ router.get(
   "/api/jobs/getDataJobApplyDonedByCompanyId/:company_id",
   api_job.getDataJobApplyDonedByCompanyId
 );
+router.get("/api/jobs/searchWorkersByJob/:job_id", api_job.searchWorkersByJob);
 
 //===================ApplyJobs================
 
@@ -375,5 +384,17 @@ router.put("/markAsRead/:notificationId", notification_api.markAsRead);
 //============== Payment ===============================
 router.post("/api/payment/createPayment", api_toUpAccount.createPayment);
 router.post("/api/payment/confirmPayment", api_toUpAccount.confirmPayment);
+router.get(
+  "/api/payment/getTransactionHistoryByCompanyId/:companyId",
+  api_toUpAccount.getTransactionHistoryByCompanyId
+);
+router.post(
+  "/api/payment/confirmPaymentSubtract",
+  api_toUpAccount.confirmPaymentSubtract
+);
+router.delete(
+  "/api/payment/deleteTransactionHistoryByCompanyId/:companyId",
+  api_toUpAccount.deleteTransactionHistoryByCompanyId
+);
 
 module.exports = initWebRouter;

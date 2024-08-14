@@ -275,7 +275,7 @@ exports.top_up_account = async (req, res) => {
     const { company_id } = req.params;
     const { amount } = req.body;
 
-    if (!amount || isNaN(amount) || amount <= 0) {
+    if (!amount || isNaN(amount)) {
       return res.status(400).json({
         message: "Số tiền nạp không hợp lệ",
         createdBy: "Hệ thống",
@@ -332,6 +332,45 @@ exports.upgrade_to_premium = async (req, res) => {
 
     // Cập nhật trạng thái premium
     company.premium = true;
+    company.updated_at = new Date();
+
+    await company.save();
+
+    return res.status(200).json({
+      data: company,
+      message: "Nâng cấp tài khoản thành công",
+      createdBy: "Hệ thống",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi: " + error.message,
+      createdBy: "Hệ thống",
+    });
+  }
+};
+
+exports.cancle_to_premium = async (req, res) => {
+  if (req.method !== "POST") {
+    return res.status(405).json({
+      message: "Phương thức không được hỗ trợ, hãy sử dụng: POST",
+      createdBy: "Hệ thống",
+    });
+  }
+
+  try {
+    const { company_id } = req.params;
+
+    // Kiểm tra sự tồn tại của công ty
+    const company = await companyModel.findById(company_id);
+    if (!company) {
+      return res.status(404).json({
+        message: "Thông tin công ty không tồn tại",
+        createdBy: "Hệ thống",
+      });
+    }
+
+    // Cập nhật trạng thái premium
+    company.premium = false;
     company.updated_at = new Date();
 
     await company.save();
