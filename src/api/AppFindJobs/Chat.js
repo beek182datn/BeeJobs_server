@@ -1,5 +1,11 @@
 const { Message } = require("../../model/Messages");
 const { ChatRoom } = require("../../model/ChatRooms");
+const { UserRoleModel } = require("../../model/Users_Roles");
+const { RoleModel } = require("../../model/Roles");
+const { json } = require("body-parser");
+const { userModel } = require("../../model/Users");
+const { companyModel } = require("../../model/Companies");
+const WorkerMD = require("../../model/Workers");
 
 exports.getMessagesByRoomId = async (req, res) => {
     const { chatroomId } = req.params;
@@ -130,3 +136,57 @@ exports.checkChatRoom = async (req, res) => {
         res.status(500).json({ message: "Server Error", error });
     }
 };
+
+exports.userInfo = async (req, res) => {
+    const userId = req.params.userId;
+    try {
+        let avatar = '';
+        let fullname = '';
+        let type = '';
+        let userRole = await UserRoleModel.findOne({ id_User: userId });
+        if (!userRole) {
+            res.status(401).json({ message: "Not found", userRole });
+        }
+        let role = await RoleModel.findOne({ _id: userRole.id_Role });
+        if (!role) {
+            res.status(401).json({ message: "Not found", role });
+        }
+
+        if (role.Code === 'NLD') {
+            let worker = await WorkerMD.findOne({ user_id: userId });
+            if (!worker) {
+                res.status(401).json({ message: "Not found NLD", worker });
+            }
+            avatar = worker.worker_avatar;
+            fullname = worker.worker_name;
+            type = role.Code;
+        } else if (role.Code === 'ADMIN') {
+            let admin = await userModel.findOne({_id: userId});
+            if (!admin) {
+                res.status(401).json({ message: "Not found admin", admin });
+            }
+            avatar = admin.avata;
+            fullname = admin.full_name;
+            type = role.Code;
+        } else if (role.Code === 'DN') {
+            let company = await companyModel.findOne({ user_id: userId });
+            if (!company) {
+                res.status(401).json({ message: "Not found DN", company });
+            }
+            avatar = company.company_logo;
+            fullname = company.company_name;
+            type = role.Code;
+        }
+
+        res.json({
+            userId: userId,
+            avatar: avatar,
+            name: fullname,
+            role: type,
+        })
+
+    } catch (error) {
+        res.status(500).json({ message: "Lỗi", error });
+    }
+
+}

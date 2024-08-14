@@ -285,20 +285,28 @@ exports.getJobApplications = async (req, res) => {
         const oneWeekAgo = now.subtract(7, 'days').toDate();
         const thirtyDaysAgo = now.subtract(30, 'days').toDate();
 
-        // Truy vấn ứng tuyển trong 1 tuần
+        // Truy vấn ứng tuyển trong 1 tuần, sắp xếp theo thời gian giảm dần
         const appliedjobsLastWeek = await applyJobModel.find({
             worker_id: userId,
             applied_at: { $gte: oneWeekAgo }
-        }).populate('worker_id').populate('job_id'); // Giả sử job_id là một reference trong model
+        })
+        .populate('worker_id')
+        .populate('job_id')
+        .sort({ applied_at: -1 }); // Sắp xếp theo thời gian giảm dần
 
-        // Truy vấn ứng tuyển trong 30 ngày
+        // Truy vấn ứng tuyển trong 30 ngày, sắp xếp theo thời gian giảm dần
         const appliedjobsLast30Days = await applyJobModel.find({
             worker_id: userId,
             applied_at: { $gte: thirtyDaysAgo }
-        }).populate('worker_id').populate('job_id');
+        })
+        .populate('worker_id')
+        .populate('job_id')
+        .sort({ applied_at: -1 }); // Sắp xếp theo thời gian giảm dần
 
-        // Truy vấn tất cả ứng tuyển
-        const allAppliedjobs = await applyJobModel.find({ worker_id: userId }).populate('job_id');
+        // Truy vấn tất cả ứng tuyển, sắp xếp theo thời gian giảm dần
+        const allAppliedjobs = await applyJobModel.find({ worker_id: userId })
+            .populate('job_id')
+            .sort({ applied_at: -1 }); // Sắp xếp theo thời gian giảm dần
 
         // Lọc các công việc đã ứng tuyển còn tồn tại trong bảng job
         const validAppliedJobsLastWeek = appliedjobsLastWeek.filter(job => job.job_id);

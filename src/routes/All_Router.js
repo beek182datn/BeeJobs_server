@@ -340,6 +340,7 @@ router.get("/api/chat/chatroom/:senderId/:receiverId", chat.getChatRoomInfo);
 router.get("/api/chat/getMessages/:senderId/:receiverId", chat.getMessages);
 router.post("/api/chat/sendmessage/:senderId/:receiverId", chat.sendMessage);
 router.get("/api/chat/checkchatroom/:senderId/:receiverId", chat.checkChatRoom);
+router.get('/userinfo/:userId', chat.userInfo);
 
 //================ Get Chat By Đông ===================
 router.get(
