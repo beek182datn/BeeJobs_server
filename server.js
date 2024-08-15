@@ -13,6 +13,7 @@ const socketIo = require('socket.io');
 const headerUserInfo = require("./src/middleware/headerUserInfo");
 const GetNotifi = require("./src/middleware/GetNotifi");
 const NotificationHelper = require("./src/helper/NotificationHelper");
+const firebase = require('./src/firebase/index');
 var app = express();
 configViewEngine(app);
 
@@ -55,7 +56,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(headerUserInfo);
-app.use(GetNotifi)
+app.use(GetNotifi);
 // Error handling
 app.use(function (err, req, res, next) {
   res.locals.message = err.message;

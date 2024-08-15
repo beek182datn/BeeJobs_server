@@ -8,7 +8,7 @@ const userSchema= new db.mongoose.Schema(
         phone:{type:String, require:true},
         accout_name: {type:String, require:true},
         gender: {type:String, require:true},
-      
+        fcmtoken: {type:String, require:true},
         full_name:{type:String,require:true},
         avata:{type:String,required:false},
         active:{type:String,require: true},
