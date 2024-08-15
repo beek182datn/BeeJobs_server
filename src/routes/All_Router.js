@@ -343,6 +343,7 @@ router.get(
   appfindjobs.getApplyJobsByIdWorker
 );
 router.get("/jobs/getJobById/:job_id", appfindjobs.getJobById);
+router.get("/getlistjob", appfindjobs.getListJobs);
 
 //=================Chat Router =====================
 router.get("/api/chat/chatroom/:senderId/:receiverId", chat.getChatRoomInfo);

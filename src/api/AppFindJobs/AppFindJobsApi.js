@@ -521,3 +521,42 @@ exports.getJobById = async (req, res) => {
         });
     }
 };
+
+exports.getListJobs = async (req, res) => {
+    try {
+      const page = parseInt(req.query.page) || 1; // Trang hiện tại
+      const limit = parseInt(req.query.limit) || 10; // Số lượng công việc mỗi trang
+      const skip = (page - 1) * limit; // Số lượng công việc cần bỏ qua
+  
+      // Lấy công việc với phân trang
+      const jobs = await jobModel.find({}).skip(skip).limit(limit);
+  
+      const jobsWithCompanyLogo = await Promise.all(
+        jobs.map(async (job) => {
+          const company = await companyModel.findById(job.company_id);
+          return {
+            ...job.toObject(),
+            company_logo: company ? company.company_logo : null,
+          };
+        })
+      );
+  
+      // Lấy tổng số công việc để tính toán tổng số trang
+      const totalJobs = await jobModel.countDocuments({});
+      const totalPages = Math.ceil(totalJobs / limit);
+  
+      return res.status(200).json({
+        data: jobsWithCompanyLogo,
+        totalPages, // Tổng số trang
+        currentPage: page, // Trang hiện tại
+        message: "Danh sách các công việc",
+        createdBy: "Hệ thống",
+      });
+    } catch (error) {
+      return res.status(500).json({
+        message: "Lỗi: " + error.message,
+        createdBy: "Hệ thống",
+      });
+    }
+  };
+  
