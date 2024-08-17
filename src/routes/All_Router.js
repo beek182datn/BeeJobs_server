@@ -271,6 +271,11 @@ router.get(
 );
 router.get("/api/jobs/searchWorkersByJob/:job_id", api_job.searchWorkersByJob);
 
+router.get(
+  "/api/jobs/getJobsWithSuitableApplications/:company_id",
+  api_job.getJobsWithSuitableApplications
+);
+
 //===================ApplyJobs================
 
 router.post(
@@ -350,7 +355,7 @@ router.get("/api/chat/chatroom/:senderId/:receiverId", chat.getChatRoomInfo);
 router.get("/api/chat/getMessages/:senderId/:receiverId", chat.getMessages);
 router.post("/api/chat/sendmessage/:senderId/:receiverId", chat.sendMessage);
 router.get("/api/chat/checkchatroom/:senderId/:receiverId", chat.checkChatRoom);
-router.get('/userinfo/:userId', chat.userInfo);
+router.get("/userinfo/:userId", chat.userInfo);
 
 //================ Get Chat By Đông ===================
 router.get(
