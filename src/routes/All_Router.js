@@ -314,7 +314,7 @@ router.get(
   api_applyjob.getApplyJobsDoneByCompanyId
 );
 router.get(
-  "/api/applyJobs/getApplyJobsDoneByJobId/:company_id",
+  "/api/applyJobs/getApplyJobsDoneByJobId/:job_id",
   api_applyjob.getApplyJobsDoneByJobId
 );
 router.get(
