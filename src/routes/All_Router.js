@@ -314,12 +314,20 @@ router.get(
   api_applyjob.getApplyJobsDoneByCompanyId
 );
 router.get(
+  "/api/applyJobs/getApplyJobsDoneByJobId/:company_id",
+  api_applyjob.getApplyJobsDoneByJobId
+);
+router.get(
   "/api/applyJobs/getApplyJobsFalseByIdCompany/:company_id",
   api_applyjob.getApplyJobsFalseByCompanyId
 );
 router.get(
   "/api/applyJobs/getWorkerAppliedByCompanyId/:company_id",
   api_applyjob.getWorkerAppliedByCompanyId
+);
+router.get(
+  "/api/applyJobs/getDataWorkerAppliedByCompanyId/:company_id",
+  api_applyjob.getDataWorkerAppliedByCompanyId
 );
 
 //=================AppFindJobs Router =====================
