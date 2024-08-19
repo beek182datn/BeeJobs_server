@@ -529,7 +529,7 @@ exports.getListJobs = async (req, res) => {
       const skip = (page - 1) * limit; // Số lượng công việc cần bỏ qua
   
       // Lấy công việc với phân trang
-      const jobs = await jobModel.find({}).sort({created_at: -1}).skip(skip).limit(limit);
+      const jobs = await jobModel.find({}).sort({created_at: -1, _id: 1}).skip(skip).limit(limit);
   
       const jobsWithCompanyLogo = await Promise.all(
         jobs.map(async (job) => {
