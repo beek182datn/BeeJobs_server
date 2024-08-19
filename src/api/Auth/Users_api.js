@@ -6,6 +6,7 @@ var bcrypt = require("bcrypt");
 var { jwtMiddleware, createJWT, checkJWT } = require("../../middleware/JWT");
 var { sendOtp, verifyOtp } = require("../../middleware/MailerSevice");
 const { MAIL_TYPE } = require("../../config/Mailer_Config");
+const {StatusUser} = require("../../config/Constans");
 const {
   hashPassword,
   checkPassword,
@@ -24,7 +25,7 @@ var user_info = {
 
 exports.api_Login = async (req, res, next) => {
   if (req.method == "POST") {
-    const { passwd, username } = req.body;
+    const { passwd, username,fcmtoken } = req.body;
     console.log(req.body);
 
     try {
@@ -40,7 +41,7 @@ exports.api_Login = async (req, res, next) => {
             // ...objU._doc, // Sao chép tất cả thuộc tính của objU vào userInfo
             id_user: objU._id,
             Username: objU.accout_name,
-            Veryfy: objU.verify,
+            
             Active: objU.active,
             Role: null, // Khởi tạo Role ban đầu là null
           };
@@ -56,7 +57,11 @@ exports.api_Login = async (req, res, next) => {
             userInfo.Role = objRole.Code; // Gán giá trị Role vào userInfo
             req.Role = objRole.Code;
           }
-
+                
+          if(!!fcmtoken){
+            objU.fcmtoken = fcmtoken
+            objU.save()
+        }
           req.user = objU;
           jwtMiddleware(req, res, () => {
             objReturn.token = req.token;
@@ -111,7 +116,7 @@ exports.api_SignUp = async (req, res, next) => {
           objU.accout_name = accout_name;
           objU.hash_pass = hashedPassword; // Lưu mật khẩu đã mã hóa vào trường hash_pass
           objU.email = email;
-          objU.status = 1; // Người dùng đang kích hoạt
+          objU.active = StatusUser.INACTIVE; // Người dùng đang kích hoạt
 
           await objU.save();
 
@@ -181,7 +186,7 @@ exports.api_verifyOtp = async (req, res, next) => {
       let isValid = await verifyOtp(email, otp, MAIL_TYPE.OTP_SignUp);
       if (isValid) {
         const user = await userMD.userModel.findOne({ email: email });
-        user.verify = true;
+        user.active = "ACTIVE";
         await user.save();
         objReturn.status = 200;
         objReturn.msg = "Xác thực thành công";

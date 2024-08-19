@@ -1,6 +1,7 @@
 const cron = require('node-cron');
 const logger = require('./logger');
 const User = require('../model/Users');
+const { StatusUser } = require('../config/Constans');
 
 
 const deleteUnverifiedUsers = async () => {
@@ -9,7 +10,7 @@ const deleteUnverifiedUsers = async () => {
         const oneMinuteAgo = new Date(Date.now() - 5 * 60 * 1000);
 
         // Tìm và lưu thông tin người dùng chưa xác thực sau 1 phút
-        const unverifiedUsers = await User.userModel.find({ verify: false, create_at: { $lt: oneMinuteAgo } });
+        const unverifiedUsers = await User.userModel.find({ active: StatusUser.INACTIVE, create_at: { $lt: oneMinuteAgo } });
 
         // Nếu có người dùng bị xóa, log thông tin của họ
         if (unverifiedUsers.length > 0) {

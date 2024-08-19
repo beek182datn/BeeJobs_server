@@ -128,3 +128,4 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+src/firebase/beejobs-ee60a-firebase-adminsdk-j4hbc-714a78eb50.json
