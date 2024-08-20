@@ -140,6 +140,7 @@ exports.getChatroomByUserIdForWorker = async (req, res) => {
           company_name: companyDetails.company_name ? companyDetails.company_name : companyDetails.full_name ? companyDetails.full_name : null,
           company_logo: companyDetails.company_logo ? companyDetails.company_logo : companyDetails.avata ? companyDetails.avata : null,
           userIds,
+          type: companyDetails.company_name ? 'DN' : companyDetails.full_name ? 'ADMIN' : '',
           lastMessage: lastMessage ? lastMessage.content : null, // Thêm tin nhắn cuối cùng vào kết quả trả về
         };
       })
