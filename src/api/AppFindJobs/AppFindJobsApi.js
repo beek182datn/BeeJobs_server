@@ -290,18 +290,18 @@ exports.getJobApplications = async (req, res) => {
             worker_id: workerId,
             applied_at: { $gte: oneWeekAgo }
         })
-        .populate('worker_id')
-        .populate('job_id')
-        .sort({ applied_at: -1 }); // Sắp xếp theo thời gian giảm dần
+            .populate('worker_id')
+            .populate('job_id')
+            .sort({ applied_at: -1 }); // Sắp xếp theo thời gian giảm dần
 
         // Truy vấn ứng tuyển trong 30 ngày, sắp xếp theo thời gian giảm dần
         const appliedjobsLast30Days = await applyJobModel.find({
             worker_id: workerId,
             applied_at: { $gte: thirtyDaysAgo }
         })
-        .populate('worker_id')
-        .populate('job_id')
-        .sort({ applied_at: -1 }); // Sắp xếp theo thời gian giảm dần
+            .populate('worker_id')
+            .populate('job_id')
+            .sort({ applied_at: -1 }); // Sắp xếp theo thời gian giảm dần
 
         // Truy vấn tất cả ứng tuyển, sắp xếp theo thời gian giảm dần
         const allAppliedjobs = await applyJobModel.find({ worker_id: workerId })
@@ -524,39 +524,235 @@ exports.getJobById = async (req, res) => {
 
 exports.getListJobs = async (req, res) => {
     try {
-      const page = parseInt(req.query.page) || 1; // Trang hiện tại
-      const limit = parseInt(req.query.limit) || 10; // Số lượng công việc mỗi trang
-      const skip = (page - 1) * limit; // Số lượng công việc cần bỏ qua
-  
-      // Lấy công việc với phân trang
-      const jobs = await jobModel.find({}).skip(skip).limit(limit);
-  
-      const jobsWithCompanyLogo = await Promise.all(
-        jobs.map(async (job) => {
-          const company = await companyModel.findById(job.company_id);
-          return {
-            ...job.toObject(),
-            company_logo: company ? company.company_logo : null,
-          };
-        })
-      );
-  
-      // Lấy tổng số công việc để tính toán tổng số trang
-      const totalJobs = await jobModel.countDocuments({});
-      const totalPages = Math.ceil(totalJobs / limit);
-  
-      return res.status(200).json({
-        data: jobsWithCompanyLogo,
-        totalPages, // Tổng số trang
-        currentPage: page, // Trang hiện tại
-        message: "Danh sách các công việc",
-        createdBy: "Hệ thống",
-      });
+        const page = parseInt(req.query.page) || 1; // Trang hiện tại
+        const limit = parseInt(req.query.limit) || 10; // Số lượng công việc mỗi trang
+        const skip = (page - 1) * limit; // Số lượng công việc cần bỏ qua
+
+        // Lấy công việc với phân trang
+        const jobs = await jobModel.find({}).sort({ created_at: -1, _id: 1 }).skip(skip).limit(limit);
+
+        const jobsWithCompanyLogo = await Promise.all(
+            jobs.map(async (job) => {
+                const company = await companyModel.findById(job.company_id);
+                return {
+                    ...job.toObject(),
+                    company_logo: company ? company.company_logo : null,
+                };
+            })
+        );
+
+        // Lấy tổng số công việc để tính toán tổng số trang
+        const totalJobs = await jobModel.countDocuments({});
+        const totalPages = Math.ceil(totalJobs / limit);
+
+        return res.status(200).json({
+            data: jobsWithCompanyLogo,
+            totalPages, // Tổng số trang
+            currentPage: page, // Trang hiện tại
+            message: "Danh sách các công việc",
+            createdBy: "Hệ thống",
+        });
     } catch (error) {
-      return res.status(500).json({
-        message: "Lỗi: " + error.message,
-        createdBy: "Hệ thống",
-      });
+        return res.status(500).json({
+            message: "Lỗi: " + error.message,
+            createdBy: "Hệ thống",
+        });
     }
-  };
-  
+};
+
+exports.getJobsByTitle = async (req, res) => {
+    try {
+        const searchKeyword = req.query.keyword || "";
+
+        if (searchKeyword === '') {
+            return res.status(201).json({
+                data: [],
+                message: "Hãy nhập tên việc làm",
+                createdBy: "Hệ thống",
+            });
+        }
+
+        const query = {};
+
+        if (searchKeyword) {
+            query.title = { $regex: searchKeyword, $options: "i" };
+        }
+        const jobs = await jobModel.find(query);
+
+        if (!jobs || jobs.length === 0) {
+            return res.status(201).json({
+                data: [],
+                message: "Không có kết quả",
+                createdBy: "Hệ thống",
+            });
+        }
+        const jobsWithCompanyLogo = await Promise.all(
+            jobs.map(async (job) => {
+                const company = await companyModel.findById(job.company_id);
+                return {
+                    ...job.toObject(),
+                    company_logo: company ? company.company_logo : null,
+                };
+            })
+        );
+
+        return res.status(200).json({
+            data: jobsWithCompanyLogo,
+            message: "Danh sách công việc",
+            createdBy: "Hệ thống",
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: "Lỗi: " + error.message,
+            createdBy: "Hệ thống",
+        });
+    }
+};
+
+exports.getJobsBySalary = async (req, res) => {
+    try {
+        const searchKeyword = req.query.keyword || "";
+
+        if (searchKeyword === '') {
+            return res.status(201).json({
+                data: [],
+                message: "Hãy nhập tên việc làm",
+                createdBy: "Hệ thống",
+            });
+        }
+
+        const query = {};
+
+        if (searchKeyword) {
+            query.salary = { $regex: searchKeyword, $options: "i" };
+        }
+        const jobs = await jobModel.find(query);
+
+        if (!jobs || jobs.length === 0) {
+            return res.status(201).json({
+                data: [],
+                message: "Không có kết quả",
+                createdBy: "Hệ thống",
+            });
+        }
+
+        const jobsWithCompanyLogo = await Promise.all(
+            jobs.map(async (job) => {
+                const company = await companyModel.findById(job.company_id);
+                return {
+                    ...job.toObject(),
+                    company_logo: company ? company.company_logo : null,
+                };
+            })
+        );
+
+        return res.status(200).json({
+            data: jobsWithCompanyLogo,
+            message: "Danh sách công việc",
+            createdBy: "Hệ thống",
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: "Lỗi: " + error.message,
+            createdBy: "Hệ thống",
+        });
+    }
+};
+
+exports.getJobsByLocation = async (req, res) => {
+    try {
+        const searchKeyword = req.query.keyword || "";
+
+        if (searchKeyword === '') {
+            return res.status(201).json({
+                data: [],
+                message: "Hãy nhập tên việc làm",
+                createdBy: "Hệ thống",
+            });
+        }
+
+        const query = {};
+
+        if (searchKeyword) {
+            query.location = { $regex: searchKeyword, $options: "i" };
+        }
+        const jobs = await jobModel.find(query);
+
+        if (!jobs || jobs.length === 0) {
+                return res.status(201).json({
+                    data: [],
+                    message: "Không có kết quả",
+                    createdBy: "Hệ thống",
+                });
+        }
+        const jobsWithCompanyLogo = await Promise.all(
+            jobs.map(async (job) => {
+                const company = await companyModel.findById(job.company_id);
+                return {
+                    ...job.toObject(),
+                    company_logo: company ? company.company_logo : null,
+                };
+            })
+        );
+
+        return res.status(200).json({
+            data: jobsWithCompanyLogo,
+            message: "Danh sách công việc",
+            createdBy: "Hệ thống",
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: "Lỗi: " + error.message,
+            createdBy: "Hệ thống",
+        });
+    }
+};
+
+exports.getJobsByForm = async (req, res) => {
+    try {
+        const searchKeyword = req.query.keyword || "";
+
+        if (searchKeyword === '') {
+            return res.status(201).json({
+                data: [],
+                message: "Hãy nhập tên việc làm",
+                createdBy: "Hệ thống",
+            });
+        }
+
+        const query = {};
+
+        if (searchKeyword) {
+            query.form = { $regex: searchKeyword, $options: "i" };
+        }
+        const jobs = await jobModel.find(query);
+
+        if (!jobs || jobs.length === 0) {
+            return res.status(201).json({
+                data: [],
+                message: "Không có kết quả",
+                createdBy: "Hệ thống",
+            });
+        }
+        const jobsWithCompanyLogo = await Promise.all(
+            jobs.map(async (job) => {
+                const company = await companyModel.findById(job.company_id);
+                return {
+                    ...job.toObject(),
+                    company_logo: company ? company.company_logo : null,
+                };
+            })
+        );
+
+        return res.status(200).json({
+            data: jobsWithCompanyLogo,
+            message: "Danh sách công việc",
+            createdBy: "Hệ thống",
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: "Lỗi: " + error.message,
+            createdBy: "Hệ thống",
+        });
+    }
+};

@@ -79,7 +79,15 @@ exports.editApplyJob = async (req, res) => {
       { status },
       { new: true }
     );
+      var getIdCompany = await jobModel.findOne({_id:applyJobId}).company_id;
 
+
+    await NotificationHelper.createNotification(
+      updatedApplyJob.worker_id,
+      getIdCompany,
+      "Kết quả hồ sơ của bạn: "+status,
+      'UngTuyen'
+    );
     if (!updatedApplyJob) {
       return res.status(404).json({
         message: "Công việc không tồn tại!",
