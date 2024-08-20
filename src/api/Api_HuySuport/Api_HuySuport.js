@@ -124,6 +124,9 @@ exports.getChatroomByUserIdForWorker = async (req, res) => {
           companyDetails = await companyModel.findOne({ _id: otherID }).select(
             'company_name company_logo'
           );
+          if(!companyDetails){
+            companyDetails = await userMD.userModel.findOne({ _id: otherID }).select('full_name avata');
+          }
         }
 
         if (messages.length > 0) {
@@ -134,8 +137,8 @@ exports.getChatroomByUserIdForWorker = async (req, res) => {
           _id,
           myID,
           otherID,
-          company_name: companyDetails ? companyDetails.company_name : null,
-          company_logo: companyDetails ? companyDetails.company_logo : null,
+          company_name: companyDetails.company_name ? companyDetails.company_name : companyDetails.full_name ? companyDetails.full_name : null,
+          company_logo: companyDetails.company_logo ? companyDetails.company_logo : companyDetails.avata ? companyDetails.avata : null,
           userIds,
           lastMessage: lastMessage ? lastMessage.content : null, // Thêm tin nhắn cuối cùng vào kết quả trả về
         };
