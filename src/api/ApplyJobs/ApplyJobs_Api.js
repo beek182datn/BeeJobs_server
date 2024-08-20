@@ -3,6 +3,7 @@ const { jobModel } = require("../../model/Jobs");
 const WorkerMD = require("../../model/Workers");
 const { userModel } = require("../../model/Users");
 const { companyModel } = require("../../model/Companies");
+const NotificationModel = require("../../model/Notification");
 
 var fs = require("fs");
 const path = require("path");
@@ -79,14 +80,13 @@ exports.editApplyJob = async (req, res) => {
       { status },
       { new: true }
     );
-      var getIdCompany = await jobModel.findOne({_id:applyJobId}).company_id;
+    var getIdCompany = await jobModel.findOne({ _id: applyJobId }).company_id;
 
-
-    await NotificationHelper.createNotification(
+    await NotificationModel.createNotification(
       updatedApplyJob.worker_id,
       getIdCompany,
-      "Kết quả hồ sơ của bạn: "+status,
-      'UngTuyen'
+      "Kết quả hồ sơ của bạn: " + status,
+      "UngTuyen"
     );
     if (!updatedApplyJob) {
       return res.status(404).json({
