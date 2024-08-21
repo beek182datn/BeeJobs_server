@@ -398,11 +398,16 @@ exports.getFollowedJobs = async (req, res) => {
         }
 
         // Lọc các công việc có deadline trước ngày hôm nay
-        const filteredJobs = jobs
-            .map(job => ({
-                ...job.toObject(), // Chuyển đổi Mongoose Document thành Object
-                isFollowing: userId ? jobsId.includes(job._id.toString()) : false // Thêm trường isFollowing
-            }));
+        const filteredJobs = jobs.filter(job => {
+            try {
+                return job.company_id;// Kiểm tra deadline và company_id
+            } catch (error) {
+                return false; // Nếu không thể phân tích, bỏ qua công việc này
+            }
+        }).map(job => ({
+            ...job.toObject(), // Chuyển đổi Mongoose Document thành Object
+            isFollowing: userId ? jobsId.includes(job._id.toString()) : false // Thêm trường isFollowing
+        }));
 
         return res.status(200).json({
             data: filteredJobs,
