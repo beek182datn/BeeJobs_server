@@ -1,7 +1,7 @@
 const { applyJobModel } = require("../../model/ApplyJobs");
 const { jobModel } = require("../../model/Jobs");
 const WorkerMD = require("../../model/Workers");
-
+const {createNotification} = require("../../helper/NotificationHelper");
 var fs = require("fs");
 const path = require("path");
 
@@ -40,6 +40,20 @@ exports.create_applyjob = async (req, res) => {
 
     // Lưu đơn ứng tuyển vào cơ sở dữ liệu
     await newApplyJob.save();
+    var getIdCompany = await jobModel.findOne({ _id: job_id });
+
+    var getUserId = await companyModel.findOne({ _id: getIdCompany.company_id });
+	console.log("ok",getUserId)
+    if (getUserId != null) {
+      await createNotification(
+        getUserId.user_id,
+        worker_id,
+        "Có hồ sơ ứng tuyển mới!!!",
+        "UngTuyen"
+      );
+	  
+	  
+    }
 
     return res.status(201).json({
       message: "Ứng tuyển công việc thành công!",
@@ -72,6 +86,20 @@ exports.editApplyJob = async (req, res) => {
         createdBy: "Hệ thống",
       });
     }
+    var getIdCompany = await jobModel.findOne({ _id: applyJobId });
+
+    await NotificationHelper.createNotification(
+      updatedApplyJob.worker_id,
+      getIdCompany.company_id,
+      "Kết quả hồ sơ của bạn: " + status,
+      "UngTuyen"
+    );
+   if (!updatedApplyJob) {
+     return res.status(404).json({
+       message: "Công việc không tồn tại!",
+       createdBy: "Hệ thống",
+     });
+   }
 
     return res.status(200).json({
       data: updatedApplyJob,
