@@ -487,8 +487,8 @@ exports.getJobById = async (req, res) => {
     try {
         const job_id = req.params.job_id;
 
-        const job = await jobModel.findById(job_id);
-        if (!job) {
+        const job = await jobModel.findById(job_id).populate('company_id');
+        if (!job || !job.company_id) {
             return res.status(404).json({
                 data: null,
                 message: "Thông tin công việc không tồn tại!",
@@ -496,21 +496,8 @@ exports.getJobById = async (req, res) => {
             });
         }
 
-        const company_id = job.company_id;
-        const company = await companyModel.findById(company_id);
-        if (!company) {
-            return res.status(404).json({
-                message: "Thông tin công ty không tồn tại!",
-                createdBy: "Hệ thống",
-            });
-        }
-        const jobWithCompanyLogo = {
-            ...job.toObject(),
-            company_logo: company.company_logo, // Thêm company_logo vào dữ liệu công việc
-        };
-
         return res.status(200).json({
-            data: jobWithCompanyLogo,
+            data: job,
             message: "Thông tin công việc",
             createdBy: "Hệ thống",
         });
