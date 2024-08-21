@@ -697,7 +697,7 @@ exports.getJobsByTitle = async (req, res) => {
 exports.getJobsBySalary = async (req, res) => {
     try {
         const searchKeyword = req.query.keyword || "";
-        const userId = re1.query.userId;
+        const userId = req.query.userId;
 
         if (searchKeyword === '') {
             return res.status(201).json({
