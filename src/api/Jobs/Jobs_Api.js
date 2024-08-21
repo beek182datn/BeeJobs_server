@@ -228,7 +228,7 @@ exports.getJobsByIdCompany = async (req, res) => {
     }
     const company_logo = checkCompany.company_logo;
 
-    const jobs = await jobModel.find({ company_id });
+    const jobs = await jobModel.find({ company_id }).sort({ created_at: -1 });
     const jobsWithCompanyLogo = jobs.map((job) => ({
       ...job.toObject(),
       company_logo: company_logo, // Thêm company_logo vào từng công việc
