@@ -537,33 +537,31 @@ exports.getListJobs = async (req, res) => {
             status: 'ACTIVE',
             deadline: { $lt: today } // Điều kiện deadline phải trước ngày hôm nay
         })
-        .sort({ created_at: -1, _id: 1 })
-        .skip(skip)
-        .limit(limit);
+            .sort({ created_at: -1, _id: 1 })
+            .skip(skip)
+            .limit(limit).populate('company_id');
 
-        const jobsWithCompanyLogo = await Promise.all(
-            jobs.map(async (job) => {
-                const company = await companyModel.findById(job.company_id);
-                return {
-                    ...job.toObject(),
-                    company_logo: company ? company.company_logo : null,
-                };
-            })
-        );
+        const filteredJobs = jobs.filter(job =>
+            job.company_id
+        )
 
         // Lấy tổng số công việc để tính toán tổng số trang
-        const totalJobs = await jobModel.countDocuments({
+        const totalJobs = await jobModel.find({
             status: 'ACTIVE',
             deadline: { $lt: today } // Tính tổng số công việc với điều kiện deadline
-        });
-        const totalPages = Math.ceil(totalJobs / limit);
+        }).populate('company_id');
+        const filteredTotalJobs = totalJobs.filter(job =>
+            job.company_id
+        )
+        const totalPages = Math.ceil(filteredTotalJobs.length / limit);
 
         return res.status(200).json({
-            data: jobsWithCompanyLogo,
+            data: filteredJobs,
             totalPages, // Tổng số trang
             currentPage: page, // Trang hiện tại
             message: "Danh sách các công việc",
             createdBy: "Hệ thống",
+            totalJobs: filteredTotalJobs.length
         });
     } catch (error) {
         return res.status(500).json({
@@ -693,11 +691,11 @@ exports.getJobsByLocation = async (req, res) => {
         const jobs = await jobModel.find(query);
 
         if (!jobs || jobs.length === 0) {
-                return res.status(201).json({
-                    data: [],
-                    message: "Không có kết quả",
-                    createdBy: "Hệ thống",
-                });
+            return res.status(201).json({
+                data: [],
+                message: "Không có kết quả",
+                createdBy: "Hệ thống",
+            });
         }
         const jobsWithCompanyLogo = await Promise.all(
             jobs.map(async (job) => {
