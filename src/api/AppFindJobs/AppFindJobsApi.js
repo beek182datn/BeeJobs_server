@@ -9,6 +9,19 @@ const { applyJobModel } = require('../../model/ApplyJobs');
 const { JobFollows } = require('../../model/JobFollow');
 const { jobModel } = require('../../model/Jobs');
 
+// cac ham toi uu
+const parseDate = (dateString) => {
+    if (dateString.includes('/')) {
+        const [day, month, year] = dateString.split('/').map(Number);
+        return new Date(year, month - 1, day); // month - 1 vì tháng trong JavaScript bắt đầu từ 0
+    } else if (dateString.includes('-')) {
+        const [year, month, day] = dateString.split('-').map(Number);
+        return new Date(year, month - 1, day); // Đối với định dạng yyyy-mm-dd
+    } else {
+        throw new Error('Invalid date format');
+    }
+};
+
 exports.folowCompany = async (req, res) => {
     try {
         const userId = req.params.userId;
@@ -240,42 +253,6 @@ exports.update_Workers = async (req, res) => {
     }
 };
 
-// exports.getJobApplications = async (req, res) => {
-//     try {
-//         const { userId } = req.params; // Giả sử bạn có userId trong params
-
-//         // Lấy thời gian hiện tại
-//         const now = moment();
-
-//         // Tính thời gian cho 1 tuần và 30 ngày trước
-//         const oneWeekAgo = now.subtract(7, 'days').toDate();
-//         const thirtyDaysAgo = now.subtract(30, 'days').toDate();
-
-//         // Truy vấn ứng tuyển trong 1 tuần
-//         const appliedjobsLastWeek = await applyJobModel.find({
-//             worker_id: userId,
-//             applied_at: { $gte: oneWeekAgo }
-//         });
-
-//         // Truy vấn ứng tuyển trong 30 ngày
-//         const appliedjobsLast30Days = await applyJobModel.find({
-//             worker_id: userId,
-//             applied_at: { $gte: thirtyDaysAgo }
-//         });
-
-//         // Truy vấn tất cả ứng tuyển
-//         const allAppliedjobs = await applyJobModel.find({ worker_id: userId });
-
-//         res.status(200).send({
-//             appliedjobsLastWeek,
-//             appliedjobsLast30Days,
-//             allAppliedjobs
-//         });
-//     } catch (error) {
-//         console.log(error);
-//         res.status(500).send({ message: "Đã xảy ra lỗi." });
-//     }
-// }
 
 exports.getJobApplications = async (req, res) => {
     try {
@@ -407,7 +384,7 @@ exports.getFollowedJobs = async (req, res) => {
             _id: { $in: jobsId },
             status: 'ACTIVE'
         }
-        );
+        ).populate('company_id');
 
         if (!jobs) {
             return res.status(200).json({
@@ -417,18 +394,8 @@ exports.getFollowedJobs = async (req, res) => {
             });
         }
 
-        const jobsWithCompanyLogo = await Promise.all(
-            jobs.map(async (job) => {
-                const company = await companyModel.findById(job.company_id);
-                return {
-                    ...job.toObject(),
-                    company_logo: company ? company.company_logo : null,
-                };
-            })
-        );
-
         return res.status(200).json({
-            data: jobsWithCompanyLogo,
+            data: jobs,
             message: "Danh sách các công việc",
             createdBy: "Hệ thống",
         });
@@ -569,20 +536,9 @@ exports.getJobsByIdCompany = async (req, res) => {
     }
 };
 
-const parseDate = (dateString) => {
-    if (dateString.includes('/')) {
-        const [day, month, year] = dateString.split('/').map(Number);
-        return new Date(year, month - 1, day); // month - 1 vì tháng trong JavaScript bắt đầu từ 0
-    } else if (dateString.includes('-')) {
-        const [year, month, day] = dateString.split('-').map(Number);
-        return new Date(year, month - 1, day); // Đối với định dạng yyyy-mm-dd
-    } else {
-        throw new Error('Invalid date format');
-    }
-};
-
 exports.getListJobs = async (req, res) => {
     try {
+        const userId = req.query.userId;
         const page = parseInt(req.query.page) || 1; // Trang hiện tại
         const limit = parseInt(req.query.limit) || 10; // Số lượng công việc mỗi trang
         const skip = (page - 1) * limit; // Số lượng công việc cần bỏ qua
@@ -596,6 +552,13 @@ exports.getListJobs = async (req, res) => {
         }).sort({ created_at: -1, _id: 1 })
             .populate('company_id');
 
+        // Lấy dữ liệu theo dõi công việc nếu có userId
+        let followedJobs = [];
+        if (userId) {
+            const data = await JobFollows.findOne({ userId });
+            followedJobs = data ? data.jobsId : []; // Lấy danh sách jobId mà user đã theo dõi
+        }
+
         // Lọc các công việc có deadline trước ngày hôm nay
         const filteredJobs = jobs.filter(job => {
             try {
@@ -604,7 +567,12 @@ exports.getListJobs = async (req, res) => {
             } catch (error) {
                 return false; // Nếu không thể phân tích, bỏ qua công việc này
             }
-        }).slice(skip, skip + limit); // Phân trang
+        })
+            .slice(skip, skip + limit) // phân trang
+            .map(job => ({
+                ...job.toObject(), // Chuyển đổi Mongoose Document thành Object
+                isFollowing: userId ? followedJobs.includes(job._id.toString()) : false // Thêm trường isFollowing
+            }));
 
         // Lấy tổng số công việc để tính toán tổng số trang
         const totalJobs = jobs.filter(job => {
