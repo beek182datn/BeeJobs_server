@@ -456,27 +456,47 @@ exports.getDataWorkerAppliedByCompanyId = async (req, res) => {
   try {
     const { company_id } = req.params;
 
+    // Tìm tất cả các công việc của công ty có company_id
     const jobs = await jobModel.find({ company_id: company_id });
 
+    // Kiểm tra xem có công việc nào không
+    if (jobs.length === 0) {
+      return res.status(404).json({
+        data: [],
+        message: "Không tìm thấy công việc nào cho công ty này!",
+        createdBy: "Hệ thống",
+      });
+    }
+
+    // Lấy danh sách job_id từ các công việc
     const jobIds = jobs.map((job) => job._id);
 
+    // Tìm tất cả các worker đã ứng tuyển vào các công việc này, không trùng lặp
     const workers = await applyJobModel.aggregate([
       { $match: { job_id: { $in: jobIds } } },
       {
         $group: {
-          _id: "$worker_id",
+          _id: "$worker_id", // Group by worker_id (ObjectId)
+        },
+      },
+      {
+        $addFields: {
+          worker_id_as_string: { $toString: "$_id" },
         },
       },
       {
         $lookup: {
           from: "Workers", // Tên collection chứa thông tin worker
-          localField: "_id",
-          foreignField: "_id",
+          localField: "worker_id_as_string",
+          foreignField: "user_id",
           as: "workerDetails",
         },
       },
       {
-        $unwind: "$workerDetails",
+        $unwind: {
+          path: "$workerDetails",
+          preserveNullAndEmptyArrays: false,
+        },
       },
       {
         $project: {
@@ -488,8 +508,10 @@ exports.getDataWorkerAppliedByCompanyId = async (req, res) => {
       },
     ]);
 
+    console.log("Workers Aggregation Results:", workers);
+
     return res.status(200).json({
-      data: workers,
+      data: workers || [],
       message: "Lấy danh sách worker đã ứng tuyển thành công!",
       createdBy: "Hệ thống",
     });
