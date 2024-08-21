@@ -228,7 +228,7 @@ exports.getJobsByIdCompany = async (req, res) => {
     }
     const company_logo = checkCompany.company_logo;
 
-    const jobs = await jobModel.find({ company_id });
+    const jobs = await jobModel.find({ company_id }).sort({ created_at: -1 });
     const jobsWithCompanyLogo = jobs.map((job) => ({
       ...job.toObject(),
       company_logo: company_logo, // Thêm company_logo vào từng công việc
@@ -931,6 +931,69 @@ exports.searchWorkersByJob = async (req, res) => {
     return res.status(200).json({
       data: matchingWorkers || [],
       message: "Tìm kiếm ứng viên thành công!",
+      createdBy: "Hệ thống",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi: " + error.message,
+      createdBy: "Hệ thống",
+    });
+  }
+};
+
+exports.getJobsWithSuitableApplications = async (req, res) => {
+  if (req.method !== "GET") {
+    return res.status(405).json({
+      message: "Phương thức không được hỗ trợ, hãy sử dụng: GET!",
+      createdBy: "Hệ thống",
+    });
+  }
+
+  try {
+    const { company_id } = req.params;
+
+    // Tìm tất cả các công việc của công ty có company_id
+    const jobs = await jobModel.find({ company_id: company_id });
+
+    if (!jobs || jobs.length === 0) {
+      return res.status(404).json({
+        message: "Không tìm thấy công việc nào cho công ty này!",
+        createdBy: "Hệ thống",
+      });
+    }
+
+    // Lấy danh sách job_id từ các công việc
+    const jobIds = jobs.map((job) => job._id);
+
+    // Tìm các công việc đã có ít nhất một đơn ứng tuyển với trạng thái "Phù hợp"
+    const jobsWithSuitableApplications = await applyJobModel.aggregate([
+      { $match: { job_id: { $in: jobIds }, status: "Phù hợp" } },
+      {
+        $lookup: {
+          from: "Jobs", // Tên collection công việc
+          localField: "job_id",
+          foreignField: "_id",
+          as: "jobDetails",
+        },
+      },
+      { $unwind: "$jobDetails" },
+      {
+        $group: {
+          _id: "$job_id",
+          jobDetails: { $first: "$jobDetails" },
+        },
+      },
+    ]);
+
+    // Lấy chi tiết công việc từ kết quả của aggregate
+    const jobsWithSuitable = jobsWithSuitableApplications.map(
+      (item) => item.jobDetails
+    );
+
+    return res.status(200).json({
+      data: jobsWithSuitable,
+      message:
+        "Lấy danh sách công việc đã có đơn ứng tuyển với trạng thái 'Phù hợp' thành công!",
       createdBy: "Hệ thống",
     });
   } catch (error) {
