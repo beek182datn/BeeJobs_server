@@ -8,6 +8,7 @@ const moment = require('moment');
 const { applyJobModel } = require('../../model/ApplyJobs');
 const { JobFollows } = require('../../model/JobFollow');
 const { jobModel } = require('../../model/Jobs');
+const { database } = require('firebase-admin');
 
 // cac ham toi uu
 const parseDate = (dateString) => {
@@ -379,12 +380,14 @@ exports.getFollowedJobs = async (req, res) => {
 
         const jobsId = data.jobsId;
 
-        // Tìm tất cả các công ty theo companyId
+        // Tìm tất cả các công việc trong mảng
         const jobs = await jobModel.find({
             _id: { $in: jobsId },
             status: 'ACTIVE'
         }
-        ).populate('company_id');
+        )
+            .sort({ created_at: -1, _id: 1 })
+            .populate('company_id');
 
         if (!jobs) {
             return res.status(200).json({
@@ -394,8 +397,15 @@ exports.getFollowedJobs = async (req, res) => {
             });
         }
 
+        // Lọc các công việc có deadline trước ngày hôm nay
+        const filteredJobs = jobs
+            .map(job => ({
+                ...job.toObject(), // Chuyển đổi Mongoose Document thành Object
+                isFollowing: userId ? jobsId.includes(job._id.toString()) : false // Thêm trường isFollowing
+            }));
+
         return res.status(200).json({
-            data: jobs,
+            data: filteredJobs,
             message: "Danh sách các công việc",
             createdBy: "Hệ thống",
         });
@@ -486,6 +496,7 @@ exports.getJobsByIdCompany = async (req, res) => {
 
     try {
         const company_id = req.params.company_id;
+        const userId = req.query.userId;
 
         const today = new Date();
         today.setHours(0, 0, 0, 0); // Đặt giờ về 00:00:00 để so sánh chỉ ngày
@@ -494,7 +505,8 @@ exports.getJobsByIdCompany = async (req, res) => {
         const jobs = await jobModel.find({
             company_id: company_id,
             status: 'ACTIVE'
-        }).sort({ created_at: -1, _id: 1 })
+        })
+            .sort({ created_at: -1, _id: 1 })
             .populate('company_id');
 
         if (!jobs) {
@@ -513,6 +525,13 @@ exports.getJobsByIdCompany = async (req, res) => {
             });
         }
 
+        // Lấy dữ liệu theo dõi công việc nếu có userId
+        let followedJobs = [];
+        if (userId) {
+            const data = await JobFollows.findOne({ userId });
+            followedJobs = data ? data.jobsId : []; // Lấy danh sách jobId mà user đã theo dõi
+        }
+
         // Lọc các công việc có deadline trước ngày hôm nay
         const filteredJobs = jobs.filter(job => {
             try {
@@ -521,7 +540,10 @@ exports.getJobsByIdCompany = async (req, res) => {
             } catch (error) {
                 return false; // Nếu không thể phân tích, bỏ qua công việc này
             }
-        })
+        }).map(job => ({
+            ...job.toObject(), // Chuyển đổi Mongoose Document thành Object
+            isFollowing: userId ? followedJobs.includes(job._id.toString()) : false // Thêm trường isFollowing
+        }));
 
         return res.status(200).json({
             data: filteredJobs,
@@ -549,7 +571,8 @@ exports.getListJobs = async (req, res) => {
         // Lấy công việc với phân trang
         const jobs = await jobModel.find({
             status: 'ACTIVE',
-        }).sort({ created_at: -1, _id: 1 })
+        })
+            .sort({ created_at: -1, _id: 1 })
             .populate('company_id');
 
         // Lấy dữ liệu theo dõi công việc nếu có userId
