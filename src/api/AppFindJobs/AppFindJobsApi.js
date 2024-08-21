@@ -509,6 +509,55 @@ exports.getJobById = async (req, res) => {
     }
 };
 
+exports.getJobsByIdCompany = async (req, res) => {
+    if (req.method !== "GET") {
+        return res.status(405).json({
+            message: "Phương thức không được hỗ trợ, hãy sử dụng: GET!",
+            createdBy: "Hệ thống",
+        });
+    }
+
+    try {
+        const company_id = req.params.company_id;
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Đặt giờ về 00:00:00 để so sánh chỉ ngày
+
+        // Lấy công việc với phân trang và điều kiện deadline
+        const jobs = await jobModel.find({
+            company_id: company_id,
+            status: 'ACTIVE',
+            deadline: { $lt: today } // Điều kiện deadline phải trước ngày hôm nay
+        }).populate('company_id');
+        if (!jobs) {
+            return res.status(404).json({
+                data: [],
+                message: "Oops",
+                createdBy: "Hệ thống",
+            });
+        }
+
+        if (jobs.length === 0) {
+            return res.status(200).json({
+                data: [],
+                message: "Không có công việc nào",
+                createdBy: "Hệ thống",
+            });
+        }
+
+        return res.status(200).json({
+            data: jobs,
+            message: "Danh sách các công việc của công ty",
+            createdBy: "Hệ thống",
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: "Lỗi: " + error.message,
+            createdBy: "Hệ thống",
+        });
+    }
+};
+
 exports.getListJobs = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1; // Trang hiện tại
