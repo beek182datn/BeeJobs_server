@@ -634,6 +634,7 @@ exports.getListJobs = async (req, res) => {
 exports.getJobsByTitle = async (req, res) => {
     try {
         const searchKeyword = req.query.keyword || "";
+        const userId = req.query.userId;
 
         if (searchKeyword === '') {
             return res.status(201).json({
@@ -659,6 +660,14 @@ exports.getJobsByTitle = async (req, res) => {
             });
         }
         const today = new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()));
+        // Lấy dữ liệu theo dõi công việc nếu có userId
+        let followedJobs = [];
+        if (userId) {
+            const data = await JobFollows.findOne({ userId });
+            followedJobs = data ? data.jobsId : []; // Lấy danh sách jobId mà user đã theo dõi
+        }
+
+        // Lọc các công việc có deadline trước ngày hôm nay
         const filteredJobs = jobs.filter(job => {
             try {
                 const jobDeadline = parseDate(job.deadline); // Chuyển đổi chuỗi thành Date
@@ -667,6 +676,10 @@ exports.getJobsByTitle = async (req, res) => {
                 return false; // Nếu không thể phân tích, bỏ qua công việc này
             }
         })
+            .map(job => ({
+                ...job.toObject(), // Chuyển đổi Mongoose Document thành Object
+                isFollowing: userId ? followedJobs.includes(job._id.toString()) : false // Thêm trường isFollowing
+            }));
 
         return res.status(200).json({
             data: filteredJobs,
@@ -684,6 +697,7 @@ exports.getJobsByTitle = async (req, res) => {
 exports.getJobsBySalary = async (req, res) => {
     try {
         const searchKeyword = req.query.keyword || "";
+        const userId = re1.query.userId;
 
         if (searchKeyword === '') {
             return res.status(201).json({
@@ -710,6 +724,14 @@ exports.getJobsBySalary = async (req, res) => {
         }
 
         const today = new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()));
+        // Lấy dữ liệu theo dõi công việc nếu có userId
+        let followedJobs = [];
+        if (userId) {
+            const data = await JobFollows.findOne({ userId });
+            followedJobs = data ? data.jobsId : []; // Lấy danh sách jobId mà user đã theo dõi
+        }
+
+        // Lọc các công việc có deadline trước ngày hôm nay
         const filteredJobs = jobs.filter(job => {
             try {
                 const jobDeadline = parseDate(job.deadline); // Chuyển đổi chuỗi thành Date
@@ -718,6 +740,11 @@ exports.getJobsBySalary = async (req, res) => {
                 return false; // Nếu không thể phân tích, bỏ qua công việc này
             }
         })
+            .map(job => ({
+                ...job.toObject(), // Chuyển đổi Mongoose Document thành Object
+                isFollowing: userId ? followedJobs.includes(job._id.toString()) : false // Thêm trường isFollowing
+            }));
+
 
         return res.status(200).json({
             data: filteredJobs,
@@ -735,6 +762,7 @@ exports.getJobsBySalary = async (req, res) => {
 exports.getJobsByLocation = async (req, res) => {
     try {
         const searchKeyword = req.query.keyword || "";
+        const userId = req.query.userId;
 
         if (searchKeyword === '') {
             return res.status(201).json({
@@ -761,6 +789,14 @@ exports.getJobsByLocation = async (req, res) => {
         }
 
         const today = new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()));
+        // Lấy dữ liệu theo dõi công việc nếu có userId
+        let followedJobs = [];
+        if (userId) {
+            const data = await JobFollows.findOne({ userId });
+            followedJobs = data ? data.jobsId : []; // Lấy danh sách jobId mà user đã theo dõi
+        }
+
+        // Lọc các công việc có deadline trước ngày hôm nay
         const filteredJobs = jobs.filter(job => {
             try {
                 const jobDeadline = parseDate(job.deadline); // Chuyển đổi chuỗi thành Date
@@ -769,6 +805,11 @@ exports.getJobsByLocation = async (req, res) => {
                 return false; // Nếu không thể phân tích, bỏ qua công việc này
             }
         })
+            .map(job => ({
+                ...job.toObject(), // Chuyển đổi Mongoose Document thành Object
+                isFollowing: userId ? followedJobs.includes(job._id.toString()) : false // Thêm trường isFollowing
+            }));
+
 
         return res.status(200).json({
             data: filteredJobs,
@@ -786,6 +827,7 @@ exports.getJobsByLocation = async (req, res) => {
 exports.getJobsByForm = async (req, res) => {
     try {
         const searchKeyword = req.query.keyword || "";
+        const userId = req.query.userId;
 
         if (searchKeyword === '') {
             return res.status(201).json({
@@ -812,6 +854,14 @@ exports.getJobsByForm = async (req, res) => {
         }
 
         const today = new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()));
+        // Lấy dữ liệu theo dõi công việc nếu có userId
+        let followedJobs = [];
+        if (userId) {
+            const data = await JobFollows.findOne({ userId });
+            followedJobs = data ? data.jobsId : []; // Lấy danh sách jobId mà user đã theo dõi
+        }
+
+        // Lọc các công việc có deadline trước ngày hôm nay
         const filteredJobs = jobs.filter(job => {
             try {
                 const jobDeadline = parseDate(job.deadline); // Chuyển đổi chuỗi thành Date
@@ -820,6 +870,11 @@ exports.getJobsByForm = async (req, res) => {
                 return false; // Nếu không thể phân tích, bỏ qua công việc này
             }
         })
+            .map(job => ({
+                ...job.toObject(), // Chuyển đổi Mongoose Document thành Object
+                isFollowing: userId ? followedJobs.includes(job._id.toString()) : false // Thêm trường isFollowing
+            }));
+
 
         return res.status(200).json({
             data: filteredJobs,
