@@ -46,20 +46,7 @@ exports.create_applyjob = async (req, res) => {
 
     // Lưu đơn ứng tuyển vào cơ sở dữ liệu
     await newApplyJob.save();
-    var getIdCompany = await jobModel.findOne({ _id: job_id });
-
-    var getUserId = await companyModel.findOne({ _id: getIdCompany.company_id });
-	console.log("ok",getUserId)
-    if (getUserId != null) {
-      await createNotification(
-        getUserId.user_id,
-        worker_id,
-        "Có hồ sơ ứng tuyển mới!!!",
-        "UngTuyen"
-      );
-	  
-	  
-    }
+    
 
     var getIdCompany = await jobModel.findOne({ _id: job_id });
 
