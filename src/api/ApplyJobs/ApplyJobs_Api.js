@@ -61,12 +61,12 @@ exports.create_applyjob = async (req, res) => {
 	  
     }
 
-    var getIdCompany = await jobModel.findOne({ _id: job_id }).company_id;
+    var getIdCompany = await jobModel.findOne({ _id: job_id });
 
-    var getUserId = await companyModel.findOne({ _id: getIdCompany }).user_id;
+    var getUserId = await companyModel.findOne({ _id: getIdCompany.company_id });
     if (getUserId != null) {
       await NotificationHelper.createNotification(
-        getUserId,
+        getUserId.user_id,
         worker_id,
         "Có hồ sơ ứng tuyển mới!!!",
         "UngTuyen"
