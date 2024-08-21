@@ -528,8 +528,18 @@ exports.getListJobs = async (req, res) => {
         const limit = parseInt(req.query.limit) || 10; // Số lượng công việc mỗi trang
         const skip = (page - 1) * limit; // Số lượng công việc cần bỏ qua
 
-        // Lấy công việc với phân trang
-        const jobs = await jobModel.find({}).sort({ created_at: -1, _id: 1 }).skip(skip).limit(limit);
+        // Lấy ngày hôm nay
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Đặt giờ về 00:00:00 để so sánh chỉ ngày
+
+        // Lấy công việc với phân trang và điều kiện deadline
+        const jobs = await jobModel.find({
+            status: 'ACTIVE',
+            deadline: { $lt: today } // Điều kiện deadline phải trước ngày hôm nay
+        })
+        .sort({ created_at: -1, _id: 1 })
+        .skip(skip)
+        .limit(limit);
 
         const jobsWithCompanyLogo = await Promise.all(
             jobs.map(async (job) => {
@@ -542,7 +552,10 @@ exports.getListJobs = async (req, res) => {
         );
 
         // Lấy tổng số công việc để tính toán tổng số trang
-        const totalJobs = await jobModel.countDocuments({});
+        const totalJobs = await jobModel.countDocuments({
+            status: 'ACTIVE',
+            deadline: { $lt: today } // Tính tổng số công việc với điều kiện deadline
+        });
         const totalPages = Math.ceil(totalJobs / limit);
 
         return res.status(200).json({
@@ -559,6 +572,7 @@ exports.getListJobs = async (req, res) => {
         });
     }
 };
+
 
 exports.getJobsByTitle = async (req, res) => {
     try {
