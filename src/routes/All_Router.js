@@ -29,7 +29,7 @@ const fileFilter = (req, file, cb) => {
 const uploader = multer({
   storage: storage,
   fileFilter: fileFilter,
-  limits: { fileSize: 1024 * 1024 * 30 }, // Giới hạn kích thước file (5MB)
+  limits: { fileSize: 1024 * 1024 * 20 }, // Giới hạn kích thước file (5MB)
 });
 
 var chat = require("../api/AppFindJobs/Chat");
@@ -361,7 +361,10 @@ router.get("/jobs/getJobsBySalary", appfindjobs.getJobsBySalary); //Tìm công v
 router.get("/jobs/getJobsByTitle", appfindjobs.getJobsByTitle); //Tìm công việc theo tiêu đề == vị trí tuyển dụng
 router.get("/jobs/getJobsByLocation", appfindjobs.getJobsByLocation); //Tìm việc theo địa điểm doanh nghiệp
 router.get("/jobs/getJobsByForm", appfindjobs.getJobsByForm); //Tìm việc theo hình thức (Thực tập, ....)
-router.get('/jobs/getjobbycompanyid/:company_id', appfindjobs.getJobsByIdCompany);
+router.get(
+  "/jobs/getjobbycompanyid/:company_id",
+  appfindjobs.getJobsByIdCompany
+);
 
 //=================Chat Router =====================
 router.get("/api/chat/chatroom/:senderId/:receiverId", chat.getChatRoomInfo);

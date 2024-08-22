@@ -26,7 +26,7 @@ exports.create_company = async (req, res) => {
         const logoFile = req.files["company_logo"][0];
         const newPathLogo = path.join("./public/uploads/", logoFile.filename);
         fs.renameSync(logoFile.path, newPathLogo);
-        url_logo = "/uploads/" + logoFile.filename;
+        url_logo = "http://beejobs.io.vn:14307/uploads/" + logoFile.filename;
       }
 
       if (req.files["company_certification"]) {
@@ -36,7 +36,8 @@ exports.create_company = async (req, res) => {
           certificateFile.filename
         );
         fs.renameSync(certificateFile.path, newPathCertificate);
-        url_certificate = "/uploads/" + certificateFile.filename;
+        url_certificate =
+          "http://beejobs.io.vn:14307/uploads/" + certificateFile.filename;
       }
       let company = new companyModel({
         user_id: req.params.user_id,
@@ -112,7 +113,7 @@ exports.edit_company = async (req, res) => {
       const logoFile = req.files["company_logo"][0];
       const newPathLogo = path.join("./public/uploads/", logoFile.filename);
       fs.renameSync(logoFile.path, newPathLogo);
-      url_logo = "/uploads/" + logoFile.filename;
+      url_logo = "http://beejobs.io.vn:14307/uploads/" + logoFile.filename;
     }
 
     if (req.files && req.files["company_certification"]) {
@@ -122,7 +123,8 @@ exports.edit_company = async (req, res) => {
         certificateFile.filename
       );
       fs.renameSync(certificateFile.path, newPathCertificate);
-      url_certificate = "/uploads/" + certificateFile.filename;
+      url_certificate =
+        "http://beejobs.io.vn:14307/uploads/" + certificateFile.filename;
     }
 
     const updateFields = {
@@ -200,7 +202,7 @@ exports.edit_company_logo = async (req, res) => {
       const logoFile = req.files["company_logo"][0];
       const newPathLogo = path.join("./public/uploads/", logoFile.filename);
       fs.renameSync(logoFile.path, newPathLogo);
-      url_logo = "/uploads/" + logoFile.filename;
+      url_logo = "http://beejobs.io.vn:14307/uploads/" + logoFile.filename;
     }
 
     // Cập nhật thông tin công ty chỉ với company_logo
