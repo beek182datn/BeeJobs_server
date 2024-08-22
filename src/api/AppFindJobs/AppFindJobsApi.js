@@ -153,7 +153,7 @@ exports.create_Workers = async (req, res) => {
 
                 const newPathAvatar = path.join("./public/uploads/", logoFile.filename);
                 fs.renameSync(logoFile.path, newPathAvatar); // Di chuyển file đến thư mục public
-                url_avatar = "/uploads/" + logoFile.filename;
+                url_avatar = "http://beejobs.io.vn:14307/uploads/" + logoFile.filename;
             }
 
             // Tạo mới đối tượng worker
@@ -218,7 +218,7 @@ exports.update_Workers = async (req, res) => {
 
                 const newPathAvatar = path.join("./public/uploads/", logoFile.filename);
                 fs.renameSync(logoFile.path, newPathAvatar); // Di chuyển file đến thư mục public
-                worker.worker_avatar = "/uploads/" + logoFile.filename;
+                worker.worker_avatar = "http://beejobs.io.vn:14307/uploads/" + logoFile.filename;
             }
 
             // Cập nhật thông tin worker
