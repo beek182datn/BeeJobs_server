@@ -18,13 +18,13 @@
 <body>
     <!-- HTML -->
     <span class="span">Biểu đồ doanh thu năm 2024</span>
-    <div id="chartdivDT" data-jobs-applications='<%= JSON.stringify(data.jobsAndApplications) %>'></div>
+    <div id="chartdivDT" data-cash-money='<%= JSON.stringify(data.moneyDeposits) %>'></div>
 
     <!-- Chart code -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var chartdivDT = document.getElementById('chartdivDT');
-            var dataTD = JSON.parse(chartdivDT.getAttribute('data-jobs-applications'));
+            var dataTD = JSON.parse(chartdivDT.getAttribute('data-cash-money'));
 
             am5.ready(function() {
                 // Create root element
