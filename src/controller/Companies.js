@@ -48,16 +48,18 @@ exports.GetInfoCompany = async (req, res, next) => {
   }
 };
 exports.LockCompanies = async (req, res) => {
+  console.log("LockCompanies")
   const Companies = await CompaniesMD.companyModel.findById(
     req.params.company_id
   );
 
   if (Companies) {
-    Companies.status = StatusUser.LOCK;
+    Companies.status = StatusUser.StatusUser.LOCK;
     await Companies.save();
-
+console.log(Companies);
     res.redirect("/Companies/index");
   }
+
 };
 
 exports.acitve = async (req, res, next) => {

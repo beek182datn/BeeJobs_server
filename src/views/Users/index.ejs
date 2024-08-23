@@ -11,7 +11,7 @@
 
   <form action="" method="GET" class="mb-3">
     <div class="input-group">
-      <input type="text" class="form-control" placeholder="Tìm kiếm..." name="search" value="<%= search %>">
+      <input type="text" class="form-control" placeholder="Nhập email để tìm kiếm..." name="search" value="<%= search %>">
       <div class="input-group-append">
         <button class="btn btn-outline-secondary" type="submit">Tìm kiếm</button>
       </div>
@@ -40,7 +40,7 @@
           <td><%= lstUsers.accout_name %></td>
           <td><%= lstUsers.email %></td>
           <td>
-            <% if(lstUsers.verify == true ){ %>
+            <% if(lstUsers.active == "ACTIVE" ){ %>
             <span class="badge badge-pill badge-success">Đã duyệt</span>
             <% }else if(lstUsers.active == "LOCK" ){ %>
               <span class="badge badge-pill badge-danger">Người dùng bị khóa</span>

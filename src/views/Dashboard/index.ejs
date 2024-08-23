@@ -64,11 +64,13 @@
             <div class="row gutters">
 <span class="span">Biểu đồ ứng tuyển của người lao động năm 2024</span>
 
-                <div id="chartdiv"></div>
+                <div id="chartdiv" data-jobAplySS='<%= JSON.stringify(data.applicationsStats) %>'></div>
 
                 </div>
 <%- include('./BieuDoTinTuyenDung.ejs') %>
 <%- include('./BieuDoTangTruongDoanhNghiep.ejs') %>
+<%- include('./BieuDoDoanhThu.ejs') %>
+
               
 
                 </div>
@@ -84,6 +86,10 @@
 
        
         <script>
+   document.addEventListener("DOMContentLoaded", function() {
+var chartDiv = document.getElementById('chartdiv');
+var data = JSON.parse(chartDiv.getAttribute('data-jobAplySS'));
+
             am5.ready(function() {
             
             // Create root element
@@ -119,37 +125,6 @@
             
             
             // Data
-            var data = [{
-              month: "Tháng 1",
-              ungTuyen: 23,
-              ungTuyenThanhCong: 18
-            }, {
-                month: "Tháng 2",
-                ungTuyen: 26,
-                ungTuyenThanhCong: 22
-            }, {
-                month: "Tháng 3",
-                ungTuyen: 30,
-                ungTuyenThanhCong: 23
-            }, {
-                month: "Tháng 4",
-                ungTuyen: 29,
-                ungTuyenThanhCong: 25
-            }, {
-                month: "Tháng 5",
-                ungTuyen: 24,
-                ungTuyenThanhCong: 22
-            }
-            , {
-                month: "Tháng 6",
-                ungTuyen: 80,
-                ungTuyenThanhCong: 50
-            }
-            , {
-                month: "Tháng 7",
-                ungTuyen: 60,
-                ungTuyenThanhCong: 40
-            }];
             
             
             // Create axes
@@ -257,9 +232,11 @@
             chart.appear(1000, 100);
             
             }); // end am5.ready()
-            </script>
+          }   
+        );
+          </script>
             
-                
+          
 
     <%- include('../inc/nav_footer.ejs') %>
 

@@ -98,11 +98,7 @@ const initWebRouter = (app) => {
   //=================Companies Router =====================
 
   router.get("/Companies/index", CheckLogin.ycLogin, Companies.index);
-  router.get(
-    "/Companies/lockcompani/:company_id",
-    CheckLogin.ycLogin,
-    Companies.LockCompanies
-  );
+  router.get("/compamies/lockcompani/:company_id",CheckLogin.ycLogin,Companies.LockCompanies);
   router.get(
     "/compamies/active/:company_id",
     CheckLogin.ycLogin,

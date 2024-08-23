@@ -1,6 +1,7 @@
 const CompanyMD = require('../model/Companies');
 const JobsMD = require('../model/Jobs');
 const ApplyJobs = require('../model/ApplyJobs');
+const {historyTransModel} = require('../model/History_Trans');
 const { log } = require('winston');
 
 exports.index = async (req, res, next) => {
@@ -99,6 +100,83 @@ exports.index = async (req, res, next) => {
         applicationsCountRaw.forEach(item => {
             jobsAndApplicationsData[item._id - 1].UngTuyen = item.applyCount;
         });
+
+
+        const moneyDepositsRaw = await historyTransModel.aggregate([
+            {
+                $match: {
+                    created_at: {
+                        $gte: new Date(`${currentYear}-01-01`),
+                        $lte: new Date(`${currentYear}-12-31`)
+                    },
+                    status: "Nạp"
+                }
+            },
+            {
+                $group: {
+                    _id: { $month: "$created_at" },
+                    totalAmount: { $sum: "$amount" }
+                }
+            },
+            {
+                $sort: { "_id": 1 }
+            }
+        ]);
+
+        const moneyDeposits = Array.from({ length: 12 }, (v, k) => ({
+            month: `Tháng ${k + 1}`,
+            totalAmount: 0
+        }));
+
+        // Fill data from query result into the object
+        moneyDepositsRaw.forEach(item => {
+            moneyDeposits[item._id - 1].totalAmount = item.totalAmount;
+        });
+
+
+ // New aggregation for successful applications vs total applications
+ const applicationsStatsRaw = await ApplyJobs.applyJobModel.aggregate([
+    {
+        $match: {
+            applied_at: {
+                $gte: new Date(`${currentYear}-01-01`),
+                $lte: new Date(`${currentYear}-12-31`)
+            }
+        }
+    },
+    {
+        $group: {
+            _id: { $month: "$applied_at" },
+            totalApplications: { $sum: 1 },
+            successfulApplications: {
+                $sum: {
+                    $cond: [{ $eq: ["$status", "Phù hợp"] }, 1, 0]
+                }
+            }
+        }
+    },
+    {
+        $sort: { "_id": 1 }
+    }
+]);
+
+const applicationsStats = Array.from({ length: 12 }, (v, k) => ({
+    month: `Tháng ${k + 1}`,
+    TongUngTuyen: 0,
+    UngTuyenThanhCong: 0
+}));
+
+// Fill data from query result into the object
+applicationsStatsRaw.forEach(item => {
+    applicationsStats[item._id - 1].TongUngTuyen = item.totalApplications;
+    applicationsStats[item._id - 1].UngTuyenThanhCong = item.successfulApplications;
+});
+
+// Add applications stats data to the main data object
+data.applicationsStats = applicationsStats;
+
+        // Add money deposits data to the main data object
+        data.moneyDeposits = moneyDeposits;
 
         data.companyGrowth = companyGrowth;
         data.jobsAndApplications = jobsAndApplicationsData;

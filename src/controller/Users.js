@@ -28,6 +28,7 @@ exports.index = async (req, res, next) => {
 
     const lstUsers = await UsersMD.userModel
       .find(query)
+      .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
       .lean();
