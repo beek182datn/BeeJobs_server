@@ -888,3 +888,142 @@ exports.getJobsByForm = async (req, res) => {
         });
     }
 };
+
+// exports.getJobsFilterOption = async (req, res) => {
+//     try {
+//         const titleKeyword = req.query.title || "";
+//         const salaryKeyword = req.query.salary || "";
+//         const locationKeyword = req.query.location || "";
+//         const experienceKeyword = req.query.experience || "";
+//         const userId = req.query.userId;
+
+//         // if (titleKeyword === '' || salaryKeyword === '' || locationKeyword === '' || experienceKeyword === '') {
+//         //     return res.status(201).json({
+//         //         data: [],
+//         //         message: "Hãy nhập tên việc làm",
+//         //         createdBy: "Hệ thống",
+//         //     });
+//         // }
+
+//         let query = {};
+//         let jobs = [];
+
+//         if (titleKeyword || salaryKeyword || locationKeyword || experienceKeyword) {
+//             query.title = { $regex: titleKeyword, $options: "i" };
+//             query.salary = { $regex: salaryKeyword, $options: "i" };
+//             query.location = { $regex: locationKeyword, $options: "i" };
+//             query.experience = { $regex: experienceKeyword, $options: "i" };
+//             query.status = 'ACTIVE';
+//             jobs = await jobModel.find(query).sort({ created_at: -1, _id: 1 }).populate('company_id');
+//         }
+
+//         if (!jobs || jobs.length === 0) {
+//             return res.status(201).json({
+//                 data: [],
+//                 message: "Không có kết quả",
+//                 createdBy: "Hệ thống",
+//             });
+//         }
+//         const today = new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()));
+//         // Lấy dữ liệu theo dõi công việc nếu có userId
+//         let followedJobs = [];
+//         if (userId) {
+//             const data = await JobFollows.findOne({ userId });
+//             followedJobs = data ? data.jobsId : []; // Lấy danh sách jobId mà user đã theo dõi
+//         }
+
+//         // Lọc các công việc có deadline trước ngày hôm nay
+//         const filteredJobs = jobs.filter(job => {
+//             try {
+//                 const jobDeadline = parseDate(job.deadline); // Chuyển đổi chuỗi thành Date
+//                 return job.company_id && jobDeadline > today; // Kiểm tra deadline và company_id
+//             } catch (error) {
+//                 return false; // Nếu không thể phân tích, bỏ qua công việc này
+//             }
+//         })
+//             .map(job => ({
+//                 ...job.toObject(), // Chuyển đổi Mongoose Document thành Object
+//                 isFollowing: userId ? followedJobs.includes(job._id.toString()) : false // Thêm trường isFollowing
+//             }));
+
+//         return res.status(200).json({
+//             data: filteredJobs,
+//             message: "Danh sách công việc",
+//             createdBy: "Hệ thống",
+//         });
+//     } catch (error) {
+//         return res.status(500).json({
+//             message: "Lỗi: " + error.message,
+//             createdBy: "Hệ thống",
+//         });
+//     }
+// };
+
+
+exports.getJobsFilterOption = async (req, res) => {
+    try {
+        const titleKeyword = req.query.title || "";
+        const salaryRange = req.query.salary ? req.query.salary.split('-').map(Number) : [];
+        const locationKeyword = req.query.location || "";
+        const experienceKeyword = req.query.experience ? parseInt(req.query.experience) : null;
+        const userId = req.query.userId;
+
+        let query = {};
+        let jobs = [];
+
+        if (titleKeyword || salaryRange.length > 0 || locationKeyword || experienceKeyword !== null) {
+            query.title = { $regex: titleKeyword, $options: "i" };
+            query.location = { $regex: locationKeyword, $options: "i" };
+            query.status = 'ACTIVE';
+
+            if (salaryRange.length === 2) {
+                query.salary = { $gte: salaryRange[0].toString(), $lte: salaryRange[1].toString() };
+            }
+
+            if (experienceKeyword !== null) {
+                query.experience = { $gte: experienceKeyword.toString() };
+            }
+
+            jobs = await jobModel.find(query).sort({ created_at: -1, _id: 1 }).populate('company_id');
+        }
+
+        if (!jobs || jobs.length === 0) {
+            return res.status(201).json({
+                data: [],
+                message: "Không có kết quả",
+                createdBy: "Hệ thống",
+            });
+        }
+
+        const today = new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()));
+        let followedJobs = [];
+        if (userId) {
+            const data = await JobFollows.findOne({ userId });
+            followedJobs = data ? data.jobsId : [];
+        }
+
+        const filteredJobs = jobs.filter(job => {
+            try {
+                const jobDeadline = parseDate(job.deadline);
+                return job.company_id && jobDeadline > today;
+            } catch (error) {
+                return false;
+            }
+        })
+        .map(job => ({
+            ...job.toObject(),
+            isFollowing: userId ? followedJobs.includes(job._id.toString()) : false
+        }));
+
+        return res.status(200).json({
+            data: filteredJobs,
+            message: "Danh sách công việc",
+            createdBy: "Hệ thống",
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: "Lỗi: " + error.message,
+            createdBy: "Hệ thống",
+        });
+    }
+};

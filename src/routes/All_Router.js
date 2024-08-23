@@ -365,6 +365,7 @@ router.get(
   "/jobs/getjobbycompanyid/:company_id",
   appfindjobs.getJobsByIdCompany
 );
+router.get('/jobs/getjobs', appfindjobs.getJobsFilterOption);
 
 //=================Chat Router =====================
 router.get("/api/chat/chatroom/:senderId/:receiverId", chat.getChatRoomInfo);
