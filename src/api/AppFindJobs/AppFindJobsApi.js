@@ -9,6 +9,7 @@ const { applyJobModel } = require('../../model/ApplyJobs');
 const { JobFollows } = require('../../model/JobFollow');
 const { jobModel } = require('../../model/Jobs');
 const { database } = require('firebase-admin');
+const {createNotification} = require("../../helper/NotificationHelper");
 
 // cac ham toi uu
 const parseDate = (dateString) => {
