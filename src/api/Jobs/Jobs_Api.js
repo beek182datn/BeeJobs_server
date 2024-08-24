@@ -22,6 +22,9 @@ exports.createJob = async (req, res) => {
       });
     }
 
+    let expires_at = new Date();
+    expires_at.setDate(expires_at.getDate() + 30);
+
     // Tạo công việc mới
     const newJob = new jobModel({
       company_id: req.params.company_id,
@@ -40,6 +43,7 @@ exports.createJob = async (req, res) => {
       deadline: req.body.deadline,
       created_at: new Date(),
       updated_at: new Date(),
+      expires_at: expires_at,
     });
 
     // Lưu công việc vào cơ sở dữ liệu

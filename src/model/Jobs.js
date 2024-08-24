@@ -20,6 +20,7 @@ const jobSchema = new db.mongoose.Schema(
     status: { type: String, require: true },
     created_at: { type: Date, require: true },
     updated_at: { type: Date, require: true },
+    expires_at: { type: Date, require: true },
   },
   {
     collection: "Jobs",

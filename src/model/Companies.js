@@ -12,6 +12,7 @@ const companySchema = new db.mongoose.Schema(
     company_scale: { type: String, require: false },
     company_website: { type: String, require: false },
     company_certification: { type: String, require: true },
+    representative: { type: String, require: true },
     taxcode: { type: String, require: true },
     status: { type: String, require: true },
     updated_at: { type: Date },
