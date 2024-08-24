@@ -68,7 +68,7 @@
                 <% chatRooms.forEach(chatRoom => { %>
                   <li class="person" data-chat-room-id="<%= chatRoom._id %>" data-chat-nameuserchat="<%= chatRoom.otherUserName %>" data-chat-user-role="<%=chatRoom.otherUserRole%>" >
                     <div class="user">
-                      <img src="<%= chatRoom && chatRoom.otherUserAvatar ? ("http://beejobs.io.vn:14307" + chatRoom.otherUserAvatar) : "https://img.freepik.com/premium-vector/abyssinian-cat-head-avata_73950-151.jpg" %>" alt="User" />
+                      <img src="<%= chatRoom && chatRoom.otherUserAvatar ? (chatRoom.otherUserAvatar) : "https://img.freepik.com/premium-vector/abyssinian-cat-head-avata_73950-151.jpg" %>" alt="User" />
                       <span class="status away"></span>
                     </div>
                     <p class="name-time">

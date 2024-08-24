@@ -27,7 +27,7 @@
                         <div class="welcome-msg">
                             <% if(userInfo){ %>
                                 <div class="welcome-user-thumb">
-                                    <img src="<%= userInfo && userInfo.avata ? ("http://beejobs.io.vn:14307" + userInfo.avata) : "https://img.freepik.com/premium-vector/abyssinian-cat-head-avata_73950-151.jpg" %>"  alt='Admin Templates' />
+                                    <img src="<%= userInfo && userInfo.avata ? (userInfo.avata) : "https://img.freepik.com/premium-vector/abyssinian-cat-head-avata_73950-151.jpg" %>"  alt='Admin Templates' />
                                 </div>
                                 <div class="welcome-title">
                                     Xin chào, <span><%= userInfo.full_name %></span>
