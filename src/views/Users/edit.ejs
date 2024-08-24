@@ -20,7 +20,7 @@
               <input type="file" name="avata_profile" id="avata" class="d-none"  onchange="showImagePreview(this)" />
               <label for="avata" class="avatar-placeholder">
                <img
-  src="<%= user && user.avata ? ("http://beejobs.io.vn:14307" + user.avata) : "https://img.freepik.com/premium-vector/abyssinian-cat-head-avata_73950-151.jpg" %>"
+  src="<%= user && user.avata ? (user.avata) : "https://img.freepik.com/premium-vector/abyssinian-cat-head-avata_73950-151.jpg" %>"
   alt="Avatar"
   id="avatar-preview"
   class="user-avatar"

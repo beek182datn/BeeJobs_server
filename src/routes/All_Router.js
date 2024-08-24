@@ -362,6 +362,11 @@ router.get(
   appfindjobs.getJobsByIdCompany
 );
 router.get('/jobs/getjobs', appfindjobs.getJobsFilterOption);
+router.post(
+  "/applyJobs/create/:worker_id/:job_id",
+  uploader.fields([{ name: "cv", maxCount: 1 }]),
+  appfindjobs.create_applyjob
+);
 
 //=================Chat Router =====================
 router.get("/api/chat/chatroom/:senderId/:receiverId", chat.getChatRoomInfo);
