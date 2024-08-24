@@ -159,9 +159,10 @@ exports.getInforWorker = async (req, res) => {
                 });
             } else {
                 // Nếu không tìm thấy worker, trả về mã lỗi 404
-                return res.status(404).json({
+                return res.status(201).json({
+                    worker_info: {},
                     message: "Không tìm thấy worker",
-                    createdBy: "Sơn"
+                    createdBy: "Hệ thống"
                 });
             }
         } catch (error) {
