@@ -109,6 +109,7 @@ exports.getChatroomByUserId = async (req, res) => {
           worker_avatar: workerDetails.worker_avatar || null,
           userIds,
           lastMessage: lastMessage ? lastMessage.content : null, // Thêm tin nhắn cuối cùng vào kết quả trả về
+          createdAt: lastMessage ? lastMessage.createdAt : null,
         };
       })
     );

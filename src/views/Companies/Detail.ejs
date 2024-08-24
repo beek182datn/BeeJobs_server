@@ -20,7 +20,7 @@
              
               <label for="avata" class="avatar-placeholder">
                <img
-  src="<%= companies && companies.company_logo ? ("http://beejobs.io.vn:14307" + companies.company_logo) : "https://img.freepik.com/premium-vector/abyssinian-cat-head-avata_73950-151.jpg" %>"
+  src="<%= companies && companies.company_logo ? (Fcompanies.company_logo) : "https://img.freepik.com/premium-vector/abyssinian-cat-head-avata_73950-151.jpg" %>"
   alt="Avatar"
   id="avatar-preview"
   class="user-avatar"
@@ -58,7 +58,7 @@
             <label>Chứng chỉ:</label>
             <% if (companies.company_certification) { %>
               
-              <a class="btn btn-primary" href="<%= "http://beejobs.io.vn:14307" + companies.company_certification %>" target="_blank">Xem</a>
+              <a class="btn btn-primary" href="<%= companies.company_certification %>" target="_blank">Xem</a>
             
             <% } else { %>
               <span>Chưa có chứng chỉ</span>
