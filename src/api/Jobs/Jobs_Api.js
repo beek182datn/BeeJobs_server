@@ -61,6 +61,44 @@ exports.createJob = async (req, res) => {
     });
   }
 };
+
+exports.updateJobStatusToInactive = async (req, res) => {
+  if (req.method !== "PUT") {
+    return res.status(405).json({
+      message: "Phương thức không được hỗ trợ, hãy sử dụng: PUT!",
+      createdBy: "Hệ thống",
+    });
+  }
+
+  try {
+    const job_id = req.params.job_id;
+
+    const job = await jobModel.findById(job_id);
+    if (!job) {
+      return res.status(404).json({
+        message: "Công việc không tồn tại!",
+        createdBy: "Hệ thống",
+      });
+    }
+
+    // Cập nhật trường status thành INACTIVE
+    job.status = "INACTIVE";
+    job.updated_at = new Date();
+
+    await job.save();
+
+    return res.status(200).json({
+      message: "Cập nhật trạng thái công việc thành INACTIVE thành công!",
+      createdBy: "Hệ thống",
+      data: job,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi: " + error.message,
+      createdBy: "Hệ thống",
+    });
+  }
+};
 exports.editJob = async (req, res) => {
   if (req.method !== "PUT") {
     return res.status(405).json({
@@ -241,6 +279,80 @@ exports.getJobsByIdCompany = async (req, res) => {
     return res.status(200).json({
       data: jobsWithCompanyLogo,
       message: "Danh sách các công việc của công ty",
+      createdBy: "Hệ thống",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi: " + error.message,
+      createdBy: "Hệ thống",
+    });
+  }
+};
+
+exports.getJobsActiveByCompanyId = async (req, res) => {
+  if (req.method !== "GET") {
+    return res.status(405).json({
+      message: "Phương thức không được hỗ trợ, hãy sử dụng: GET!",
+      createdBy: "Hệ thống",
+    });
+  }
+
+  try {
+    const company_id = req.params.company_id;
+
+    // Kiểm tra sự tồn tại của công ty
+    const checkCompany = await companyModel.findById(company_id);
+    if (!checkCompany) {
+      return res.status(404).json({
+        message: "Thông tin công ty không tồn tại!",
+        createdBy: "Hệ thống",
+      });
+    }
+    // Tìm các công việc có status là ACTIVE và thuộc về công ty
+    const jobs = await jobModel
+      .find({ company_id, status: "ACTIVE" })
+      .sort({ created_at: -1 });
+
+    return res.status(200).json({
+      data: jobs,
+      message: "Danh sách các công việc ACTIVE của công ty",
+      createdBy: "Hệ thống",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi: " + error.message,
+      createdBy: "Hệ thống",
+    });
+  }
+};
+
+exports.getJobsInactiveByCompanyId = async (req, res) => {
+  if (req.method !== "GET") {
+    return res.status(405).json({
+      message: "Phương thức không được hỗ trợ, hãy sử dụng: GET!",
+      createdBy: "Hệ thống",
+    });
+  }
+
+  try {
+    const company_id = req.params.company_id;
+
+    // Kiểm tra sự tồn tại của công ty
+    const checkCompany = await companyModel.findById(company_id);
+    if (!checkCompany) {
+      return res.status(404).json({
+        message: "Thông tin công ty không tồn tại!",
+        createdBy: "Hệ thống",
+      });
+    }
+    // Tìm các công việc có status là ACTIVE và thuộc về công ty
+    const jobs = await jobModel
+      .find({ company_id, status: "INACTIVE" })
+      .sort({ created_at: -1 });
+
+    return res.status(200).json({
+      data: jobs,
+      message: "Danh sách các công việc ACTIVE của công ty",
       createdBy: "Hệ thống",
     });
   } catch (error) {

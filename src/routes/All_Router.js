@@ -98,7 +98,11 @@ const initWebRouter = (app) => {
   //=================Companies Router =====================
 
   router.get("/Companies/index", CheckLogin.ycLogin, Companies.index);
-  router.get("/compamies/lockcompani/:company_id",CheckLogin.ycLogin,Companies.LockCompanies);
+  router.get(
+    "/compamies/lockcompani/:company_id",
+    CheckLogin.ycLogin,
+    Companies.LockCompanies
+  );
   router.get(
     "/compamies/active/:company_id",
     CheckLogin.ycLogin,
@@ -236,12 +240,22 @@ router.post(
 
 router.post("/api/jobs/create/:company_id", api_job.createJob); // Tạo Job mới
 router.put("/api/jobs/edit/:company_id/:job_id", api_job.editJob); // Cập nhật Job
+router.put("/api/jobs/edit/:job_id", api_job.updateJobStatusToInactive);
 router.get("/api/jobs/getListJobs", api_job.getListJobs); // Lấy danh sách tất cả công việc
 router.get("/api/jobs/getJobById/:job_id", api_job.getJobById); // Lấy công việc theo id
 router.get(
   "/api/jobs/getJobsByIdCompany/:company_id",
   api_job.getJobsByIdCompany
 ); //Lấy tất cả công việc của 1 DN
+router.get(
+  "/api/jobs/getJobsActiveByIdCompany/:company_id",
+  api_job.getJobsActiveByCompanyId
+);
+router.get(
+  "/api/jobs/getJobsInctiveByIdCompany/:company_id",
+  api_job.getJobsInactiveByCompanyId
+);
+
 router.get("/api/jobs/getJobsBySalary", api_job.getJobsBySalary); //Tìm công việc theo mức lương
 router.get("/api/jobs/getJobsByTitle", api_job.getJobsByTitle); //Tìm công việc theo tiêu đề == vị trí tuyển dụng
 router.get("/api/jobs/getJobsByLocation", api_job.getJobsByLocation); //Tìm việc theo địa điểm doanh nghiệp
@@ -361,7 +375,7 @@ router.get(
   "/jobs/getjobbycompanyid/:company_id",
   appfindjobs.getJobsByIdCompany
 );
-router.get('/jobs/getjobs', appfindjobs.getJobsFilterOption);
+router.get("/jobs/getjobs", appfindjobs.getJobsFilterOption);
 router.post(
   "/applyJobs/create/:worker_id/:job_id",
   uploader.fields([{ name: "cv", maxCount: 1 }]),
