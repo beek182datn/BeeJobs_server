@@ -1,4 +1,5 @@
 var db = require("../config/db");
+const moment = require('moment-timezone');
 const companySchema = new db.mongoose.Schema(
   {
     user_id: { type: db.mongoose.Schema.Types.ObjectId, ref: "userModel" },
@@ -15,8 +16,28 @@ const companySchema = new db.mongoose.Schema(
     representative: { type: String, require: true },
     taxcode: { type: String, require: true },
     status: { type: String, require: true },
-    updated_at: { type: Date },
-    created_at: { type: Date, require: true },
+    updated_at: { type: Date, 
+      require: true,
+      get: function(date) {
+        if (date) {
+          return moment(date).tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD');
+        }
+        return date;
+      },
+      set: function(date) {
+        return moment.tz(date, 'Asia/Ho_Chi_Minh').toDate();
+      }},
+    created_at: { type: Date, 
+      require: true,
+      get: function(date) {
+        if (date) {
+          return moment(date).tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD');
+        }
+        return date;
+      },
+      set: function(date) {
+        return moment.tz(date, 'Asia/Ho_Chi_Minh').toDate();
+      }},
   },
   {
     collection: "Companies",

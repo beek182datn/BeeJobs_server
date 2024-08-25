@@ -20,7 +20,7 @@
              
               <label for="avata" class="avatar-placeholder">
                <img
-  src="<%= companies && companies.company_logo ? (Fcompanies.company_logo) : "https://img.freepik.com/premium-vector/abyssinian-cat-head-avata_73950-151.jpg" %>"
+  src="<%= companies && companies.company_logo ? (companies.company_logo) : "https://img.freepik.com/premium-vector/abyssinian-cat-head-avata_73950-151.jpg" %>"
   alt="Avatar"
   id="avatar-preview"
   class="user-avatar"
@@ -30,69 +30,173 @@
           </div>
           <div class="form-group">
             <label>Tên doanh nghiệp: </label>
-          <span><%= companies.company_name %></span>
+          <span style="font-size: 15px; font-weight: bold;"><%= companies.company_name %> <% if(companies.premium) { %>
+            <img src="/img/crown.png"  style="max-width: 2%;margin: 10px 10px 16px 10px;"/>
+        <% } %></span>
           </div>
           <div class="form-group">
             <label>Mô tả: </label>
-            <span><%= companies.company_desc %></span>
+            <span style="font-size: 15px; font-weight: bold;"><%= companies.company_desc %></span>
            
           </div>
          
           <div class="form-group">
             <label>Địa chỉ: </label>
-<span><%= companies.company_address %></span>
+<span style="font-size: 15px; font-weight: bold;"><%= companies.company_address %></span>
            
           </div>
           <div class="form-group">
             <label>Quy mô: </label>
-<span><%= companies.company_scale %></span>
+<span style="font-size: 15px; font-weight: bold;"><%= companies.company_scale %></span>
           
           </div>
           <div class="form-group">
             <label> Website: </label>
-            <span><%= companies.company_website %></span>
+            <span style="font-size: 15px; font-weight: bold;"><%= companies.company_website %></span>
            
             
           </div>
           <div class="form-group">
-            <label>Chứng chỉ:</label>
+            <label>Giấy phép hoạt động:</label>
             <% if (companies.company_certification) { %>
               
               <a class="btn btn-primary" href="<%= companies.company_certification %>" target="_blank">Xem</a>
             
             <% } else { %>
-              <span>Chưa có chứng chỉ</span>
+              <span>Chưa có giấy phép</span>
             <% } %>
           </div>
 
           <div class="form-group">
             <label> Mã số thuế: </label>
-            <span><%= companies.taxcode %></span>
+            <span style="font-size: 15px; font-weight: bold;"><%= companies.taxcode %></span>
+           
+            
+          </div>
+          <div class="form-group">
+            <label> Số dư tài khoản: </label>
+            <span style="font-size: 15px; font-weight: bold;"><%= companies.currency %> USD</span>
            
             
           </div>
           <div class="form-group">
             <label> Trạng thái: </label>
-            <% if(companies.active){ %>
-              <span class="badge badge-pill badge-success">Đã duyệt</span>
-  
-              <% }else { %>
+            <% if(companies.status == "LOCK"){ %>
+              <span class="badge badge-pill badge-danger">Bị khóa</span>
+              <% }else if(companies.status == "INACTIVE") { %>
+
               <span class="badge badge-pill badge-danger">Chưa duyệt</span>
+
+              <% }else { %>
+              <span class="badge badge-pill badge-success">Đã duyệt</span>
   
               <% } %>
            
             
           </div>
 
-         
+         <fieldset style="border: 1px solid blue; border-radius: 10px;padding: 12px;">
+          <label style="font-size: 18px; font-weight: bold;">Thông tin người đại diện</label>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label> Họ tên: </label>
+                <span style="font-size: 15px; font-weight: bold;"><%= companies.representative %></span>
+               
+                
+              </div>
+            </div>
+            <div class="col-sm-6">  <div class="form-group">
+              <label> Số điện thoại: </label>
+              <span style="font-size: 15px; font-weight: bold;"><%= companies.phone_number %></span>
+             
+              
+            </div></div>
+
+          </div>
+          
+        
+         </fieldset>
         </div>
-        <% if(!companies.active){ %>
-          <button type="button" class="btn btn-danger" >
+        <% if(!companies.status == "ACTIVE"){ %>
+          <button type="button" class="btn badge-success" >
             
               <a class="dropdown-item" href="/compamies/active/<%= companies._id %>">Duyệt doanh nghiệp</a>
           
           </button>
           <% }%>
+
+
+
+
+
+          <div><span style="font-size: 20px;
+            font-weight: bold;
+            padding-left: 15px;">Lịch sử giao dịch của doanh nghiệp</span></div>
+          <div class="table-responsive" style="padding: 15px;">
+            <table class="table m-0">
+              <thead>
+                <tr>
+                  <th>STT</th>
+                 <th>Ngày giao dịch</th>
+                  <th>Trạng thái giao dịch</th>
+                  
+                </tr>
+              </thead>
+              <tbody>
+                <% lstHostoryTrans.forEach((lstHostoryTrans, index) => { %>
+                <tr>
+                  <td>
+                    <span class="text-info"><%= (currentPage - 1) * limit + index + 1 %></span>
+                  </td>
+                  
+                  <td><%= lstHostoryTrans.transaction_date %></td>
+                  <td style="color: <%= lstHostoryTrans.amount > 0 ? 'green' : 'red' %>;">
+                    <%= lstHostoryTrans.status %>
+                    <%= lstHostoryTrans.amount > 0 ? '+' : '-' %>
+                    <%= Math.abs(lstHostoryTrans.amount) %> USD
+                  </td>
+                 
+                </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+          <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+              <% if (currentPage > 1) { %>
+                <li class="page-item">
+                  <a class="page-link" href="?page=1&limit=<%= limit %>&search=<%= search %>" aria-label="First">
+                    <span aria-hidden="true">&laquo;&laquo;</span>
+                  </a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="?page=<%= currentPage - 1 %>&limit=<%= limit %>&search=<%= search %>" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+              <% } %>
+        
+              <% for(let i = 1; i <= totalPages; i++) { %>
+                <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                  <a class="page-link" href="?page=<%= i %>&limit=<%= limit %>&search=<%= search %>"><%= i %></a>
+                </li>
+              <% } %>
+        
+              <% if (currentPage < totalPages) { %>
+                <li class="page-item">
+                  <a class="page-link" href="?page=<%= currentPage + 1 %>&limit=<%= limit %>&search=<%= search %>" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="?page=<%= totalPages %>&limit=<%= limit %>&search=<%= search %>" aria-label="Last">
+                    <span aria-hidden="true">&raquo;&raquo;</span>
+                  </a>
+                </li>
+              <% } %>
+            </ul>
+          </nav>
       </div>
       
       

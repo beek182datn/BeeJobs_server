@@ -1,7 +1,7 @@
 var CompaniesMD = require("../model/Companies");
 const msg = " ";
 var StatusUser = require("../../src/config/Constans");
-
+var {historyTransModel} = require("../model/History_Trans");
 exports.index = async (req, res, next) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -20,6 +20,7 @@ exports.index = async (req, res, next) => {
     const lstCompanies = await CompaniesMD.companyModel
       .find(query)
       .skip(skip)
+      .sort({ _id: -1 })
       .limit(limit)
       .lean();
 
@@ -37,11 +38,31 @@ exports.index = async (req, res, next) => {
 
 exports.GetInfoCompany = async (req, res, next) => {
   try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const search = req.query.search || '';
+    const skip = (page - 1) * limit;
+
+
     const Companies = await CompaniesMD.companyModel.findById(
       req.params.Idcompany
     );
     if (Companies) {
-      res.render("../views/Companies/Detail.ejs", { companies: Companies });
+      const query = { company_id: Companies._id };
+      
+      const totalCompanies = await historyTransModel.countDocuments(query);
+      const totalPages = Math.ceil(totalCompanies / limit);
+     
+      const GetHistoryTrans =  await historyTransModel
+      .find(query)
+      .skip(skip)
+      .limit(limit)
+      .sort({ _id: -1 })
+      .lean();
+      res.render("../views/Companies/Detail.ejs", { companies: Companies,lstHostoryTrans: GetHistoryTrans, currentPage: page,
+        totalPages: totalPages,
+        limit: limit,
+        search: search});
     }
   } catch (error) {
     console.log(error);

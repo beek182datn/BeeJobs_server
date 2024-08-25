@@ -15,22 +15,35 @@
     <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
 </head>
+
 <body>
     <!-- HTML -->
-    <span class="span">Biểu đồ tăng trưởng doanh nghiệp năm 2024</span>
-    <div id="chartdivDN" data-company-growth='<%= JSON.stringify(data.companyGrowth) %>'></div>
+    <span id="TieuDeNam" class="span">Biểu đồ tăng trưởng doanh nghiệp qua các năm</span>
+    <select id="yearSelector">
+        <option value="">Tất cả các năm</option>
+        <% data.companyGrowthByYear.forEach(item => { %>
+            <option value="<%= item.year %>"><%= item.year %></option>
+        <% }) %>
+    </select>
+    
+    <div id="chartdivDN" data-company-growth='<%= JSON.stringify(data.companyGrowthByYear) %>'></div>
 
     <!-- Chart code -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             // Get data from data attribute
             var chartDiv = document.getElementById('chartdivDN');
-            var dataDN = JSON.parse(chartDiv.getAttribute('data-company-growth'));
-
+            var dataDNFirst = JSON.parse(chartDiv.getAttribute('data-company-growth'));
+            var rootDN;
+            function createChartDN(dataDN) {
+                
+                if (rootDN) {
+        rootDN.dispose();
+    }
             // Set data
             am5.ready(function() {
                 // Create root element
-                var rootDN = am5.Root.new("chartdivDN");
+                rootDN = am5.Root.new("chartdivDN");
 
                 // Set themes
                 rootDN.setThemes([
@@ -114,7 +127,35 @@
                 series.appear(1000);
                 chartDN.appear(1000, 100);
             }); // end am5.ready()
+            }
+        createChartDN(dataDNFirst);
+
+        var tieudenam = document.getElementById("TieuDeNam")
+        $('#yearSelector').change(function() {
+            var selectedYear = $(this).val();
+
+            if (selectedYear === "") {
+                // Hiển thị dữ liệu tất cả các năm
+                createChartDN(dataDNFirst)
+                tieudenam.innerText = `Biểu đồ tăng trưởng doanh nghiệp qua các năm`;
+            } else {
+                // Gọi API để lấy dữ liệu của năm được chọn
+                $.ajax({
+    url: `/Dashboard/getdatayearDN/${selectedYear}`,
+    method: 'GET',
+    success: function(data) {
+        console.log(data, 'Dữ liệu từ API');
+
+        createChartDN(data);
+        tieudenam.innerText = `Biểu đồ tăng trưởng doanh nghiệp năm ${selectedYear}`;
+    },
+    error: function(error) {
+        console.error('Lỗi khi gọi API:', error);
+    }
+});}
+            });
         });
+       
     </script>
 </body>
 </html>
