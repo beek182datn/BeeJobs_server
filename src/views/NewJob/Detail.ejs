@@ -17,46 +17,47 @@
           
           <div class="form-group">
             <label>Tiêu đề tin: </label>
-          <span><%= jobs.title %></span>
+          <span style="font-size: 15px; font-weight: bold;"><%= jobs.title %></span>
           </div>
           <div class="form-group">
             <label>Mô tả: </label>
-            <span><%= jobs.desc %></span>
+            <span style="font-size: 15px; font-weight: bold;"><%= jobs.desc %></span>
            
           </div>
          
           <div class="form-group">
             <label>Lĩnh vực: </label>
-<span><%= jobs.majors %></span>
+<span style="font-size: 15px; font-weight: bold;"><%= jobs.majors %></span>
            
           </div>
           <div class="form-group">
             <label>Số lượng: </label>
-<span><%= jobs.number_of_recruitments %></span>
+<span style="font-size: 15px; font-weight: bold;"><%= jobs.number_of_recruitments %></span>
           
           </div>
+        
           <div class="form-group">
             <label> Yêu cầu: </label>
-            <span><%= jobs.requirements %></span>
+            <span style="font-size: 15px; font-weight: bold;"><%= jobs.requirements %></span>
            
             
           </div>
           <div class="form-group">
             <label>Mức lương:</label>
         
-            <span><%= jobs.salary %></span>
+            <span style="font-size: 15px; font-weight: bold;"><%= jobs.salary %></span>
            
           </div>
           <div class="form-group">
             <label>Quyền lợi:</label>
         
-            <span><%= jobs.benefits %></span>
+            <span style="font-size: 15px; font-weight: bold;"><%= jobs.benefits %></span>
            
           </div>
 
           <div class="form-group">
             <label> Địa chỉ làm việc: </label>
-            <span><%= jobs.location %></span>
+            <span style="font-size: 15px; font-weight: bold;"><%= jobs.location %></span>
            
             
           </div>
@@ -81,5 +82,84 @@
       
       
   </div>
-  
+
+
+  <div style="padding: 15px; background-color: aliceblue;" >
+  <div>
+    <span style="font-size: 20px;
+    font-weight: bold;
+    padding-left: 15px;">Danh sách người lao động ứng tuyển : <%= jobs.applicationsCount %></span></div>
+  <div class="table-responsive" style="padding: 15px;">
+    <table class="table m-0">
+      <thead>
+        <tr>
+          <th>STT</th>
+         <th>Họ tên</th>
+          <th>Số điện thoại</th>
+          <th>Email</th>
+
+          <th>Lĩnh vực</th>
+          <th>Kinh nghiệm</th>
+
+
+          
+        </tr>
+      </thead>
+      <tbody>
+        <% workers.forEach((lstAplyJobs, index) => { %>
+        <tr>
+          <td>
+            <span class="text-info"><%= (currentPage - 1) * limit + index + 1 %></span>
+          </td>
+          
+          <td><%= lstAplyJobs.worker_name %></td>
+          <td><%= lstAplyJobs.phone %></td>
+          <td><%= lstAplyJobs.email %></td>
+
+          <td><%= lstAplyJobs.major %></td>
+
+          <td><%= lstAplyJobs.experience %></td>
+
+         
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+      <% if (currentPage > 1) { %>
+        <li class="page-item">
+          <a class="page-link" href="?page=1&limit=<%= limit %>&search=<%= search %>" aria-label="First">
+            <span aria-hidden="true">&laquo;&laquo;</span>
+          </a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page=<%= currentPage - 1 %>&limit=<%= limit %>&search=<%= search %>" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+      <% } %>
+
+      <% for(let i = 1; i <= totalPages; i++) { %>
+        <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+          <a class="page-link" href="?page=<%= i %>&limit=<%= limit %>&search=<%= search %>"><%= i %></a>
+        </li>
+      <% } %>
+
+      <% if (currentPage < totalPages) { %>
+        <li class="page-item">
+          <a class="page-link" href="?page=<%= currentPage + 1 %>&limit=<%= limit %>&search=<%= search %>" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page=<%= totalPages %>&limit=<%= limit %>&search=<%= search %>" aria-label="Last">
+            <span aria-hidden="true">&raquo;&raquo;</span>
+          </a>
+        </li>
+      <% } %>
+    </ul>
+  </nav>
+</div>
   <%- include('../inc/nav_footer.ejs') %> <%- include('../inc/footer.ejs') %>
