@@ -43,7 +43,7 @@ var Chat = require("../controller/Chat");
 var User = require("../controller/Users");
 var Jobs = require("../controller/Jobs");
 var CheckLogin = require("../middleware/LoginCheck");
-var History_Trans= require("../controller/historytrans");
+var History_Trans = require("../controller/historytrans");
 const chatController = require("../controller/Chat");
 var api_worker = require("../api/Workers/Workers_Api");
 var api_company = require("../api/Companies/Companies_Api");
@@ -89,12 +89,27 @@ const initWebRouter = (app) => {
 
   router.get("/Dashboard/index", CheckLogin.ycLogin, Dashboard.index);
 
-  router.get("/Dashboard/getdatayearDN/:selectedYear", CheckLogin.ycLogin,Dashboard.getYearData);
-  router.get('/Dashboard/getJobDataByYear/:selectedYear', Dashboard.getJobDataByYear);
-router.get('/Dashboard/getApplicationDataByYear/:selectedYear', Dashboard.getApplicationDataByYear);
-router.get('/Dashboard/getMoneyDepositsByYear/:selectedYear', Dashboard.getMoneyDepositsByYear);
-router.get('/Dashboard/getMoneyDepositsByDateRange/:startDate/:endDate', Dashboard.getMoneyDepositsByYear);
-
+  router.get(
+    "/Dashboard/getdatayearDN/:selectedYear",
+    CheckLogin.ycLogin,
+    Dashboard.getYearData
+  );
+  router.get(
+    "/Dashboard/getJobDataByYear/:selectedYear",
+    Dashboard.getJobDataByYear
+  );
+  router.get(
+    "/Dashboard/getApplicationDataByYear/:selectedYear",
+    Dashboard.getApplicationDataByYear
+  );
+  router.get(
+    "/Dashboard/getMoneyDepositsByYear/:selectedYear",
+    Dashboard.getMoneyDepositsByYear
+  );
+  router.get(
+    "/Dashboard/getMoneyDepositsByDateRange/:startDate/:endDate",
+    Dashboard.getMoneyDepositsByYear
+  );
 
   //=================Tin tuyển dụng Router =====================
 
@@ -124,10 +139,8 @@ router.get('/Dashboard/getMoneyDepositsByDateRange/:startDate/:endDate', Dashboa
     Companies.GetInfoCompany
   );
 
-
   //=================HistotyTrans Router =====================
-router.get("/histotyTrans/index", CheckLogin.ycLogin,History_Trans.index);
-
+  router.get("/histotyTrans/index", CheckLogin.ycLogin, History_Trans.index);
 
   //=================Chat Router =====================
 
@@ -254,7 +267,7 @@ router.post(
 
 router.post("/api/jobs/create/:company_id", api_job.createJob); // Tạo Job mới
 router.put("/api/jobs/edit/:company_id/:job_id", api_job.editJob); // Cập nhật Job
-router.put("/api/jobs/edit/:job_id", api_job.updateJobStatusToInactive);
+router.put("/api/jobs/editstatus/:job_id", api_job.updateJobStatusToInactive);
 router.get("/api/jobs/getListJobs", api_job.getListJobs); // Lấy danh sách tất cả công việc
 router.get("/api/jobs/getJobById/:job_id", api_job.getJobById); // Lấy công việc theo id
 router.get(
