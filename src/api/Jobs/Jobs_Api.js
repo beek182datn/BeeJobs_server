@@ -314,7 +314,7 @@ exports.getJobsActiveByCompanyId = async (req, res) => {
       .sort({ created_at: -1 });
 
     return res.status(200).json({
-      data: jobs,
+      data: jobs || [],
       message: "Danh sách các công việc ACTIVE của công ty",
       createdBy: "Hệ thống",
     });
@@ -351,7 +351,7 @@ exports.getJobsInactiveByCompanyId = async (req, res) => {
       .sort({ created_at: -1 });
 
     return res.status(200).json({
-      data: jobs,
+      data: jobs || [],
       message: "Danh sách các công việc ACTIVE của công ty",
       createdBy: "Hệ thống",
     });
