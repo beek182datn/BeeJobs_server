@@ -155,13 +155,13 @@ exports.getInforWorker = async (req, res) => {
                 return res.status(200).json({
                     worker_info: {_id, user_id ,worker_name, worker_avatar, phone, email, major, experience, address },
                     message: "Lấy thông tin worker thành công!",
-                    createdBy: "Sơn"
+                    createdBy: "Hệ thống"
                 });
             } else {
                 // Nếu không tìm thấy worker, trả về mã lỗi 404
-                return res.status(404).json({
+                return res.status(201).json({
                     message: "Không tìm thấy worker",
-                    createdBy: "Sơn"
+                    createdBy: "Hệ thống"
                 });
             }
         } catch (error) {
