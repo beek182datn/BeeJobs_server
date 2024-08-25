@@ -1,4 +1,4 @@
-
+const moment = require('moment-timezone');
 var db = require("../config/db");
 const userSchema= new db.mongoose.Schema(
     {
@@ -13,7 +13,17 @@ const userSchema= new db.mongoose.Schema(
         avata:{type:String,required:false},
         active:{type:String,require: true},
         verify: { type: Boolean, default: false},
-        create_at :{ type: Date, default: Date.now },
+        create_at :{type: Date, 
+            require: true,
+            get: function(date) {
+              if (date) {
+                return moment(date).tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD');
+              }
+              return date;
+            },
+            set: function(date) {
+              return moment.tz(date, 'Asia/Ho_Chi_Minh').toDate();
+            }, default: Date.now },
 
 
         

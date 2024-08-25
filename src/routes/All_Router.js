@@ -43,6 +43,7 @@ var Chat = require("../controller/Chat");
 var User = require("../controller/Users");
 var Jobs = require("../controller/Jobs");
 var CheckLogin = require("../middleware/LoginCheck");
+var History_Trans= require("../controller/historytrans");
 const chatController = require("../controller/Chat");
 var api_worker = require("../api/Workers/Workers_Api");
 var api_company = require("../api/Companies/Companies_Api");
@@ -88,6 +89,13 @@ const initWebRouter = (app) => {
 
   router.get("/Dashboard/index", CheckLogin.ycLogin, Dashboard.index);
 
+  router.get("/Dashboard/getdatayearDN/:selectedYear", CheckLogin.ycLogin,Dashboard.getYearData);
+  router.get('/Dashboard/getJobDataByYear/:selectedYear', Dashboard.getJobDataByYear);
+router.get('/Dashboard/getApplicationDataByYear/:selectedYear', Dashboard.getApplicationDataByYear);
+router.get('/Dashboard/getMoneyDepositsByYear/:selectedYear', Dashboard.getMoneyDepositsByYear);
+router.get('/Dashboard/getMoneyDepositsByDateRange/:startDate/:endDate', Dashboard.getMoneyDepositsByYear);
+
+
   //=================Tin tuyển dụng Router =====================
 
   router.get("/Jobs/index", CheckLogin.ycLogin, Jobs.index);
@@ -111,6 +119,12 @@ const initWebRouter = (app) => {
     CheckLogin.ycLogin,
     Companies.GetInfoCompany
   );
+
+
+  //=================HistotyTrans Router =====================
+router.get("/histotyTrans/index", CheckLogin.ycLogin,History_Trans.index);
+
+
   //=================Chat Router =====================
 
   // Route để lấy các phòng chat của admin

@@ -3,6 +3,7 @@ const JobsMD = require('../model/Jobs');
 const ApplyJobs = require('../model/ApplyJobs');
 const {historyTransModel} = require('../model/History_Trans');
 const { log } = require('winston');
+const { Console } = require('winston/lib/winston/transports');
 
 exports.index = async (req, res, next) => {
     try {
@@ -40,17 +41,293 @@ exports.index = async (req, res, next) => {
             companyGrowth[item._id - 1].value = item.value;
         });
 
+         // Lấy dữ liệu doanh nghiệp theo từng tháng của tất cả các năm
+         const companyGrowthByYearRaw = await CompanyMD.companyModel.aggregate([
+            {
+                $group: {
+                    _id: {
+                        year: { $year: "$created_at" },
+                        month: { $month: "$created_at" }
+                    },
+                    value: { $sum: 1 }
+                }
+            },
+            {
+                $sort: { "_id.year": 1, "_id.month": 1 }
+            }
+        ]);
+
+        const companyGrowthByYear = companyGrowthByYearRaw.map(item => ({
+            month: `Năm ${item._id.year}`,
+            year: item._id.year,
+            value: item.value
+        }));
+
+        data.companyGrowthByYear = companyGrowthByYear;
+
+
+       
+
+          // Lấy số tin tuyển dụng theo tháng trong tất cả các năm
+const jobsCountRawByYearRaw = await JobsMD.jobModel.aggregate([
+    {
+        $group: {
+            _id: {
+                year: { $year: "$created_at" },
+                month: { $month: "$created_at" }
+            },
+            jobCount: { $sum: 1 }
+        }
+    },
+    {
+        $sort: { "_id.year": 1, "_id.month": 1 }
+    }
+]);
+
+// Lấy số hồ sơ ứng tuyển theo tháng trong tất cả các năm
+const applicationsCountRaw = await ApplyJobs.applyJobModel.aggregate([
+    {
+        $group: {
+            _id: {
+                year: { $year: "$applied_at" },
+                month: { $month: "$applied_at" }
+            },
+            applyCount: { $sum: 1 }
+        }
+    },
+    {
+        $sort: { "_id.year": 1, "_id.month": 1 }
+    }
+]);
+
+// Tạo đối tượng chứa dữ liệu tổng hợp theo năm và tháng
+const jobsAndApplicationsData = jobsCountRawByYearRaw.map(item => ({
+    year: item._id.year,
+    month: `Năm ${item._id.year}`,
+    TinTuyen: item.jobCount || 0,
+    UngTuyen: 0 // Sẽ cập nhật từ applicationsCountRaw
+}));
+
+// Điền dữ liệu hồ sơ ứng tuyển vào đối tượng
+applicationsCountRaw.forEach(appItem => {
+    const match = jobsAndApplicationsData.find(jobItem =>
+        jobItem.year === appItem._id.year && jobItem.month === `Năm ${appItem._id.year}`
+    );
+    if (match) {
+        match.UngTuyen = appItem.applyCount;
+    } else {
+        jobsAndApplicationsData.push({
+            year: appItem._id.year,
+            month: `Năm ${appItem._id.year}`,
+            TinTuyen: 0,
+            UngTuyen: appItem.applyCount
+        });
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+        // // Lấy số tin tuyển dụng theo tháng trong năm hiện tại
+        // const jobsCountRaw = await JobsMD.jobModel.aggregate([
+        //     {
+        //         $match: {
+        //             created_at: {
+        //                 $gte: new Date(`${currentYear}-01-01`),
+        //                 $lte: new Date(`${currentYear}-12-31`)
+        //             }
+        //         }
+        //     },
+        //     {
+        //         $group: {
+        //             _id: { $month: "$created_at" },
+        //             jobCount: { $sum: 1 }
+        //         }
+        //     },
+        //     {
+        //         $sort: { "_id": 1 }
+        //     }
+        // ]);
+
+        // // Lấy số hồ sơ ứng tuyển theo tháng trong năm hiện tại
+        // const applicationsCountRaw = await ApplyJobs.applyJobModel.aggregate([
+        //     {
+        //         $match: {
+        //             applied_at: {
+        //                 $gte: new Date(`${currentYear}-01-01`),
+        //                 $lte: new Date(`${currentYear}-12-31`)
+        //             }
+        //         }
+        //     },
+        //     {
+        //         $group: {
+        //             _id: { $month: "$applied_at" },
+        //             applyCount: { $sum: 1 }
+        //         }
+        //     },
+        //     {
+        //         $sort: { "_id": 1 }
+        //     }
+        // ]);
+
+        // const jobsAndApplicationsData = Array.from({ length: 12 }, (v, k) => ({
+        //     month: `Tháng ${k + 1}`,
+        //     TinTuyen: 0,
+        //     UngTuyen: 0
+        // }));
+
+        // // Điền dữ liệu từ kết quả truy vấn vào đối tượng
+        // jobsCountRaw.forEach(item => {
+        //     jobsAndApplicationsData[item._id - 1].TinTuyen = item.jobCount;
+        // });
+
+        // applicationsCountRaw.forEach(item => {
+        //     jobsAndApplicationsData[item._id - 1].UngTuyen = item.applyCount;
+        // });
+
+
+
+
+
+        
+        const moneyDepositsRaw = await historyTransModel.aggregate([
+            {
+                $group: {
+                    _id: {
+                        year: { $year: "$transaction_date" },
+                        month: { $month: "$transaction_date" }
+                    },
+                    totalAmount: { $sum: "$amount" }
+                }
+            },
+            {
+                $sort: { "_id.year": 1, "_id.month": 1 }
+            }
+        ]);
+        
+        const moneyDeposits = moneyDepositsRaw.map(item => ({
+            month: `Năm ${item._id.year}`,
+            totalAmount: item.totalAmount || 0,
+            year: item._id.year,
+        }));
+        
+        console.log(moneyDeposits);
+        
+      
+     
+
+
+
+        
+
+ // New aggregation for successful applications vs total applications
+ const applicationsStatsRaw = await ApplyJobs.applyJobModel.aggregate([
+{
+        $group: {
+            _id: {
+                year: { $year: "$applied_at" },
+                month: { $month: "$applied_at" }
+            },
+            totalApplications: { $sum: 1 },
+            successfulApplications: {
+                $sum: {
+                    $cond: [{ $eq: ["$status", "Phù hợp"] }, 1, 0]
+                }
+            }
+        }
+    },
+    {
+        $sort: { "_id.year": 1, "_id.month": 1 }
+    }
+]);
+
+
+
+const applicationsStats = applicationsStatsRaw.map(item => ({
+    year: item._id.year,
+    month: `Năm ${item._id.year}`,
+    TongUngTuyen: item.totalApplications || 0,
+    UngTuyenThanhCong: item.successfulApplications || 0 // Sẽ cập nhật từ applicationsCountRaw
+}));
+// Fill data from query result into the object
+
+
+// Add applications stats data to the main data object
+// data.applicationsStats = applicationsStats;
+
+        // Add money deposits data to the main data object
+        data.moneyDeposits = moneyDeposits;
+
+        data.companyGrowth = companyGrowth;
+        data.applicationsStats = applicationsStats;
+        data.jobsAndApplicationsData = jobsAndApplicationsData;
         console.log('====================================');
-        console.log(companyGrowth);
+        console.log(data);
         console.log('====================================');
 
-        // Lấy số tin tuyển dụng theo tháng trong năm hiện tại
-        const jobsCountRaw = await JobsMD.jobModel.aggregate([
+        res.render("../views/Dashboard/index.ejs", { data });
+    } catch (error) {
+        next(error);
+    }
+};
+exports.getYearData = async (req, res, next) => {
+    try {
+        const selectedYear = parseInt(req.params.selectedYear);
+
+        // Lấy dữ liệu doanh nghiệp theo tháng trong năm cụ thể (năm được chọn)
+        const companyGrowthCurrentYearRaw = await CompanyMD.companyModel.aggregate([
             {
                 $match: {
                     created_at: {
-                        $gte: new Date(`${currentYear}-01-01`),
-                        $lte: new Date(`${currentYear}-12-31`)
+                        $gte: new Date(`${selectedYear}-01-01`),
+                        $lte: new Date(`${selectedYear}-12-31`)
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: { $month: "$created_at" },
+                    value: { $sum: 1 }
+                }
+            },
+            {
+                $sort: { "_id": 1 }
+            }
+        ]);
+
+        const companyGrowthCurrentYear = Array.from({ length: 12 }, (v, k) => ({
+            month: `Tháng ${k + 1}`,
+            value: 0
+        }));
+
+        companyGrowthCurrentYearRaw.forEach(item => {
+            companyGrowthCurrentYear[item._id - 1].value = item.value;
+        });
+        console.log(companyGrowthCurrentYear,"getyear")
+        res.json(companyGrowthCurrentYear);
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.getJobDataByYear = async (req, res, next) => {
+    try {
+        const selectedYear = parseInt(req.params.selectedYear);
+
+         // Lấy số tin tuyển dụng theo tháng trong năm hiện tại
+         const jobsCountRaw = await JobsMD.jobModel.aggregate([
+            {
+                $match: {
+                    created_at: {
+                        $gte: new Date(`${selectedYear}-01-01`),
+                        $lte: new Date(`${selectedYear}-12-31`)
                     }
                 }
             },
@@ -70,8 +347,8 @@ exports.index = async (req, res, next) => {
             {
                 $match: {
                     applied_at: {
-                        $gte: new Date(`${currentYear}-01-01`),
-                        $lte: new Date(`${currentYear}-12-31`)
+                        $gte: new Date(`${selectedYear}-01-01`),
+                        $lte: new Date(`${selectedYear}-12-31`)
                     }
                 }
             },
@@ -102,19 +379,78 @@ exports.index = async (req, res, next) => {
         });
 
 
-        const moneyDepositsRaw = await historyTransModel.aggregate([
+
+        res.json(jobsAndApplicationsData);
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.getApplicationDataByYear = async (req, res, next) => {
+    try {
+        const selectedYear = parseInt(req.params.selectedYear);
+
+        // Lấy dữ liệu ứng tuyển theo tháng trong năm cụ thể (năm được chọn)
+        const applicationsCountCurrentYearRaw = await ApplyJobs.applyJobModel.aggregate([
             {
                 $match: {
-                    created_at: {
-                        $gte: new Date(`${currentYear}-01-01`),
-                        $lte: new Date(`${currentYear}-12-31`)
-                    },
-                    status: "Nạp"
+                    applied_at: {
+                        $gte: new Date(`${selectedYear}-01-01`),
+                        $lte: new Date(`${selectedYear}-12-31`)
+                    }
                 }
             },
             {
                 $group: {
-                    _id: { $month: "$created_at" },
+                    _id: { $month: "$applied_at" },
+                    totalApplications: { $sum: 1 },
+                    successfulApplications: {
+                        $sum: {
+                            $cond: [{ $eq: ["$status", "Phù hợp"] }, 1, 0]
+                        }
+                    }
+                }
+            },
+            {
+                $sort: { "_id": 1 }
+            }
+        ]);
+
+        const applicationsStats = Array.from({ length: 12 }, (v, k) => ({
+            month: `Tháng ${k + 1}`,
+            TongUngTuyen: 0,
+            UngTuyenThanhCong: 0
+        }));
+
+       // Fill data from query result into the object
+       applicationsCountCurrentYearRaw.forEach(item => {
+    applicationsStats[item._id - 1].TongUngTuyen = item.totalApplications;
+    applicationsStats[item._id - 1].UngTuyenThanhCong = item.successfulApplications;
+});
+
+        res.json(applicationsStats);
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.getMoneyDepositsByYear = async (req, res, next) => {
+    try {
+        const selectedYear = parseInt(req.params.selectedYear);
+
+        const moneyDepositsRaw = await historyTransModel.aggregate([
+            {
+                $match: {
+                    transaction_date: {
+                        $gte: new Date(`${selectedYear}-01-01`),
+                        $lte: new Date(`${selectedYear}-12-31`)
+                    },
+                    amount: { $gt: 0 } 
+                }
+            },
+            {
+                $group: {
+                    _id: { $month: "$transaction_date" },
                     totalAmount: { $sum: "$amount" }
                 }
             },
@@ -134,58 +470,52 @@ exports.index = async (req, res, next) => {
         });
 
 
- // New aggregation for successful applications vs total applications
- const applicationsStatsRaw = await ApplyJobs.applyJobModel.aggregate([
-    {
-        $match: {
-            applied_at: {
-                $gte: new Date(`${currentYear}-01-01`),
-                $lte: new Date(`${currentYear}-12-31`)
-            }
-        }
-    },
-    {
-        $group: {
-            _id: { $month: "$applied_at" },
-            totalApplications: { $sum: 1 },
-            successfulApplications: {
-                $sum: {
-                    $cond: [{ $eq: ["$status", "Phù hợp"] }, 1, 0]
-                }
-            }
-        }
-    },
-    {
-        $sort: { "_id": 1 }
+        res.json(moneyDeposits);
+    } catch (error) {
+        next(error);
     }
-]);
+};
 
-const applicationsStats = Array.from({ length: 12 }, (v, k) => ({
-    month: `Tháng ${k + 1}`,
-    TongUngTuyen: 0,
-    UngTuyenThanhCong: 0
-}));
 
-// Fill data from query result into the object
-applicationsStatsRaw.forEach(item => {
-    applicationsStats[item._id - 1].TongUngTuyen = item.totalApplications;
-    applicationsStats[item._id - 1].UngTuyenThanhCong = item.successfulApplications;
-});
+exports.getMoneyDepositsByDateRange = async (req, res, next) => {
+    try {
 
-// Add applications stats data to the main data object
-data.applicationsStats = applicationsStats;
+        const { startDate, endDate } = req.params;
+        const selectedYear = parseInt(req.params.selectedYear);
 
-        // Add money deposits data to the main data object
-        data.moneyDeposits = moneyDeposits;
+        const moneyDepositsRaw = await historyTransModel.aggregate([
+            {
+                $match: {
+                    transaction_date: {
+                        $gte: new Date(`${startDate}`),
+                        $lte: new Date(`${endDate}`)
+                    },
+                    amount: { $gt: 0 } 
+                }
+            },
+            {
+                $group: {
+                    _id: { $month: "$transaction_date" },
+                    totalAmount: { $sum: "$amount" }
+                }
+            },
+            {
+                $sort: { "_id": 1 }
+            }
+        ]);
 
-        data.companyGrowth = companyGrowth;
-        data.jobsAndApplications = jobsAndApplicationsData;
+        const moneyDeposits = Array.from({ length: 12 }, (v, k) => ({
+            month: `Tháng ${k + 1}`,
+            totalAmount: 0
+        }));
 
-        console.log('====================================');
-        console.log(data);
-        console.log('====================================');
+        // Fill data from query result into the object
+        moneyDepositsRaw.forEach(item => {
+            moneyDeposits[item._id - 1].totalAmount = item.totalAmount;
+        });
 
-        res.render("../views/Dashboard/index.ejs", { data });
+        console.log(moneyDeposits);
+        res.json(moneyDeposits);
     } catch (error) {
         next(error);
     }

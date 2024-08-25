@@ -62,14 +62,33 @@
 
             <!-- Row start -->
             <div class="row gutters">
-<span class="span">Biểu đồ ứng tuyển của người lao động năm 2024</span>
 
-                <div id="chartdiv" data-jobAplySS='<%= JSON.stringify(data.applicationsStats) %>'></div>
+<div class="col-sm-6">
+  <span id="TieuDeJobsUngTuyen" class="span">Biểu đồ ứng tuyển của người lao động các năm </span>
 
-                </div>
-<%- include('./BieuDoTinTuyenDung.ejs') %>
+  <select id="yearSelectorTuyenDung">
+    <option value="">Tất cả các năm</option>
+    <% data.applicationsStats.forEach(item => { %>
+        <option value="<%= item.year %>"><%= item.year %></option>
+    <% }) %>
+</select>
+  <div id="chartdiv" data-jobAplySS='<%= JSON.stringify(data.applicationsStats) %>'></div>
+
+  </div>
+
+<div class="col-sm-6">
+  <%- include('./BieuDoTinTuyenDung.ejs') %>
+
+</div>
+<div class="col-sm-6">
 <%- include('./BieuDoTangTruongDoanhNghiep.ejs') %>
+  
+</div>
+<div class="col-sm-6">
 <%- include('./BieuDoDoanhThu.ejs') %>
+  
+</div>
+</div>
 
               
 
@@ -88,13 +107,19 @@
         <script>
    document.addEventListener("DOMContentLoaded", function() {
 var chartDiv = document.getElementById('chartdiv');
-var data = JSON.parse(chartDiv.getAttribute('data-jobAplySS'));
-
-            am5.ready(function() {
+var dataFirst = JSON.parse(chartDiv.getAttribute('data-jobAplySS'));
+var root;
+function createChartJobs(data) {
+    // Hủy bỏ biểu đồ cũ và tạo biểu đồ mới cho tin tuyển dụng
+    if (root) {
+      root.dispose();
+    }
+    // Code để tạo biểu đồ mới cho tin tuyển dụng...
+    am5.ready(function() {
             
             // Create root element
             // https://www.amcharts.com/docs/v5/getting-started/#Root_element
-            var root = am5.Root.new("chartdiv");
+             root = am5.Root.new("chartdiv");
             
             
             // Set themes
@@ -204,8 +229,8 @@ var data = JSON.parse(chartDiv.getAttribute('data-jobAplySS'));
               return series;
             }
             
-            createSeries("ungTuyen", "Ứng tuyển");
-            createSeries("ungTuyenThanhCong", "Ứng tuyển thành công");
+            createSeries("TongUngTuyen", "Ứng tuyển");
+            createSeries("UngTuyenThanhCong", "Ứng tuyển thành công");
             
             
             // Add legend
@@ -232,8 +257,57 @@ var data = JSON.parse(chartDiv.getAttribute('data-jobAplySS'));
             chart.appear(1000, 100);
             
             }); // end am5.ready()
+          
+          
+          
+}
+
+          
+createChartJobs(dataFirst)
+
+var getTieuDeJobsUngTuyen = document.getElementById("TieuDeJobsUngTuyen");
+
+$('#yearSelectorTuyenDung').change(function() {
+          console.log("zo")
+    var selectedYear = $(this).val();
+
+    if (selectedYear === "") {
+        createChartJobs(dataFirst); // Hiển thị dữ liệu tất cả các năm
+        getTieuDeJobsUngTuyen.innerText = `Biểu đồ ứng tuyển của người lao động các năm`;
+    } else {
+      console.log("zo1")
+        $.ajax({
+            url: `/Dashboard/getApplicationDataByYear/${selectedYear}`,
+            method: 'GET',
+            success: function(data) {
+              console.log("zo",data);
+                createChartJobs(data);
+        getTieuDeJobsUngTuyen.innerText = `Biểu đồ ứng tuyển của người lao động năm ${selectedYear}`;
+
+                 // Cập nhật biểu đồ tin tuyển dụng với dữ liệu mới
+            },
+    error: function(error) {
+        console.error('Lỗi khi gọi API:', error);
+    }
+        });
+    }
+});
           }   
         );
+
+
+
+
+
+
+
+
+
+     
+
+
+
+
           </script>
             
           

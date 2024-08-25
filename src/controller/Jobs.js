@@ -17,7 +17,7 @@ exports.index = async (req, res) => {
         const totalJobs = await Jobs.jobModel.countDocuments(query);
         const totalPages = Math.ceil(totalJobs / limit);
 
-        let lstjobs = await Jobs.jobModel.find(query).skip(skip).limit(limit);
+        let lstjobs = await Jobs.jobModel.find(query).skip(skip).sort({ _id: -1 }).limit(limit);
 
         // Lấy thông tin công ty cho mỗi công việc
         for (let job of lstjobs) {

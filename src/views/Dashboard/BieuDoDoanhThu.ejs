@@ -11,134 +11,170 @@
         }
     </style>
     <!-- Resources -->
-    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
-    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+    <script src="https://cDT.amcharts.com/lib/5/index.js"></script>
+    <script src="https://cDT.amcharts.com/lib/5/xy.js"></script>
+    <script src="https://cDT.amcharts.com/lib/5/themes/Animated.js"></script>
 </head>
 <body>
     <!-- HTML -->
-    <span class="span">Biểu đồ doanh thu năm 2024</span>
+    <span id="TieuDeDoanhThu" class="span">Biểu đồ doanh thu năm 2024</span>
+
+    <input type="date" id="startDateSelector" />
+    <input type="date" id="endDateSelector" />
+
+    <select id="yearSelectorDoanhThu">
+        <option value="">Tất cả các năm</option>
+        <% data.moneyDeposits.forEach(item => { %>
+            <option value="<%= item.year %>"><%= item.year %></option>
+        <% }) %>
+    </select>
+
+
     <div id="chartdivDT" data-cash-money='<%= JSON.stringify(data.moneyDeposits) %>'></div>
 
     <!-- Chart code -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            var chartdivDT = document.getElementById('chartdivDT');
-            var dataTD = JSON.parse(chartdivDT.getAttribute('data-cash-money'));
+            // Get data from data attribute
+            var chartDiv = document.getElementById('chartdivDT');
+            var dataDTFirst = JSON.parse(chartDiv.getAttribute('data-cash-money'));
+            var rootDT;
+function createChartDT(dataDT){
 
+  
+    if (rootDT) {
+        rootDT.dispose();
+    }
+            // Set data
             am5.ready(function() {
                 // Create root element
-                var rootTD = am5.Root.new("chartdivDT");
+                rootDT = am5.Root.new("chartdivDT");
 
                 // Set themes
-                rootTD.setThemes([
-                    am5themes_Animated.new(rootTD)
+                rootDT.setThemes([
+                    am5themes_Animated.new(rootDT)
                 ]);
 
                 // Create chart
-                var chartTD = rootTD.container.children.push(am5xy.XYChart.new(rootTD, {
-                    panX: false,
-                    panY: false,
+                var chartDT = rootDT.container.children.push(am5xy.XYChart.new(rootDT, {
+                    panX: true,
+                    panY: true,
                     wheelX: "panX",
                     wheelY: "zoomX",
+                    pinchZoomX: true,
                     paddingLeft: 0,
-                    layout: rootTD.verticalLayout
+                    paddingRight: 1
                 }));
 
+                // Add cursor
+                var cursor = chartDT.set("cursor", am5xy.XYCursor.new(rootDT, {}));
+                cursor.lineY.set("visible", false);
+
                 // Create axes
-                var yAxisTD = chartTD.yAxes.push(am5xy.CategoryAxis.new(rootTD, {
+                var xRenderer = am5xy.AxisRendererX.new(rootDT, {
+                    minGridDistance: 30,
+                    minorGridEnabled: true
+                });
+
+                xRenderer.labels.template.setAll({
+                    rotation: -90,
+                    centerY: am5.p50,
+                    centerX: am5.p100,
+                    paddingRight: 15
+                });
+
+                xRenderer.grid.template.setAll({
+                    location: 1
+                });
+
+                var xAxis = chartDT.xAxes.push(am5xy.CategoryAxis.new(rootDT, {
+                    maxDeviation: 0.3,
                     categoryField: "month",
-                    renderer: am5xy.AxisRendererY.new(rootTD, {
-                        inversed: true,
-                        cellStartLocation: 0.1,
-                        cellEndLocation: 0.9,
-                        minorGridEnabled: true
+                    renderer: xRenderer,
+                    tooltip: am5.Tooltip.new(rootDT, {})
+                }));
+
+                var yRenderer = am5xy.AxisRendererY.new(rootDT, {
+                    strokeOpacity: 0.1
+                });
+
+                var yAxis = chartDT.yAxes.push(am5xy.ValueAxis.new(rootDT, {
+                    maxDeviation: 0.3,
+                    renderer: yRenderer
+                }));
+
+                // Create series
+                var series = chartDT.series.push(am5xy.ColumnSeries.new(rootDT, {
+                    name: "Series 1",
+                    xAxis: xAxis,
+                    yAxis: yAxis,
+                    valueYField: "totalAmount",
+                    sequencedInterpolation: true,
+                    categoryXField: "month",
+                    tooltip: am5.Tooltip.new(rootDT, {
+                        labelText: "{valueY} USD"
                     })
                 }));
 
-                yAxisTD.data.setAll(dataTD);
+                series.columns.template.setAll({ cornerRadiusTL: 5, cornerRadiusTR: 5, strokeOpacity: 0 });
+                series.columns.template.adapters.add("fill", function(fill, target) {
+                    return chartDT.get("colors").getIndex(series.columns.indexOf(target));
+                });
 
-                var xAxisTD = chartTD.xAxes.push(am5xy.ValueAxis.new(rootTD, {
-                    renderer: am5xy.AxisRendererX.new(rootTD, {
-                        strokeOpacity: 0.1,
-                        minGridDistance: 50
-                    }),
-                    min: 0
-                }));
+                series.columns.template.adapters.add("stroke", function(stroke, target) {
+                    return chartDT.get("colors").getIndex(series.columns.indexOf(target));
+                });
 
-                // Add series
-                function createSeriesTD(field, name) {
-                    var seriesTD = chartTD.series.push(am5xy.ColumnSeries.new(rootTD, {
-                        name: name,
-                        xAxis: xAxisTD,
-                        yAxis: yAxisTD,
-                        valueXField: field,
-                        categoryYField: "month",
-                        sequencedInterpolation: true,
-                        tooltip: am5.Tooltip.new(rootTD, {
-                            pointerOrientation: "horizontal",
-                            labelText: "[bold]{name}[/]\n{categoryY}: {valueX}"
-                        })
-                    }));
-
-                    seriesTD.columns.template.setAll({
-                        height: am5.p100,
-                        strokeOpacity: 0
-                    });
-
-                    seriesTD.bullets.push(function () {
-                        return am5.Bullet.new(rootTD, {
-                            locationX: 1,
-                            locationY: 0.5,
-                            sprite: am5.Label.new(rootTD, {
-                                centerY: am5.p50,
-                                text: "{valueX}",
-                                populateText: true
-                            })
-                        });
-                    });
-
-                    seriesTD.bullets.push(function () {
-                        return am5.Bullet.new(rootTD, {
-                            locationX: 1,
-                            locationY: 0.5,
-                            sprite: am5.Label.new(rootTD, {
-                                centerX: am5.p100,
-                                centerY: am5.p50,
-                                text: "{name}",
-                                fill: am5.color(0xffffff),
-                                populateText: true
-                            })
-                        });
-                    });
-
-                    seriesTD.data.setAll(dataTD);
-                    seriesTD.appear();
-
-                    return seriesTD;
-                }
-
-                createSeriesTD("UngTuyen", "Số Hồ Sơ Ứng tuyển");
-                createSeriesTD("TinTuyen", "Tin đăng tuyển");
-
-                // Add legend
-                var legendTD = chartTD.children.push(am5.Legend.new(rootTD, {
-                    centerX: am5.p50,
-                    x: am5.p50
-                }));
-
-                legendTD.data.setAll(chartTD.series.values);
-
-                // Add cursor
-                var cursorTD = chartTD.set("cursor", am5xy.XYCursor.new(rootTD, {
-                    behavior: "zoomY"
-                }));
-                cursorTD.lineY.set("forceHidden", true);
-                cursorTD.lineX.set("forceHidden", true);
+                xAxis.data.setAll(dataDT);
+                series.data.setAll(dataDT);
 
                 // Make stuff animate on load
-                chartTD.appear(1000, 100);
+                series.appear(1000);
+                chartDT.appear(1000, 100);
             }); // end am5.ready()
+       
+       
+        }
+        createChartDT(dataDTFirst);
+        var getTieuDeJobsDT = document.getElementById("TieuDeDoanhThu")
+        $('#yearSelectorDoanhThu').change(function() {
+    var selectedYear = $(this).val();
+
+    if (selectedYear === "") {
+        createChartDT(dataDTFirst); // Hiển thị dữ liệu tất cả các năm
+        getTieuDeJobsDT.innerHTML = `Biểu đồ ứng tuyển của người lao động các năm`;
+
+    } else {
+        $.ajax({
+            url: `/Dashboard/getMoneyDepositsByYear/${selectedYear}`,
+            method: 'GET',
+            success: function(data) {
+                createChartDT(data); // Cập nhật biểu đồ tiền gửi với dữ liệu mới
+        getTieuDeJobsDT.innerHTML = `Biểu đồ ứng tuyển của người lao động năm ${selectedYear}`;
+
+            }
+        });
+    }
+});
+$('#startDateSelector, #endDateSelector').change(function() {
+    var startDate = $('#startDateSelector').val();
+    var endDate = $('#endDateSelector').val();
+
+    if (startDate === "" || endDate === "") {
+        createChartDT(dataDTFirst); // Hiển thị dữ liệu tất cả các năm
+        getTieuDeJobsDT.innerHTML = `Biểu đồ ứng tuyển của người lao động các ngày`;
+    } else {
+        $.ajax({
+            url: `/Dashboard/getMoneyDepositsByDateRange/${startDate}/${endDate}`,
+            method: 'GET',
+            success: function(data) {
+                createChartDT(data); // Cập nhật biểu đồ tiền gửi với dữ liệu mới
+                getTieuDeJobsDT.innerHTML = `Biểu đồ ứng tuyển của người lao động từ ngày ${startDate} đến ngày ${endDate}`;
+            }
+        });
+    }
+});
+
         });
     </script>
 </body>
