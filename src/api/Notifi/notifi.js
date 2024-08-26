@@ -176,7 +176,9 @@ exports.getNotifiByCompanyId = async (req, res) => {
     // Tìm tất cả các thông báo có userId là company_id
     const notifications = await NotificationModel.find({
       userId: company_id,
-    }).exec();
+    })
+      .sort({ createdAt: -1 })
+      .exec();
 
     return res.status(200).json({
       message: "Lấy thông báo thành công!",
@@ -211,12 +213,59 @@ exports.getNotifiByWorkerId = async (req, res) => {
     }
     const notifications = await NotificationModel.find({
       userId: worker_id,
-    }).exec();
+    })
+      .sort({ createdAt: -1 })
+      .exec();
 
     return res.status(200).json({
       message: "Lấy thông báo thành công!",
       createdBy: "Hệ thống",
       data: notifications || [],
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Lỗi: " + error.message,
+      createdBy: "Hệ thống",
+    });
+  }
+};
+
+exports.updateIsRead = async (req, res) => {
+  if (req.method !== "PUT") {
+    return res.status(405).json({
+      message: "Phương thức không được hỗ trợ, hãy sử dụng: PUT!",
+      createdBy: "Hệ thống",
+    });
+  }
+
+  try {
+    const { notification_id } = req.params;
+
+    if (!notification_id) {
+      return res.status(400).json({
+        message: "Thiếu tham số notification_id!",
+        createdBy: "Hệ thống",
+      });
+    }
+
+    // Cập nhật trường isRead thành true
+    const updatedNotification = await NotificationModel.findByIdAndUpdate(
+      notification_id,
+      { isRead: true },
+      { new: true }
+    );
+
+    if (!updatedNotification) {
+      return res.status(404).json({
+        message: "Thông báo không tồn tại!",
+        createdBy: "Hệ thống",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Cập nhật trạng thái isRead thành công!",
+      createdBy: "Hệ thống",
+      data: updatedNotification,
     });
   } catch (error) {
     return res.status(500).json({
