@@ -446,6 +446,15 @@ router.get("/api/unread/:userId", notification_api.getUnreadNotifications);
 router.get("/all/:userId", notification_api.getAllNotifications);
 router.put("/markAsRead/:notificationId", notification_api.markAsRead);
 
+router.get(
+  "/api/notifi/getNotifiByCompanyId/:company_id",
+  notification_api.getNotifiByCompanyId
+);
+router.get(
+  "/api/notifi/getNotifiByWorkerId/:worker_id",
+  notification_api.getNotifiByWorkerId
+);
+
 //============== Payment ===============================
 router.post("/api/payment/createPayment", api_toUpAccount.createPayment);
 router.post("/api/payment/confirmPayment", api_toUpAccount.confirmPayment);
