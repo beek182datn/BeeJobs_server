@@ -1075,7 +1075,9 @@ exports.create_applyjob = async (req, res) => {
           getUserId.user_id,
           worker_id,
           "Có hồ sơ ứng tuyển mới!!!",
-          "UngTuyen"
+          "UngTuyen",
+          job_id,
+          newApplyJob._id
         );
       }
   
