@@ -2,6 +2,8 @@ const { jobModel } = require("../../model/Jobs");
 const { companyModel } = require("../../model/Companies");
 const { applyJobModel } = require("../../model/ApplyJobs");
 const WorkerMD = require("../../model/Workers");
+const { createNotification } = require("../../helper/NotificationHelper");
+const { FolowerCompany } = require("../../model/FolowerCompany");
 
 exports.createJob = async (req, res) => {
   if (req.method !== "POST") {
@@ -10,6 +12,8 @@ exports.createJob = async (req, res) => {
       createdBy: "Hệ thống",
     });
   }
+
+  let message = "";
 
   try {
     // Kiểm tra sự tồn tại của công ty
@@ -48,6 +52,18 @@ exports.createJob = async (req, res) => {
 
     // Lưu công việc vào cơ sở dữ liệu
     await newJob.save();
+
+    const followers = await FolowerCompany.find({ companyId: company_id });
+
+    for (let follower of followers) {
+      await createNotification(
+        follower.userId,
+        company_id,
+        `Công ty ${checkCompany.company_name} vừa đăng một công việc mới!`,
+        "Tuyển dụng",
+        newJob._id
+      );
+    }
 
     return res.status(201).json({
       message: "Tạo công việc thành công!",

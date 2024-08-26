@@ -2,7 +2,7 @@ const { applyJobModel } = require("../../model/ApplyJobs");
 const { jobModel } = require("../../model/Jobs");
 const WorkerMD = require("../../model/Workers");
 
-const {createNotification} = require("../../helper/NotificationHelper");
+const { createNotification } = require("../../helper/NotificationHelper");
 
 const { userModel } = require("../../model/Users");
 const { companyModel } = require("../../model/Companies");
@@ -46,11 +46,12 @@ exports.create_applyjob = async (req, res) => {
 
     // Lưu đơn ứng tuyển vào cơ sở dữ liệu
     await newApplyJob.save();
-    
 
     var getIdCompany = await jobModel.findOne({ _id: job_id });
 
-    var getUserId = await companyModel.findOne({ _id: getIdCompany.company_id });
+    var getUserId = await companyModel.findOne({
+      _id: getIdCompany.company_id,
+    });
     if (getUserId != null) {
       await createNotification(
         getUserId.user_id,
@@ -78,27 +79,48 @@ exports.editApplyJob = async (req, res) => {
     const applyJobId = req.params.applyJob_id;
     const { status } = req.body;
 
+    let message = "";
     // Tìm và cập nhật chỉ trường status
     const updatedApplyJob = await applyJobModel.findByIdAndUpdate(
       applyJobId,
       { status },
       { new: true }
     );
-   
-    var getIdCompany = await jobModel.findOne({ _id: updatedApplyJob.job_id });
-    var getUserID = await companyModel.findOne({ _id: getIdCompany.company_id });
+    const job = await jobModel.findById(updatedApplyJob.job_id);
+    if (!job) {
+      return res.status(404).json({
+        message: "Công việc không tồn tại!",
+        createdBy: "Hệ thống",
+      });
+    }
+
+    const company = await companyModel.findById(job.company_id);
+    if (!company) {
+      return res.status(404).json({
+        message: "Công ty không tồn tại!",
+        createdBy: "Hệ thống",
+      });
+    }
+    if (status === "Phù hợp" || status === "Chưa phù hợp") {
+      message =
+        "Nhà tuyển dụng đã đánh giá trạng thái ứng tuyển của bạn là: " + status;
+    } else {
+      message = "Nhà tuyển dụng đã " + status + " hồ sơ của bạn!";
+    }
     await createNotification(
       updatedApplyJob.worker_id,
-      getUserID.user_id,
-      "Kết quả hồ sơ của bạn: " + status,
-      "UngTuyen"
+      company._id,
+      message,
+      "Ứng Tuyển",
+      updatedApplyJob.job_id,
+      updatedApplyJob._id
     );
-   if (!updatedApplyJob) {
-     return res.status(404).json({
-       message: "Công việc không tồn tại!",
-       createdBy: "Hệ thống",
-     });
-   }
+    if (!updatedApplyJob) {
+      return res.status(404).json({
+        message: "Công việc không tồn tại!",
+        createdBy: "Hệ thống",
+      });
+    }
 
     return res.status(200).json({
       data: updatedApplyJob,
