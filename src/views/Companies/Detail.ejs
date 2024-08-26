@@ -118,7 +118,7 @@
         
          </fieldset>
         </div>
-        <% if(!companies.status == "ACTIVE"){ %>
+        <% if(companies.status == "INACTIVE"){ %>
           <button type="button" class="btn badge-success" >
             
               <a class="dropdown-item" href="/compamies/active/<%= companies._id %>">Duyệt doanh nghiệp</a>
@@ -130,7 +130,8 @@
 
 
 
-          <div><span style="font-size: 20px;
+          <div style="margin-top: 10px;">
+            <span style="font-size: 20px;
             font-weight: bold;
             padding-left: 15px;">Lịch sử giao dịch của doanh nghiệp</span></div>
           <div class="table-responsive" style="padding: 15px;">

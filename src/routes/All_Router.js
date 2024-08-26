@@ -45,6 +45,7 @@ var Jobs = require("../controller/Jobs");
 var CheckLogin = require("../middleware/LoginCheck");
 var History_Trans = require("../controller/historytrans");
 const chatController = require("../controller/Chat");
+const Worker = require("../controller/Worker");
 var api_worker = require("../api/Workers/Workers_Api");
 var api_company = require("../api/Companies/Companies_Api");
 var api_job = require("../api/Jobs/Jobs_Api");
@@ -127,6 +128,11 @@ const initWebRouter = (app) => {
     Companies.LockCompanies
   );
   router.get(
+    "/compamies/opencompani/:company_id",
+    CheckLogin.ycLogin,
+    Companies.OpenCompanies
+  );
+  router.get(
     "/compamies/active/:company_id",
     CheckLogin.ycLogin,
 
@@ -182,6 +188,18 @@ const initWebRouter = (app) => {
 
   router.get("/Users/detail/:user_id", CheckLogin.ycLogin, User.Detail);
   router.get("/Users/lockuser/:user_id", CheckLogin.ycLogin, User.LockUser);
+  router.get("/Users/openuser/:user_id", CheckLogin.ycLogin, User.OpenUser);
+
+  //=================Worker Router =====================
+  router.get("/worker/index", CheckLogin.ycLogin, Worker.index);
+  router.get("/worker/detail/:IdWoker", CheckLogin.ycLogin, Worker.GetInfoWoker);
+
+
+
+
+
+
+
   return app.use("/", router);
 };
 
