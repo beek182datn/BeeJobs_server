@@ -455,7 +455,7 @@ router.get(
   notification_api.getNotifiByWorkerId
 );
 router.put(
-  "/api/notifi/updateIsRead/:worker_id",
+  "/api/notifi/updateIsRead/:notification_id",
   notification_api.updateIsRead
 );
 
