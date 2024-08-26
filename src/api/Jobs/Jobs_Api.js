@@ -4,6 +4,7 @@ const { applyJobModel } = require("../../model/ApplyJobs");
 const WorkerMD = require("../../model/Workers");
 const { createNotification } = require("../../helper/NotificationHelper");
 const { FolowerCompany } = require("../../model/FolowerCompany");
+const mongoose = require("mongoose");
 
 exports.createJob = async (req, res) => {
   if (req.method !== "POST") {
@@ -63,13 +64,26 @@ exports.createJob = async (req, res) => {
     }
 
     for (let follower of followers) {
-      await createNotification(
-        follower.userId,
-        company_id,
-        `Công ty ${checkCompany.company_name} vừa đăng một công việc mới!`,
-        "Tuyển dụng",
-        newJob._id
-      );
+      if (!mongoose.Types.ObjectId.isValid(follower.userId)) {
+        console.warn(`Invalid userId: ${follower.userId}`);
+        continue;
+      }
+
+      const userObjectId = new mongoose.Types.ObjectId(follower.userId);
+      try {
+        await createNotification(
+          userObjectId,
+          company_id,
+          `Công ty ${checkCompany.company_name} vừa đăng một công việc mới!`,
+          "Tuyển dụng",
+          newJob._id
+        );
+      } catch (error) {
+        console.error(
+          `Error creating notification for user ${follower.userId}:`,
+          error
+        );
+      }
     }
 
     return res.status(201).json({
