@@ -480,7 +480,6 @@ exports.getMoneyDepositsByYear = async (req, res, next) => {
 exports.getMoneyDepositsByDateRange = async (req, res, next) => {
     try {
         let { startDate, endDate } = req.params;
-        const selectedYear = parseInt(req.params.selectedYear);
 
         // Nếu không có startDate và endDate, sẽ lấy tháng hiện tại
         const currentDate = new Date();
@@ -505,34 +504,47 @@ exports.getMoneyDepositsByDateRange = async (req, res, next) => {
             },
             {
                 $group: {
-                    _id: { $dayOfMonth: "$transaction_date" },
+                    _id: { 
+                        year: { $year: "$transaction_date" },
+                        month: { $month: "$transaction_date" },
+                        day: { $dayOfMonth: "$transaction_date" }
+                    },
                     totalAmount: { $sum: "$amount" }
                 }
             },
             {
-                $sort: { "_id": 1 }
+                $sort: { "_id.year": 1, "_id.month": 1, "_id.day": 1 }
             }
         ]);
 
         // Chuẩn bị dữ liệu đầu ra
         const moneyDeposits = [];
-        const daysInMonth = endDate.getDate();
+        let currentDateIter = new Date(startDate);
+        
+        while (currentDateIter <= endDate) {
+            const year = currentDateIter.getFullYear();
+            const month = currentDateIter.getMonth() + 1; // Tháng tính từ 0, nên cần cộng thêm 1
+            const day = currentDateIter.getDate();
 
-        for (let i = 1; i <= daysInMonth; i++) {
-            const date = new Date(startDate.getFullYear(), startDate.getMonth(), i);
-            const existingRecord = moneyDepositsRaw.find(item => item._id === i);
+            const existingRecord = moneyDepositsRaw.find(item => 
+                item._id.year === year && item._id.month === month && item._id.day === day
+            );
 
             // Chuyển đổi date thành dạng dd/mm/yyyy
-            const formattedDate = `${String(i).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+            const formattedDate = `${String(day).padStart(2, '0')}/${String(month).padStart(2, '0')}/${year}`;
 
             moneyDeposits.push({
                 month: formattedDate,
                 totalAmount: existingRecord ? existingRecord.totalAmount : 0
             });
+
+            // Chuyển sang ngày tiếp theo
+            currentDateIter.setDate(currentDateIter.getDate() + 1);
         }
-        console.log(moneyDeposits,"tiền")
+
         res.json(moneyDeposits);
     } catch (error) {
         next(error);
     }
 };
+
