@@ -13,7 +13,7 @@ exports.createNotification = async (
   message,
   type,
   job_id,
-  applyjob_id
+  applyJob_id
 ) => {
   try {
     const notification = new NotificationModel({
@@ -22,7 +22,7 @@ exports.createNotification = async (
       message,
       type,
       job_id,
-      applyjob_id,
+      applyJob_id,
     });
     await notification.save();
 
