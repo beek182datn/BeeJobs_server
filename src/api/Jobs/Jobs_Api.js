@@ -13,8 +13,6 @@ exports.createJob = async (req, res) => {
     });
   }
 
-  let message = "";
-
   try {
     // Kiểm tra sự tồn tại của công ty
     const company_id = req.params.company_id;
@@ -54,6 +52,15 @@ exports.createJob = async (req, res) => {
     await newJob.save();
 
     const followers = await FolowerCompany.find({ companyId: company_id });
+
+    if (followers.length === 0) {
+      return res.status(201).json({
+        message:
+          "Tạo công việc thành công! Tuy nhiên, không có ứng viên nào theo dõi công ty để gửi thông báo.",
+        createdBy: "Hệ thống",
+        data: newJob,
+      });
+    }
 
     for (let follower of followers) {
       await createNotification(
