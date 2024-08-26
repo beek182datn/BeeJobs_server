@@ -1,24 +1,32 @@
-const mongoose = require('mongoose');
-const moment = require('moment-timezone');
+const mongoose = require("mongoose");
+const moment = require("moment-timezone");
 const notificationSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  FormUser: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  FromUser: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   message: String,
   type: String, // Ví dụ: 'info', 'success', 'warning', 'error'
+  job_id: String,
+  applyJob_id: String,
   isRead: { type: Boolean, default: false },
-  createdAt: { type: Date, 
+  createdAt: {
+    type: Date,
     require: true,
-    get: function(date) {
+    get: function (date) {
       if (date) {
-        return moment(date).tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD');
+        return moment(date).tz("Asia/Ho_Chi_Minh").format("YYYY-MM-DD");
       }
       return date;
     },
-    set: function(date) {
-      return moment.tz(date, 'Asia/Ho_Chi_Minh').toDate();
-    }, default: Date.now }
+    set: function (date) {
+      return moment.tz(date, "Asia/Ho_Chi_Minh").toDate();
+    },
+    default: Date.now,
+  },
 });
 
-const NotificationModel = mongoose.model('NotificationModel', notificationSchema);
+const NotificationModel = mongoose.model(
+  "NotificationModel",
+  notificationSchema
+);
 
 module.exports = NotificationModel;
