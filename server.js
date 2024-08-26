@@ -79,7 +79,7 @@ initWebRouter(app);
 
 // Start the server
 const PORT = process.env.PORT || 3000;
-server.listen(PORT,'0.0.0.0', (err) => {
+server.listen(PORT, (err) => {
   if (err) {
     console.error("Cannot start server:", err);
     return;
