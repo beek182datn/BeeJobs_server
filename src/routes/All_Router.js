@@ -454,6 +454,10 @@ router.get(
   "/api/notifi/getNotifiByWorkerId/:worker_id",
   notification_api.getNotifiByWorkerId
 );
+router.put(
+  "/api/notifi/updateIsRead/:worker_id",
+  notification_api.updateIsRead
+);
 
 //============== Payment ===============================
 router.post("/api/payment/createPayment", api_toUpAccount.createPayment);
