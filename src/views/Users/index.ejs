@@ -26,6 +26,8 @@
           <th>Tên người dùng</th>
           <th>Tên đăng nhập</th>
           <th>Email</th>
+          <th>Vai trò</th>
+
           <th>Trạng thái</th>
           <th>Thao tác</th>
         </tr>
@@ -39,12 +41,15 @@
           <td><%= lstUsers.full_name %></td>
           <td><%= lstUsers.accout_name %></td>
           <td><%= lstUsers.email %></td>
+          <td><%= lstUsers.roles %></td>
+
           <td>
             <% if(lstUsers.active == "ACTIVE" ){ %>
             <span class="badge badge-pill badge-success">Đã duyệt</span>
             <% }else if(lstUsers.active == "LOCK" ){ %>
               <span class="badge badge-pill badge-danger">Người dùng bị khóa</span>
-            <% }else { %>
+              <% }else if(lstUsers.active == "INACTIVE" ){ %>
+
             <span class="badge badge-pill badge-danger">Chưa duyệt</span>
             <% } %>
           </td>
@@ -61,8 +66,25 @@
               </button>
               <div class="dropdown-menu">
                 <a class="dropdown-item" href="/Users/detail/<%= lstUsers._id %>">Xem chi tiết</a>
+                <% if(lstUsers.company != null ){ %>
+                <a class="dropdown-item" href="/Users/detail/<%= lstUsers._id %>">Xem doanh nghiệp</a>
+
+                <% } %>
+
                 <!-- <a class="dropdown-item" href="/Users/editUser/<%= lstUsers._id %>">Sửa thông tin</a> -->
-                <a class="dropdown-item" href="/Users/lockuser/<%= lstUsers._id %>">Khóa người dùng </a>
+                <% if(lstUsers.active == "ACTIVE" ){ %>
+                  <a class="dropdown-item" href="/Users/lockuser/<%= lstUsers._id %>">Khóa người dùng </a>
+
+                  
+                    
+                  <%}else if(lstUsers.active == "INACTIVE" ){ %>
+                    
+                  <% }else if(lstUsers.active == "LOCK" ) { %>
+                    <a class="dropdown-item" href="/Users/openuser/<%= lstUsers._id %>">Mở khóa người dùng </a>
+                  <% } %>
+
+
+                
               </div>
             </div>
           </td>

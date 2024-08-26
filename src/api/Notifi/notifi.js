@@ -164,7 +164,7 @@ exports.getNotifiByCompanyId = async (req, res) => {
 
   try {
     // Lấy company_id từ query params
-    const { company_id } = req.query;
+    const { company_id } = req.params;
 
     if (!company_id) {
       return res.status(400).json({
@@ -203,7 +203,7 @@ exports.getNotifiByWorkerId = async (req, res) => {
 
   try {
     // Lấy company_id từ query params
-    const { worker_id } = req.query;
+    const { worker_id } = req.params;
 
     if (!worker_id) {
       return res.status(400).json({
@@ -231,15 +231,15 @@ exports.getNotifiByWorkerId = async (req, res) => {
 };
 
 exports.updateIsRead = async (req, res) => {
-  if (req.method !== "PUT") {
+  if (req.method !== "POST") {
     return res.status(405).json({
-      message: "Phương thức không được hỗ trợ, hãy sử dụng: PUT!",
+      message: "Phương thức không được hỗ trợ, hãy sử dụng: POST!",
       createdBy: "Hệ thống",
     });
   }
 
   try {
-    const { notification_id } = req.params;
+    const { notification_id } = req.body;
 
     if (!notification_id) {
       return res.status(400).json({

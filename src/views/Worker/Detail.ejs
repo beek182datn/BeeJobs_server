@@ -1,0 +1,157 @@
+<%- include('../inc/header.ejs') %> <%- include('../inc/nav_header.ejs') %>
+
+<style>
+    .user-avatar {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+</style>
+<div class="col-md-12 col-sm-12">
+    
+      <div class="form-block">
+       
+        <div class="form-block-body">
+          <div class="mb-3 d-flex justify-content-center" style="flex-direction:column;align-items: center;">
+            <label for="avata-user" class="form-label">Logo</label>
+            <div class="avatar-upload">
+             
+              <label for="avata" class="avatar-placeholder">
+               <img
+  src="<%= woker && woker.company_logo ? (woker.company_logo) : "https://img.freepik.com/premium-vector/abyssinian-cat-head-avata_73950-151.jpg" %>"
+  alt="Avatar"
+  id="avatar-preview"
+  class="user-avatar"
+/>
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Tên người lao động: </label>
+          <span style="font-size: 15px; font-weight: bold;"><%= woker.worker_name %></span>
+          </div>
+          <div class="form-group">
+            <label>số điện thoại: </label>
+            <span style="font-size: 15px; font-weight: bold;"><%= woker.phone %></span>
+           
+          </div>
+         
+          <div class="form-group">
+            <label>Email: </label>
+<span style="font-size: 15px; font-weight: bold;"><%= woker.email %></span>
+           
+          </div>
+          <div class="form-group">
+            <label>Địa chỉ: </label>
+<span style="font-size: 15px; font-weight: bold;"><%= woker.address %></span>
+           
+          </div>
+          <div class="form-group">
+            <label>Kinh nghiệm: </label>
+<span style="font-size: 15px; font-weight: bold;"><%= woker.experience %></span>
+          
+          </div>
+          <div class="form-group">
+            <label> Lĩnh vực: </label>
+            <span style="font-size: 15px; font-weight: bold;"><%= woker.major %></span>
+           
+            
+          </div>
+</div>
+    
+
+
+
+
+
+          <div style="margin-top: 10px;">
+            <span style="font-size: 20px;
+            font-weight: bold;
+            padding-left: 15px;">Danh sách những việc đã ứng tuyển</span></div>
+          <div class="table-responsive" style="padding: 15px;">
+            <table class="table m-0">
+              <thead>
+                <tr>
+                  <th>STT</th>
+                 <th>Tin tuyển dụng</th>
+                  <th>Trạng thái </th>
+                  <th>Ngày ứng tuyển</th>
+                  <th>Lời giới thiệu</th>
+
+                  <th>Cv</th>
+
+
+                  
+                </tr>
+              </thead>
+              <tbody>
+                <% lstAplyJobs.forEach((lstAplyJobs, index) => { %>
+                <tr>
+                  <td>
+                    <span class="text-info"><%= (currentPage - 1) * limit + index + 1 %></span>
+                  </td>
+                  
+                  <td><%= lstAplyJobs.fullname %></td>
+                  <td style="color: <%= lstAplyJobs.status == "Phù hợp" ? 'green' : 'red' %>;">
+                    <%= lstAplyJobs.status %></td>
+                    <td><%= lstAplyJobs.applied_at %></td>
+                    <td><%= lstAplyJobs.intro_letter %></td>
+                    <td>
+                      <% if (lstAplyJobs.cv) { %>
+                        <a href="<%= lstAplyJobs.cv %>" target="_blank" class="btn btn-primary">Xem CV</a>
+                      <% } else { %>
+                        <span>Không có CV</span>
+                      <% } %>
+
+                    
+
+                 
+                </tr>
+
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+          <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+              <% if (currentPage > 1) { %>
+                <li class="page-item">
+                  <a class="page-link" href="?page=1&limit=<%= limit %>&search=<%= search %>" aria-label="First">
+                    <span aria-hidden="true">&laquo;&laquo;</span>
+                  </a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="?page=<%= currentPage - 1 %>&limit=<%= limit %>&search=<%= search %>" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+              <% } %>
+        
+              <% for(let i = 1; i <= totalPages; i++) { %>
+                <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                  <a class="page-link" href="?page=<%= i %>&limit=<%= limit %>&search=<%= search %>"><%= i %></a>
+                </li>
+              <% } %>
+        
+              <% if (currentPage < totalPages) { %>
+                <li class="page-item">
+                  <a class="page-link" href="?page=<%= currentPage + 1 %>&limit=<%= limit %>&search=<%= search %>" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="?page=<%= totalPages %>&limit=<%= limit %>&search=<%= search %>" aria-label="Last">
+                    <span aria-hidden="true">&raquo;&raquo;</span>
+                  </a>
+                </li>
+              <% } %>
+            </ul>
+          </nav>
+      </div>
+      
+      
+  </div>
+  
+  <%- include('../inc/nav_footer.ejs') %> <%- include('../inc/footer.ejs') %>

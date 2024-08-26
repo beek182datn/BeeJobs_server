@@ -3,6 +3,8 @@ const msg = " ";
 var StatusUser = require("../../src/config/Constans");
 var {historyTransModel} = require("../model/History_Trans");
 var {applyJobModel} = require("../model/ApplyJobs");
+var WorkerMD = require("../model/Workers");
+
 
 exports.index = async (req, res, next) => {
   try {
@@ -13,21 +15,21 @@ exports.index = async (req, res, next) => {
     const skip = (page - 1) * limit;
 
     const query = search
-      ? { company_name: { $regex: search, $options: 'i' } }
+      ? { worker_name: { $regex: search, $options: 'i' } }
       : {};
 
-    const totalCompanies = await CompaniesMD.companyModel.countDocuments(query);
-    const totalPages = Math.ceil(totalCompanies / limit);
+    const totalWorker = await WorkerMD.countDocuments(query);
+    const totalPages = Math.ceil(totalWorker / limit);
 
-    const lstCompanies = await CompaniesMD.companyModel
+    const lstWorker = await WorkerMD
       .find(query)
       .skip(skip)
       .sort({ _id: -1 })
       .limit(limit)
       .lean();
 
-    res.render("../views/Companies/index.ejs", {
-      list: lstCompanies,
+    res.render("../views/Worker/index.ejs", {
+      list: lstWorker,
       currentPage: page,
       totalPages: totalPages,
       limit: limit,
@@ -38,7 +40,7 @@ exports.index = async (req, res, next) => {
   }
 };
 
-exports.GetInfoCompany = async (req, res, next) => {
+exports.GetInfoWoker = async (req, res, next) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
@@ -46,22 +48,22 @@ exports.GetInfoCompany = async (req, res, next) => {
     const skip = (page - 1) * limit;
 
 
-    const Companies = await CompaniesMD.companyModel.findById(
-      req.params.Idcompany
+    const Worker = await WorkerMD.findById(
+      req.params.IdWoker
     );
-    if (Companies) {
-      const query = { company_id: Companies._id };
+    if (Worker) {
+      const query = { worker_id: Worker.user_id};
       
-      const totalCompanies = await historyTransModel.countDocuments(query);
-      const totalPages = Math.ceil(totalCompanies / limit);
+      const totalAplyJobs = await applyJobModel.countDocuments(query);
+      const totalPages = Math.ceil(totalAplyJobs / limit);
      
-      const GetHistoryTrans =  await historyTransModel
+      const GetAplyJobs =  await applyJobModel
       .find(query)
       .skip(skip)
       .limit(limit)
       .sort({ _id: -1 })
       .lean();
-      res.render("../views/Companies/Detail.ejs", { companies: Companies,lstHostoryTrans: GetHistoryTrans, currentPage: page,
+      res.render("../views/Worker/Detail.ejs", { woker: Worker,lstAplyJobs: GetAplyJobs, currentPage: page,
         totalPages: totalPages,
         limit: limit,
         search: search});

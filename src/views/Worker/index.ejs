@@ -3,11 +3,11 @@
 
 <!-- section container start -->
 <div class="section-container">
-  <p class="section-title">Danh sách doanh nghiệp</p>
+  <p class="section-title">Danh sách hồ sơ người lao động</p>
 
   <form action="" method="GET" class="mb-3">
     <div class="input-group">
-      <input type="text" class="form-control" placeholder="Tìm kiếm doanh nghiệp..." name="search" value="<%= search %>">
+      <input type="text" class="form-control" placeholder="Tìm kiếm người lao động..." name="search" value="<%= search %>">
       <div class="input-group-append">
         <button class="btn btn-outline-secondary" type="submit">Tìm kiếm</button>
       </div>
@@ -19,39 +19,29 @@
       <thead>
         <tr>
           <th>STT</th>
-          <th>Tên doanh nghiệp</th>
+          <th>Tên người lao động</th>
+          <th>số điện thoại</th>
           <th>Địa chỉ</th>
-          <th>Quy mô</th>
-          <th>Người đại diện</th>
+        
 
-          <th>Trạng thái hoạt động</th>
+          
           <th>Thao tác</th>
         </tr>
       </thead>
       <tbody>
-        <% list.forEach((lstCompanies, index) => { %>
+        <% list.forEach((lstWoker, index) => { %>
         <tr>
           <td>
             <span class="text-info"><%= (currentPage - 1) * limit + index + 1 %></span>
           </td>
-          <td><%= lstCompanies.company_name %>  <% if(lstCompanies.premium) { %>
-            <img src="/img/crown.png"  style="max-width: 3%;margin: 10px 10px 16px 10px;"/>
-        <% } %></td>
-          <td><%= lstCompanies.company_address %></td>
-          <td><%= lstCompanies.company_scale %></td>
-          <td><%= lstCompanies.representative %></td>
+          <td><%= lstWoker.worker_name %>  </td>
+          <td><%= lstWoker.phone %></td>
+          <td><%= lstWoker.address %></td>
+         
 
           
 
-          <td>
-            <% if(lstCompanies.status == "LOCK" ){ %>
-            <span class="badge badge-pill badge-danger">Doanh nghiệp bị khóa</span>
-            <%}else if(lstCompanies.status == "INACTIVE" ){ %>
-            <span class="badge badge-pill badge-danger">Doanh nghiệp chưa kích hoạt</span>
-            <% }else { %>
-            <span class="badge badge-pill badge-success">Đang hoạt động</span>
-            <% } %>
-          </td>
+        
           <td>
             <div class="btn-group">
               <button
@@ -64,15 +54,8 @@
                 Action
               </button>
               <div class="dropdown-menu">
-                <a class="dropdown-item" href="/compamies/detail/<%= lstCompanies._id %>">Xem chi tiết</a>
-                <% if(lstCompanies.status == "INACTIVE"){ %>
-                <a class="dropdown-item" href="/compamies/detail/<%= lstCompanies._id %>">Duyệt doanh nghiệp</a>
-            <%}else if(lstCompanies.status == "LOCK" ){ %>
-              <a class="dropdown-item" href="/compamies/opencompani/<%= lstCompanies._id %>">Mở khóa</a>
-              <% }else { %>
-                <a class="dropdown-item" href="/compamies/lockcompani/<%= lstCompanies._id %>">Khoá doanh nghiệp</a>
-
-                <% }%>
+                <a class="dropdown-item" href="/worker/detail/<%= lstWoker._id %>">Xem chi tiết</a>
+                
                 
               </div>
             </div>

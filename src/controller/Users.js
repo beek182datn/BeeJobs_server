@@ -6,6 +6,10 @@ var fs = require("fs");
 const path = require("path");
 const { StatusUser } = require("../config/Constans");
 const NotificationHelper = require("../helper/NotificationHelper");
+const {UserRoleModel} = require("../model/Users_Roles");
+const {RoleModel} = require("../model/Roles");
+const WorkerMD = require("../model/Workers");
+const {companyModel} = require("../model/Companies");
 
 
 exports.index = async (req, res, next) => {
@@ -18,23 +22,71 @@ exports.index = async (req, res, next) => {
 
     const query = search
       ? { $or: [
-          { username: { $regex: search, $options: 'i' } },
+          { accout_name: { $regex: search, $options: 'i' } }, // Correcting the field names based on schema
           { email: { $regex: search, $options: 'i' } }
         ]}
       : {};
 
-    const totalUsers = await UsersMD.userModel.countDocuments(query);
+    const totalUsers = await  UsersMD.userModel.countDocuments(query);
     const totalPages = Math.ceil(totalUsers / limit);
 
     const lstUsers = await UsersMD.userModel
       .find(query)
-      .sort({ createdAt: -1 })
+      .sort({ create_at: -1 }) // Using `create_at` as defined in your schema
       .skip(skip)
       .limit(limit)
       .lean();
 
+    // Get the user IDs from the fetched users
+    const userIds = lstUsers.map(user => user._id.toString());
+
+    // Fetch UserRole documents for these users
+    const userRoles = await UserRoleModel.find({ id_User: { $in: userIds } }).lean();
+
+    // Extract unique role IDs
+    const roleIds = [...new Set(userRoles.map(userRole => userRole.id_Role))];
+
+    // Fetch roles from RoleModel
+    const roles = await RoleModel.find({ _id: { $in: roleIds } }).lean();
+
+    // Create a map of roles for easy lookup
+    const rolesMap = roles.reduce((acc, role) => {
+      acc[role._id.toString()] = role.Name;
+      return acc;
+    }, {});
+    const workers = await WorkerMD.find({ user_id: { $in: userIds }  }).lean();
+    const companies = await companyModel.find({ user_id: { $in: userIds },status: StatusUser.ACTIVE }).lean();
+    const workersMap = workers.reduce((acc, worker) => {
+      acc[worker._id.toString()] = worker._id.toString();
+      return acc;
+    }, {});
+    const companiesMap = companies.reduce((acc, companie) => {
+      acc[companie._id.toString()] = companie._id.toString();
+      return acc;
+    }, {});
+
+    // Map roles to users
+    const usersWithRoles = lstUsers.map(user => {
+      const rolesForUser = userRoles
+        .filter(userRole => userRole.id_User === user._id.toString())
+        .map(userRole => rolesMap[userRole.id_Role]);
+        const workerForUser = workers
+        .filter(userWoker => userWoker.id_User === user._id.toString())
+        .map(userWoker => workersMap[userWoker.user_id]);
+        const compamiesForUser = companies
+        .filter(userConpanis => userConpanis.id_User === user._id.toString())
+        .map(userConpanis => companiesMap[userConpanis.user_id]);
+        
+      return {
+        ...user,
+        roles: rolesForUser,
+        worker: workerForUser || null, // Include worker info if applicable
+        company: compamiesForUser || null 
+      };
+    });
+console.log(usersWithRoles)
     res.render('../views/Users/index.ejs', {
-      list: lstUsers,
+      list: usersWithRoles,
       currentPage: page,
       totalPages: totalPages,
       limit: limit,
@@ -135,6 +187,17 @@ exports.LockUser = async (req, res) => {
       console.log("Đã khóa");
       res.redirect('/Users/index');
     }
+};
+
+exports.OpenUser = async (req, res) => {
+  const user = await UsersMD.userModel.findById(req.params.user_id);
+  console.log(user);
+  if(user){
+    user.active = StatusUser.ACTIVE;
+    await user.save();
+    
+    res.redirect('/Users/index');
+  }
 };
 
 
