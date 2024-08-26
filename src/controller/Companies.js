@@ -2,6 +2,8 @@ var CompaniesMD = require("../model/Companies");
 const msg = " ";
 var StatusUser = require("../../src/config/Constans");
 var {historyTransModel} = require("../model/History_Trans");
+var {applyJobModel} = require("../model/ApplyJobs");
+
 exports.index = async (req, res, next) => {
   try {
     const page = parseInt(req.query.page) || 1;

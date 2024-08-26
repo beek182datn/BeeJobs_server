@@ -479,23 +479,33 @@ exports.getMoneyDepositsByYear = async (req, res, next) => {
 
 exports.getMoneyDepositsByDateRange = async (req, res, next) => {
     try {
-
-        const { startDate, endDate } = req.params;
+        let { startDate, endDate } = req.params;
         const selectedYear = parseInt(req.params.selectedYear);
+
+        // Nếu không có startDate và endDate, sẽ lấy tháng hiện tại
+        const currentDate = new Date();
+        if (!startDate || !endDate) {
+            const currentMonth = currentDate.getMonth();
+            startDate = new Date(currentDate.getFullYear(), currentMonth, 1);
+            endDate = new Date(currentDate.getFullYear(), currentMonth + 1, 0);
+        } else {
+            startDate = new Date(`${startDate}`);
+            endDate = new Date(`${endDate}`);
+        }
 
         const moneyDepositsRaw = await historyTransModel.aggregate([
             {
                 $match: {
                     transaction_date: {
-                        $gte: new Date(`${startDate}`),
-                        $lte: new Date(`${endDate}`)
+                        $gte: startDate,
+                        $lte: endDate
                     },
                     amount: { $gt: 0 } 
                 }
             },
             {
                 $group: {
-                    _id: { $month: "$transaction_date" },
+                    _id: { $dayOfMonth: "$transaction_date" },
                     totalAmount: { $sum: "$amount" }
                 }
             },
@@ -504,17 +514,23 @@ exports.getMoneyDepositsByDateRange = async (req, res, next) => {
             }
         ]);
 
-        const moneyDeposits = Array.from({ length: 12 }, (v, k) => ({
-            month: `Tháng ${k + 1}`,
-            totalAmount: 0
-        }));
+        // Chuẩn bị dữ liệu đầu ra
+        const moneyDeposits = [];
+        const daysInMonth = endDate.getDate();
 
-        // Fill data from query result into the object
-        moneyDepositsRaw.forEach(item => {
-            moneyDeposits[item._id - 1].totalAmount = item.totalAmount;
-        });
+        for (let i = 1; i <= daysInMonth; i++) {
+            const date = new Date(startDate.getFullYear(), startDate.getMonth(), i);
+            const existingRecord = moneyDepositsRaw.find(item => item._id === i);
 
-        console.log(moneyDeposits);
+            // Chuyển đổi date thành dạng dd/mm/yyyy
+            const formattedDate = `${String(i).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+
+            moneyDeposits.push({
+                month: formattedDate,
+                totalAmount: existingRecord ? existingRecord.totalAmount : 0
+            });
+        }
+        console.log(moneyDeposits,"tiền")
         res.json(moneyDeposits);
     } catch (error) {
         next(error);

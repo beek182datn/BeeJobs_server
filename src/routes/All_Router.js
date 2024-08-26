@@ -108,7 +108,7 @@ const initWebRouter = (app) => {
   );
   router.get(
     "/Dashboard/getMoneyDepositsByDateRange/:startDate/:endDate",
-    Dashboard.getMoneyDepositsByYear
+    Dashboard.getMoneyDepositsByDateRange
   );
 
   //=================Tin tuyển dụng Router =====================
