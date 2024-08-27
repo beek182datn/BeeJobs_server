@@ -481,17 +481,6 @@ exports.getJobById = async (req, res) => {
             });
         }
 
-        if (userId) {
-            const data = await JobFollows.findOne({ userId: userId });
-            if (data && data.jobsId.includes(job_id)) {
-                job.isFollowing = true;
-            } else {
-                job.isFollowing = false;
-            }
-        } else {
-            job.isFollowing = false; // Nếu không có userId, mặc định là false
-        }
-
         return res.status(200).json({
             data: job,
             message: "Thông tin công việc",
