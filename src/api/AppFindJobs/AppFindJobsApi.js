@@ -979,7 +979,7 @@ exports.getJobsFilterOption = async (req, res) => {
         query.location = { $regex: locationKeyword, $options: "i" };
         query.salary = { $regex: salaryKeyword, $options: "i" };
         query.experience = { $regex: experienceKeyword, $options: "i" };
-        query.major = { $regex: majorKeyword, $options: "i" };
+        query.majors = { $regex: majorKeyword, $options: "i" };
         query.status = 'ACTIVE';
 
         // if (salaryRange.length === 2) {
