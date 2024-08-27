@@ -200,7 +200,7 @@
 								<li class="dropdown">
 									<a href="#" id="userSettings" class="user-settings" data-toggle="dropdown" aria-haspopup="true">
 										<% if (userInfo) { %>
-										<span class="avatar">ER<span class="status online"></span></span>
+										<img class="avatar" src="<%= userInfo.avata %>"><span class="status online"></span></img>
 										<span class="user-name"><%= userInfo.full_name %></span>
 										<i class="icon-chevron-small-down downarrow"></i>
 										<% } %>
