@@ -40,6 +40,11 @@ io.on('connection', (socket) => {
     console.log('New message:', message);
   });
 
+  socket.on('newNotification', (notification) => {
+    io.to(notification.userId).emit('notification', notification);
+    console.log('New notification:', notification);
+  });
+
   socket.on('disconnect', () => {
     console.log('User disconnected');
   });

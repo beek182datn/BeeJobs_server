@@ -974,22 +974,22 @@ exports.getJobsFilterOption = async (req, res) => {
         let jobs = [];
 
         // if (titleKeyword || salaryKeyword || locationKeyword || experienceKeyword) {
-            query.title = { $regex: titleKeyword, $options: "i" };
-            query.location = { $regex: locationKeyword, $options: "i" };
-            query.salary = { $regex: salaryKeyword, $options: "i" };
-            query.experience = { $regex: experienceKeyword, $options: "i" };
-            query.status = 'ACTIVE';
+        query.title = { $regex: titleKeyword, $options: "i" };
+        query.location = { $regex: locationKeyword, $options: "i" };
+        query.salary = { $regex: salaryKeyword, $options: "i" };
+        query.experience = { $regex: experienceKeyword, $options: "i" };
+        query.status = 'ACTIVE';
 
-            // if (salaryRange.length === 2) {
-            //     query.salary = { $gte: salaryRange[0].toString(), $lte: salaryRange[1].toString() };
-            // }
+        // if (salaryRange.length === 2) {
+        //     query.salary = { $gte: salaryRange[0].toString(), $lte: salaryRange[1].toString() };
+        // }
 
-            // if (experienceKeyword !== null) {
-            //     query.experience = { $gte: experienceKeyword.toString() };
-            // }
+        // if (experienceKeyword !== null) {
+        //     query.experience = { $gte: experienceKeyword.toString() };
+        // }
 
-            jobs = await jobModel.find(query).sort({ created_at: -1, _id: 1 }).populate('company_id');
-            // console.log(jobs)
+        jobs = await jobModel.find(query).sort({ created_at: -1, _id: 1 }).populate('company_id');
+        // console.log(jobs)
         // }
 
         if (!jobs || jobs.length === 0) {
@@ -1071,7 +1071,7 @@ exports.create_applyjob = async (req, res) => {
         await newApplyJob.save();
 
         // var getUserId = await companyModel.findOne({ _id: getIdCompany.company_id });
-        var getJob = await jobModel.findOne({_id: job_id}).populate('company_id');
+        var getJob = await jobModel.findOne({ _id: job_id }).populate('company_id');
         if (getJob) {
             await createNotification(
                 getJob.company_id,
@@ -1084,11 +1084,22 @@ exports.create_applyjob = async (req, res) => {
             await createNotification(
                 worker_id,
                 worker_id,
-                "Bạn đã ứng tuyển thành công vào "+ getJob.title,
+                "Bạn đã ứng tuyển thành công vào " + getJob.title,
                 'UngTuyen',
                 job_id,
                 newApplyJob._id
             )
+            req.app
+                .get("io")
+                .to(chatroom._id)
+                .emit("notification", {
+                    receiver: worker_id,
+                    sender: worker_id,
+                    message: "Bạn đã ứng tuyển thành công vào " + getJob.title,
+                    type: 'UngTuyen',
+                    job_id: job_id,
+                    applyJob_id: newApplyJob._id
+                });
         }
 
         return res.status(201).json({
