@@ -1081,7 +1081,7 @@ exports.create_applyjob = async (req, res) => {
                 job_id,
                 newApplyJob._id
             );
-            await createNotification(
+            const notification = await createNotification(
                 worker_id,
                 worker_id,
                 "Bạn đã ứng tuyển thành công vào " + getJob.title,
@@ -1091,7 +1091,7 @@ exports.create_applyjob = async (req, res) => {
             )
             req.app
                 .get("io")
-                .to(chatroom._id)
+                .to(notification.userId)
                 .emit("notification", {
                     receiver: worker_id,
                     sender: worker_id,
