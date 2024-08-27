@@ -1070,14 +1070,11 @@ exports.create_applyjob = async (req, res) => {
         // Lưu đơn ứng tuyển vào cơ sở dữ liệu
         await newApplyJob.save();
 
-
-        var getIdCompany = await jobModel.findOne({ _id: job_id });
-
-        var getUserId = await companyModel.findOne({ _id: getIdCompany.company_id });
+        // var getUserId = await companyModel.findOne({ _id: getIdCompany.company_id });
         var getJob = await jobModel.findOne({_id: job_id}).populate('company_id');
-        if (getUserId != null && getJob) {
+        if (getJob) {
             await createNotification(
-                getUserId._id,
+                getJob.company_id,
                 worker_id,
                 "Có hồ sơ ứng tuyển mới!!!",
                 "UngTuyen",
@@ -1087,7 +1084,7 @@ exports.create_applyjob = async (req, res) => {
             await createNotification(
                 worker_id,
                 worker_id,
-                "Bạn đã ứng tuyển thành công vào "+getJob.title,
+                "Bạn đã ứng tuyển thành công vào "+ getJob.title,
                 'UngTuyen',
                 job_id,
                 newApplyJob._id
