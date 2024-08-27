@@ -965,29 +965,32 @@ exports.getJobsByForm = async (req, res) => {
 exports.getJobsFilterOption = async (req, res) => {
     try {
         const titleKeyword = req.query.title || "";
-        const salaryRange = req.query.salary ? req.query.salary.split('-').map(Number) : [];
+        const salaryKeyword = req.query.salary || "";
         const locationKeyword = req.query.location || "";
-        const experienceKeyword = req.query.experience ? parseInt(req.query.experience) : null;
+        const experienceKeyword = req.query.experience || "";
         const userId = req.query.userId;
 
         let query = {};
         let jobs = [];
 
-        if (titleKeyword || salaryRange.length > 0 || locationKeyword || experienceKeyword !== null) {
+        // if (titleKeyword || salaryKeyword || locationKeyword || experienceKeyword) {
             query.title = { $regex: titleKeyword, $options: "i" };
             query.location = { $regex: locationKeyword, $options: "i" };
+            query.salary = { $regex: salaryKeyword, $options: "i" };
+            query.experience = { $regex: experienceKeyword, $options: "i" };
             query.status = 'ACTIVE';
 
-            if (salaryRange.length === 2) {
-                query.salary = { $gte: salaryRange[0].toString(), $lte: salaryRange[1].toString() };
-            }
+            // if (salaryRange.length === 2) {
+            //     query.salary = { $gte: salaryRange[0].toString(), $lte: salaryRange[1].toString() };
+            // }
 
-            if (experienceKeyword !== null) {
-                query.experience = { $gte: experienceKeyword.toString() };
-            }
+            // if (experienceKeyword !== null) {
+            //     query.experience = { $gte: experienceKeyword.toString() };
+            // }
 
             jobs = await jobModel.find(query).sort({ created_at: -1, _id: 1 }).populate('company_id');
-        }
+            // console.log(jobs)
+        // }
 
         if (!jobs || jobs.length === 0) {
             return res.status(201).json({
@@ -1073,7 +1076,7 @@ exports.create_applyjob = async (req, res) => {
         var getUserId = await companyModel.findOne({ _id: getIdCompany.company_id });
         if (getUserId != null) {
             await createNotification(
-                getUserId.user_id,
+                getUserId._id,
                 worker_id,
                 "Có hồ sơ ứng tuyển mới!!!",
                 "UngTuyen",
