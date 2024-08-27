@@ -968,6 +968,7 @@ exports.getJobsFilterOption = async (req, res) => {
         const salaryKeyword = req.query.salary || "";
         const locationKeyword = req.query.location || "";
         const experienceKeyword = req.query.experience || "";
+        const majorKeyword = req.query.major || "";
         const userId = req.query.userId;
 
         let query = {};
@@ -978,6 +979,7 @@ exports.getJobsFilterOption = async (req, res) => {
         query.location = { $regex: locationKeyword, $options: "i" };
         query.salary = { $regex: salaryKeyword, $options: "i" };
         query.experience = { $regex: experienceKeyword, $options: "i" };
+        query.major = { $regex: majorKeyword, $options: "i" };
         query.status = 'ACTIVE';
 
         // if (salaryRange.length === 2) {
