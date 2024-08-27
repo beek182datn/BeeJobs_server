@@ -1089,17 +1089,6 @@ exports.create_applyjob = async (req, res) => {
                 job_id,
                 newApplyJob._id
             )
-            req.app
-                .get("io")
-                .to(notification.userId)
-                .emit("notification", {
-                    receiver: worker_id,
-                    sender: worker_id,
-                    message: "Bạn đã ứng tuyển thành công vào " + getJob.title,
-                    type: 'UngTuyen',
-                    job_id: job_id,
-                    applyJob_id: newApplyJob._id
-                });
         }
 
         return res.status(201).json({
