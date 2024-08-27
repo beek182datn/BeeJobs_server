@@ -31,7 +31,7 @@ exports.createNotification = async (
       console.log("io đây", io);
       console.log("====================================");
       try {
-        await io.to(userId).emit("newNotification", {
+        await io.to(userId.toString()).emitWithAck("newNotification", {
           title: "Thông báo mới!!!",
           message: notification.message,
           createdAt: notification.createdAt,
