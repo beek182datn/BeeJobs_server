@@ -21,6 +21,7 @@ const jobSchema = new db.mongoose.Schema(
     created_at: { type: Date, require: true },
     updated_at: { type: Date, require: true },
     expires_at: { type: Date, require: true },
+    isFollowing: { type: String, require: false },
   },
   {
     collection: "Jobs",
