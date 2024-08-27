@@ -9,7 +9,8 @@ const { applyJobModel } = require('../../model/ApplyJobs');
 const { JobFollows } = require('../../model/JobFollow');
 const { jobModel } = require('../../model/Jobs');
 const { database } = require('firebase-admin');
-const {createNotification} = require("../../helper/NotificationHelper");
+const { createNotification } = require("../../helper/NotificationHelper");
+const NotificationModel = require('../../model/Notification');
 
 // cac ham toi uu
 const parseDate = (dateString) => {
@@ -468,6 +469,7 @@ exports.getJobById = async (req, res) => {
     }
 
     try {
+        const userId = req.query.userId;
         const job_id = req.params.job_id;
 
         const job = await jobModel.findById(job_id).populate('company_id');
@@ -964,29 +966,34 @@ exports.getJobsByForm = async (req, res) => {
 exports.getJobsFilterOption = async (req, res) => {
     try {
         const titleKeyword = req.query.title || "";
-        const salaryRange = req.query.salary ? req.query.salary.split('-').map(Number) : [];
+        const salaryKeyword = req.query.salary || "";
         const locationKeyword = req.query.location || "";
-        const experienceKeyword = req.query.experience ? parseInt(req.query.experience) : null;
+        const experienceKeyword = req.query.experience || "";
+        const majorKeyword = req.query.major || "";
         const userId = req.query.userId;
 
         let query = {};
         let jobs = [];
 
-        if (titleKeyword || salaryRange.length > 0 || locationKeyword || experienceKeyword !== null) {
-            query.title = { $regex: titleKeyword, $options: "i" };
-            query.location = { $regex: locationKeyword, $options: "i" };
-            query.status = 'ACTIVE';
+        // if (titleKeyword || salaryKeyword || locationKeyword || experienceKeyword) {
+        query.title = { $regex: titleKeyword, $options: "i" };
+        query.location = { $regex: locationKeyword, $options: "i" };
+        query.salary = { $regex: salaryKeyword, $options: "i" };
+        query.experience = { $regex: experienceKeyword, $options: "i" };
+        query.majors = { $regex: majorKeyword, $options: "i" };
+        query.status = 'ACTIVE';
 
-            if (salaryRange.length === 2) {
-                query.salary = { $gte: salaryRange[0].toString(), $lte: salaryRange[1].toString() };
-            }
+        // if (salaryRange.length === 2) {
+        //     query.salary = { $gte: salaryRange[0].toString(), $lte: salaryRange[1].toString() };
+        // }
 
-            if (experienceKeyword !== null) {
-                query.experience = { $gte: experienceKeyword.toString() };
-            }
+        // if (experienceKeyword !== null) {
+        //     query.experience = { $gte: experienceKeyword.toString() };
+        // }
 
-            jobs = await jobModel.find(query).sort({ created_at: -1, _id: 1 }).populate('company_id');
-        }
+        jobs = await jobModel.find(query).sort({ created_at: -1, _id: 1 }).populate('company_id');
+        // console.log(jobs)
+        // }
 
         if (!jobs || jobs.length === 0) {
             return res.status(201).json({
@@ -1011,10 +1018,10 @@ exports.getJobsFilterOption = async (req, res) => {
                 return false;
             }
         })
-        .map(job => ({
-            ...job.toObject(),
-            isFollowing: userId ? followedJobs.includes(job._id.toString()) : false
-        }));
+            .map(job => ({
+                ...job.toObject(),
+                isFollowing: userId ? followedJobs.includes(job._id.toString()) : false
+            }));
 
         return res.status(200).json({
             data: filteredJobs,
@@ -1032,62 +1039,89 @@ exports.getJobsFilterOption = async (req, res) => {
 
 exports.create_applyjob = async (req, res) => {
     if (req.method !== "POST") {
-      return res.status(405).json({
-        message: "Phương thức không được hỗ trợ, hãy sử dụng: POST!",
-        createdBy: "Hệ thống",
-      });
+        return res.status(405).json({
+            message: "Phương thức không được hỗ trợ, hãy sử dụng: POST!",
+            createdBy: "Hệ thống",
+        });
     }
-  
+
     try {
-      // Kiểm tra sự tồn tại của người lao động và công việc
-      const { worker_id, job_id } = req.params;
-  
-      let url_cv = "";
-      let status_cv = "pending";
-      if (req.files["cv"]) {
-        const cvFile = req.files["cv"][0];
-        const newPathLogo = path.join("./public/uploads/", cvFile.filename);
-        fs.renameSync(cvFile.path, newPathLogo);
-        url_cv = "http://beejobs.io.vn:14307/uploads/" + cvFile.filename;
-      }
-  
-      // Tạo đơn ứng tuyển mới
-      const newApplyJob = new applyJobModel({
-        worker_id: worker_id,
-        job_id: job_id,
-        fullname: req.body.fullname,
-        phone_number: req.body.phone_number,
-        intro_letter: req.body.intro_letter,
-        cv: url_cv,
-        status: status_cv,
-        applied_at: new Date(),
-      });
-  
-      // Lưu đơn ứng tuyển vào cơ sở dữ liệu
-      await newApplyJob.save();
-      
-  
-      var getIdCompany = await jobModel.findOne({ _id: job_id });
-  
-      var getUserId = await companyModel.findOne({ _id: getIdCompany.company_id });
-      if (getUserId != null) {
-        await createNotification(
-          getUserId.user_id,
-          worker_id,
-          "Có hồ sơ ứng tuyển mới!!!",
-          "UngTuyen"
-        );
-      }
-  
-      return res.status(201).json({
-        message: "Ứng tuyển công việc thành công!",
-        createdBy: "Hệ thống",
-        data: newApplyJob,
-      });
+        // Kiểm tra sự tồn tại của người lao động và công việc
+        const { worker_id, job_id } = req.params;
+
+        let url_cv = "";
+        let status_cv = "pending";
+        if (req.files["cv"]) {
+            const cvFile = req.files["cv"][0];
+            const newPathLogo = path.join("./public/uploads/", cvFile.filename);
+            fs.renameSync(cvFile.path, newPathLogo);
+            url_cv = "http://beejobs.io.vn:14307/uploads/" + cvFile.filename;
+        }
+
+        // Tạo đơn ứng tuyển mới
+        const newApplyJob = new applyJobModel({
+            worker_id: worker_id,
+            job_id: job_id,
+            fullname: req.body.fullname,
+            phone_number: req.body.phone_number,
+            intro_letter: req.body.intro_letter,
+            cv: url_cv,
+            status: status_cv,
+            applied_at: new Date(),
+        });
+
+        // Lưu đơn ứng tuyển vào cơ sở dữ liệu
+        await newApplyJob.save();
+
+        // var getUserId = await companyModel.findOne({ _id: getIdCompany.company_id });
+        var getJob = await jobModel.findOne({ _id: job_id }).populate('company_id');
+        if (getJob) {
+            await createNotification(
+                getJob.company_id,
+                worker_id,
+                "Có hồ sơ ứng tuyển mới!!!",
+                "UngTuyen",
+                job_id,
+                newApplyJob._id
+            );
+            const notification = await createNotification(
+                worker_id,
+                worker_id,
+                "Bạn đã ứng tuyển thành công vào " + getJob.title,
+                'UngTuyen',
+                job_id,
+                newApplyJob._id
+            )
+        }
+
+        return res.status(201).json({
+            message: "Ứng tuyển công việc thành công!",
+            createdBy: "Hệ thống",
+            data: newApplyJob,
+        });
     } catch (error) {
-      return res.status(500).json({
-        message: "Lỗi: " + error.message,
-        createdBy: "Hệ thống",
-      });
+        return res.status(500).json({
+            message: "Lỗi: " + error.message,
+            createdBy: "Hệ thống",
+        });
     }
-  };
+};
+
+exports.deleteNotification = async (req, res) => {
+    try {
+        const { notificationId } = req.params;
+        const updatedNotification = await NotificationModel.findByIdAndDelete({ _id: notificationId });
+
+        if (!updatedNotification) {
+            return res.status(404).json({ error: "Notification not found" });
+        }
+
+        res.json({
+            message: "Notification deleted",
+            notification: updatedNotification,
+        });
+    } catch (error) {
+        console.error("Error marking notification as read:", error);
+        res.status(500).json({ error: "Failed to mark notification as read" });
+    }
+};

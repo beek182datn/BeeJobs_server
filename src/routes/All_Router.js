@@ -426,6 +426,7 @@ router.post(
   uploader.fields([{ name: "cv", maxCount: 1 }]),
   appfindjobs.create_applyjob
 );
+router.delete("/delete/:notificationId", appfindjobs.deleteNotification);
 
 //=================Chat Router =====================
 router.get("/api/chat/chatroom/:senderId/:receiverId", chat.getChatRoomInfo);
