@@ -1074,7 +1074,8 @@ exports.create_applyjob = async (req, res) => {
         var getIdCompany = await jobModel.findOne({ _id: job_id });
 
         var getUserId = await companyModel.findOne({ _id: getIdCompany.company_id });
-        if (getUserId != null) {
+        var getJob = await jobModel.findOne({_id: job_id}).populate('company_id');
+        if (getUserId != null && getJob) {
             await createNotification(
                 getUserId._id,
                 worker_id,
@@ -1083,6 +1084,14 @@ exports.create_applyjob = async (req, res) => {
                 job_id,
                 newApplyJob._id
             );
+            await createNotification(
+                worker_id,
+                worker_id,
+                "Bạn đã ứng tuyển thành công vào "+getJob.title,
+                'UngTuyen',
+                job_id,
+                newApplyJob._id
+            )
         }
 
         return res.status(201).json({
