@@ -192,7 +192,7 @@ const initWebRouter = (app) => {
 
   //=================Worker Router =====================
   router.get("/worker/index", CheckLogin.ycLogin, Worker.index);
-  router.get("/worker/detail/:IdWoker", CheckLogin.ycLogin, Worker.GetInfoWoker);
+  router.get("/worker/detail/:IdWoker", CheckLogin.ycLogin, Worker.GetInfoWorker);
 
 
 
