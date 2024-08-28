@@ -51,13 +51,24 @@ exports.index = async (req, res) => {
             return acc;
         }, {});
 
-        // Thêm số lượng ứng viên vào danh sách công việc
+        // Hàm định dạng ngày tháng theo kiểu dd/MM/yyyy
+        const formatDate = (date) => {
+            const d = new Date(date);
+            const day = ("0" + d.getDate()).slice(-2);
+            const month = ("0" + (d.getMonth() + 1)).slice(-2); // Tháng bắt đầu từ 0
+            const year = d.getFullYear();
+            return `${day}/${month}/${year}`;
+        };
+
+        // Thêm số lượng ứng viên và định dạng ngày tháng vào danh sách công việc
         lstjobs = lstjobs.map(job => ({
             ...job,
             companyName: job.company_id ? job.company_id.company_name : 'Không xác định',
-            applicationsCount: applicationCountMap[job._id] || 0
+            applicationsCount: applicationCountMap[job._id] || 0,
+            expires_at_formatted: formatDate(job.expires_at) // Thêm trường ngày giờ đã định dạng
         }));
-        console.log(lstjobs)
+
+        console.log(lstjobs);
         res.render('../views/NewJob/index.ejs', {
             list: lstjobs,
             currentPage: page,
