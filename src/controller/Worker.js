@@ -133,7 +133,7 @@ exports.GetInfoWorker = async (req, res, next) => {
 
           // Render trang chi tiết công việc với thông tin người lao động và danh sách công việc ứng tuyển
           res.render("../views/Worker/Detail.ejs", { 
-              worker: Worker,
+              woker: Worker,
               lstAplyJobs: GetAplyJobsWithNames,
               currentPage: page,
               totalPages: totalPages,
