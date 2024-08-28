@@ -487,13 +487,6 @@ exports.getDataWorkerAppliedByCompanyId = async (req, res) => {
     const jobs = await jobModel.find({ company_id: company_id });
 
     // Kiểm tra xem có công việc nào không
-    if (jobs.length === 0) {
-      return res.status(404).json({
-        data: [],
-        message: "Không tìm thấy công việc nào cho công ty này!",
-        createdBy: "Hệ thống",
-      });
-    }
 
     // Lấy danh sách job_id từ các công việc
     const jobIds = jobs.map((job) => job._id);
