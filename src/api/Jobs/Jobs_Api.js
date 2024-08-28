@@ -905,13 +905,6 @@ exports.getDataJobsAppliedByCompanyId = async (req, res) => {
     // Tìm tất cả các công việc của công ty có company_id
     const jobs = await jobModel.find({ company_id: company_id });
 
-    if (!jobs || jobs.length === 0) {
-      return res.status(404).json({
-        message: "Không tìm thấy công việc nào cho công ty này!",
-        createdBy: "Hệ thống",
-      });
-    }
-
     // Lấy danh sách job_id từ các công việc
     const jobIds = jobs.map((job) => job._id);
 
@@ -1107,13 +1100,6 @@ exports.getJobsWithSuitableApplications = async (req, res) => {
 
     // Tìm tất cả các công việc của công ty có company_id
     const jobs = await jobModel.find({ company_id: company_id });
-
-    if (!jobs || jobs.length === 0) {
-      return res.status(404).json({
-        message: "Không tìm thấy công việc nào cho công ty này!",
-        createdBy: "Hệ thống",
-      });
-    }
 
     // Lấy danh sách job_id từ các công việc
     const jobIds = jobs.map((job) => job._id);
