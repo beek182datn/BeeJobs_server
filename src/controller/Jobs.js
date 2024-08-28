@@ -90,18 +90,18 @@ exports.GetInfoJobs = async (req, res, next) => {
         const skip = (page - 1) * limit;
 
         // Tìm công việc dựa trên job_id
-        const lstJobs = await Jobs.jobModel.findById(req.params.jobs_id);
-        
+        const lstJobs = await Jobs.jobModel.findById(req.params.jobs_id).lean();
+
         if (lstJobs) {
             // Đếm số lượng ứng viên đã ứng tuyển cho công việc
-            const getCountAplyJob = await applyJobModel.find({ job_id: lstJobs._id });
+            const getCountAplyJob = await applyJobModel.find({ job_id: lstJobs._id }).lean();
 
             // Gán số lượng ứng viên cho lstJobs
             lstJobs.applicationsCount = getCountAplyJob.length || 0; 
 
             // Lấy danh sách worker_id từ getCountAplyJob
             const workerIds = getCountAplyJob.map(apply => apply.worker_id);
-            console.log(workerIds)
+            console.log(workerIds);
 
             // Lấy danh sách thông tin người lao động từ WorkerMD
             const GetWorkerAplyjob = await WorkerMD
@@ -110,7 +110,22 @@ exports.GetInfoJobs = async (req, res, next) => {
                 .limit(limit)
                 .sort({ _id: -1 })
                 .lean();
-            console.log(GetWorkerAplyjob)
+            console.log(GetWorkerAplyjob);
+
+            // Hàm định dạng ngày tháng theo kiểu dd/MM/yyyy
+            const formatDate = (date) => {
+                const d = new Date(date);
+                const day = ("0" + d.getDate()).slice(-2);
+                const month = ("0" + (d.getMonth() + 1)).slice(-2); // Tháng bắt đầu từ 0
+                const year = d.getFullYear();
+                return `${day}/${month}/${year}`;
+            };
+
+            // Thêm trường ngày giờ đã định dạng vào lstJobs nếu cần
+            if (lstJobs.expires_at) {
+                lstJobs.expires_at_formatted = formatDate(lstJobs.expires_at);
+            }
+
             // Render trang chi tiết công việc với thông tin công việc và danh sách ứng viên
             res.render('../views/NewJob/Detail.ejs', { 
                 jobs: lstJobs, 
@@ -128,7 +143,8 @@ exports.GetInfoJobs = async (req, res, next) => {
         console.log(error);
         res.status(500).send('Đã xảy ra lỗi server.');
     }
-}
+};
+
 
 exports.LockJobs = async (req, res) => {
     const ObjJobs = await Jobs.jobModel.findById(req.params.jobs_id);

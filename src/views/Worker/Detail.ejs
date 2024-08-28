@@ -93,10 +93,10 @@
                     <span class="text-info"><%= (currentPage - 1) * limit + index + 1 %></span>
                   </td>
                   
-                  <td><%= lstAplyJobs.fullname %></td>
+                  <td><%= lstAplyJobs.jobTitle %></td>
                   <td style="color: <%= lstAplyJobs.status == "Phù hợp" ? 'green' : 'red' %>;">
                     <%= lstAplyJobs.status %></td>
-                    <td><%= lstAplyJobs.applied_at %></td>
+                    <td><%= lstAplyJobs.applied_at_formatted %></td>
                     <td><%= lstAplyJobs.intro_letter %></td>
                     <td>
                       <% if (lstAplyJobs.cv) { %>
