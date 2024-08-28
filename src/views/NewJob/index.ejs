@@ -39,7 +39,8 @@
           <td><%= lstJobs.companyName %></td>
           <td><%= lstJobs.applicationsCount %></td>
 
-          <td><%= lstJobs.expires_at.ToDate() %></td>
+          <td><%= lstJobs.expires_at.ToString("dd/MM/yyyy") %></td>
+
           <td>
             <% if(lstJobs.status == "LOCK"){ %>
             <span class="badge badge-pill badge-danger">Bị khóa</span>
